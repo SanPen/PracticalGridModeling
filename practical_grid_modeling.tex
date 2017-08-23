@@ -18,7 +18,7 @@
 
 \usepackage[
     type={CC},
-    modifier={by-nc-sa},
+    modifier={by-sa},
     version={3.0},
 ]{doclicense}
 
@@ -336,13 +336,13 @@ $Y$ (Admittance) & $G$ (Conductance) & $B$ (Susceptance) & $Y=G +jB$\\
 
 \section{Components connection and their conversions}
 
-Let us assume a three-phase grid. The phases of the grid are denoted by the names of $A$, $B$ and $C$. There are two main connection types that arise: Star and Delta.
+Let us assume a three-phase grid. The phases of the grid are denoted by the names of $A$, $B$ and $C$. There are two main connection types that arise: Wye (like the letter "y") and Delta.
 
-The star and delta connections provide the ground to introduce the \textit{phase} and \textit{line} voltages. The phase to neutral voltage is called \textit{phase voltage}, those are $V_A$, $V_B$ and $V_C$. The phase to phase voltage is called \textit{line voltage}, those are $V_{AB}$, $V_{AC}$ and $V_{BC}$.
+The wye and delta connections provide the ground to introduce the \textit{phase} and \textit{line} voltages. The phase to neutral voltage is called \textit{phase voltage}, those are $V_A$, $V_B$ and $V_C$. The phase to phase voltage is called \textit{line voltage}, those are $V_{AB}$, $V_{AC}$ and $V_{BC}$.
 
 \paragraph{The delta connection} is depicted in the figure \ref{fig:delta}. The delta conection has no neutral.
 
-\paragraph{The star connection} is depicted in the figure \ref{fig:star}. The star conection does have neutral ($N$). 
+\paragraph{The wye connection} is depicted in the figure \ref{fig:star}. The star conection does have neutral ($N$). The wye connection is also known as star connection.
 
 \begin{marginfigure}
   \includegraphics[width=0.9\linewidth]{img/Delta.eps}
@@ -352,14 +352,14 @@ The star and delta connections provide the ground to introduce the \textit{phase
 
 \begin{marginfigure}
   \includegraphics[width=0.9\linewidth]{img/Star.eps}
-  \caption{Star connection scheme.}
+  \caption{Wye connection scheme.}
   \label{fig:star}
 \end{marginfigure}
 
-\paragraph{Delta to Star} The transformation of a three phase connected shunt element in Delta to it's Star equivalent is:
+\paragraph{Delta to Wye ($\Delta \rightarrow Y$)} The transformation of a three phase connected shunt element in Delta to it's Wye equivalent is:
 
 \begin{equation}
-Elm_{Star} = D \times Elm_{Delta}
+Elm_{Wye} = D \times Elm_{Delta}
 \end{equation}
 
 Where $D$ is:
@@ -390,10 +390,10 @@ Z_{BC}
 \end{array} \right]
 \end{equation}
 
-\paragraph{Star to Delta} The transformation of a three phase connected shunt element in Star to it's Delta equivalent is:
+\paragraph{Wye to Delta ($Y\rightarrow \Delta$)} The transformation of a three phase connected shunt element in Wye to it's Delta equivalent is:
 
 \begin{equation}
-Elm_{Delta} = D^{-1} \times Elm_{Star}
+Elm_{Delta} = D^{-1} \times Elm_{Wye}
 \end{equation}
 
 Where $D^{-1}$ is:
@@ -429,7 +429,7 @@ Z_C
 
 \section{Per unit system}
 
-In an electrical grid there are multiple levels of voltage. This situation intruduces discontinuities in the numerical methods used to solve power flows and state estimations among others, making them have an unstable convergence behaviour. To avoid this, the per unit system is introduced. A side effect of the per unit representation is to have a very convenient way of visualizing the grid magnitudes, all referenced to their base. In the per unit system, all the voltages are expressed in terms of their nominal value. In this case, all the grid voltage values are around one. For instance, a voltage value of 0.98 means that the voltage is 98 \% of the nominal voltage value at that point.
+In an electrical grid there are multiple levels of voltage. This situation intruduces discontinuities in the numerical methods used to solve power flows and state estimations among others, producing an unstable convergence behaviour. To avoid this, the per unit system is introduced. A side effect of the per unit representation is to have a very convenient way of visualizing the grid magnitudes, all referenced to their base. In the per unit system, all the voltages are expressed in terms of their nominal value. In this case, all the grid voltage values are around one. For instance, a voltage value of 0.98 means that the voltage is 98 \% of the nominal voltage value at that point.
 
 For most exchange formats in computer programs, the element's magnitudes are expressed with a mix of actual units and per unit values. Regardless of this, a practical way of converting any electrical magnitude to its per unit equivalent is presented.
 
@@ -538,8 +538,9 @@ Observe that $Z_1$ and $Z_2$ are identical (with the shown numerical precission)
 
 \section{Bulding $Z_{ABC}$ from the sequence components}
 
-Once the complete 3x3 impedance matrix has been reduced to the sequence components and only those have been stored in the utility database, to obtain the full 3x3 matrix might be necessary to perform unbalanced calculations. Of course we will not be able to obtain the exact original $Z_{ABC}$ from the previous example, but an approximation is better than just having the sequence values.
+Once the complete 3x3 impedance matrix has been reduced to the sequence components and only those have been stored in the utility database, the obtaining of the full 3x3 matrix might be necessary to perform unbalanced calculations. Of course we will not be able to obtain the exact original $Z_{ABC}$ from the reduced sequence components, but the approximation is fair.
 
+The approximated full impedance matrix is obtained from the sequence components as:
 
 \begin{equation}
 Z_{ABC_{approx}} = \frac{1}{3}\left[ \begin{array}{ccc}
@@ -554,7 +555,7 @@ Z_0 - Z_1 & Z_0 - Z_1 & 2Z_1 + Z_0
 We need to compute two values, before assambling the 3x3 matrix:
 
 $$
-\frac{1}{3}(Z_1 + Z_0) = \frac{1}{3} (2\cdot(0.3061 + j 0.6270) + (0.7735 + j 1.9373)) = 0.4619 + j1.0638
+\frac{1}{3}(2 \cdot Z_1 + Z_0) = \frac{1}{3} (2\cdot(0.3061 + j 0.6270) + (0.7735 + j 1.9373)) = 0.4619 + j1.0638
 $$
 
 $$
@@ -571,7 +572,7 @@ Z_{ABC_{approx}} = \left[ \begin{array}{ccc}
 \end{array} \right]
 $$
 
-We observe that the calculation outcome is a fair approximation of the original $Z_{ABC}$ and that the approximated matrix is symmetric, matching the balanced assumption, which the original impedance matrix did not fully comply with. 
+We observe that the calculation outcome is a fair approximation of the original $Z_{ABC}$ and that the approximated matrix is symmetric, matching the balanced assumption, which the original impedance matrix did not fully comply with. Therefore, is the original $Z_{ABC}$ was reduced assuming a balanced impedance distribution when that was not the case, if we build the approximated matrix, we will never know if it represents the reality.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \chapter{The branch element}
@@ -665,10 +666,10 @@ $$
 Y_{base} = \frac{1}{Z_{base}} = 43.56 \quad S
 $$
 
-Then we must obtain the line series admittance matrix $Y_{series}$ by inverting the 3x3 matrix $Z_{ABC}$. The we divide the resulting matrix by $Y_{base}$:
+Then we must obtain the line series admittance matrix $Y_{series}$ by inverting the 3x3 matrix $Z_{ABC}$. The we divide the resulting matrix by $Y_{base}$. Analogously we can invert the per unit impedance matrix:
 
 $$
-Y_{series} = \left(\frac{Z_{ABC}}{Z_{base}}\right)^{-1}
+Y_{series} = \left(\frac{Z_{ABC}}{Z_{base}}\right)^{-1} \quad p.u.
 $$
 
 $$
@@ -727,10 +728,75 @@ $$
 
 \section{Transformer}
 
+The transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections of the transformer at the primary and at the secondary.
 
+The most common transformer connections at the terminals are:
+
+\begin{itemize}
+\item Delta ($\Delta$)
+\item Wye ($Y$)
+\item Grounded Wye (the neutral is grounded) ($Yg$)
+\end{itemize}
+
+
+The table \ref{transfoemer_impedances_table} lays out the branch admittances for every pair of connections. The source for this model is the excellent book by J.Arrillaga\cite{arrillaga1990computer}.
+
+\begin{table}[h!]\index{typefaces!sizes}
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
+\midrule
+ $Yg$ & $Yg$ 			& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_I$ 		& $-\frac{1}{\alpha\beta}Y_I$\\
+ $Yg$ & $Y$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$	\\
+ $Yg$ & $\Delta$  		& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
+ $Y$ & $Yg$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$ \\
+ $Y$ & $Y$  			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
+ $\Delta$ & $\Delta$ 	& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$		& $-\frac{1}{\alpha\beta}Y_{II}$\\
+ $\Delta$ & $Yg$ 		& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{I}$		& $\frac{1}{\alpha\beta}Y_{III}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+  \caption{Three-phase transformer impedances of the branch model.}
+  \label{transfoemer_impedances_table}
+\end{table}
+
+
+\begin{equation}
+Y_{I} = \left[ \begin{array}{ccc}
+y_t & 0 &  0 \\
+0 & y_t & 0 \\ 
+0 & 0 & y_t
+\end{array} \right] 
+\end{equation}
+
+\begin{equation}
+Y_{II} = \left[ \begin{array}{ccc}
+2y_t & -y_t &  -y_t \\
+-y_t & 2y_t & -y_t \\  
+-y_t & -y_t & 2y_t
+\end{array} \right] 
+\end{equation}
+
+\begin{equation}
+Y_{III} = \left[ \begin{array}{ccc}
+-y_t & y_t &  0 \\
+0 & -y_t & y_t \\ 
+y_t & 0 & -y_t
+\end{array} \right] 
+\end{equation}
+
+$y_t$ is the transformer winding per unit admittance. It is given in values per units from the transformer especifications sheet. Usually it is given either directly as leakeage resistance $r_l$ and inductance $x_l$, in which case:
+
+\begin{equation}
+y_t = \frac{1}{r_l + jx_l}
+\end{equation}
+
+Or it is given as the "short circuit study" values. This is a more complete case.
 
 \section{Voltage regulator}
 
+Since all the electrical models are in per-unit values, the voltage regulator is modeled exactly the same as a transformer.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \chapter{The bus and it's connected elements}
