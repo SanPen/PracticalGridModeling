@@ -244,20 +244,44 @@
 \listoftables
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER Introduction
+%-------------------------------------------------------------------------------
 \chapter{Introduction}
 
 This book aims at explaining grid modelling from a practical perspective, providing state of the art models, algorithms as well as implementation hints and examples.
 
 The goal is to provide a refference document for researchers and computer engineers in the field of electric systems modelling, so that the task of building your own simulator or extend the already available open source ones becomes feasible.
 
+The book assumes that the reader has a basic understanding of matrices, vectors and complex numbers. The notation used in the book is intended to be clear and accesible as much as it is practicly possible.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+%-------------------------------------------------------------------------------
+%	CHAPTER General network model
+%-------------------------------------------------------------------------------
 \chapter{General network model}
 
+The electrical grid can be assimilated to a graph. A graph is a mathematical object composed of nodes and edges (or branches). From a calculation point of view, a node is the place where the voltage is calculated given power and currnt injections, and a branch is the place where the current and power that flows through it are computed given the nodes voltage.
 
+In the general network model, the the neutral wire and the earth "wire" are embedded into the three-phase equivalent using Kron's reduction. See \cite{dorfler2013kron} for a comprehensive explanation or simply \cite{kersting2012distribution} for practical application.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+A node has power injection or consumption devices attached to it. Examples are loads, generators, capacitor banks or any other device that injects or consumes power from the grid.
+
+A branch has attached to it devices that modify the flow through the branch. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems).
+
+A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to calculate magnitudes of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit: a graph that does not contain further islands inside. In practice, a grid is split in its islands, each island is computed separatelly and the resuts are merged back to provide a consistent analysis interface of the whole grid.
+
+\section{n-phase modeling}
+
+The electrical grid calculations are mostly done in what is called "positive sequence equivalent. This is a single phase equivalent of a three-phase grid. In practice the positive sequence equivalent is applied to branches with one, two or three phases, this simplifies the modeling, but makes the ralistic analysis of the grid much harder since the phases inbalance has been neglected.
+
+In this book, three-phase models will be presented, but the aplication of the numerical methods will be done in phase-by-phase basis. This is possible using the models presented by Vieira, Freitas and Morelato \cite{vieira2004phase}. In their work, the authors pick the diagonal of the elements admittance matrices to form single-phase grids, that are simulated independently. The magnetic coupling effects are included in the single-phase admittance matrices as shunt elements. This allows a very flexible model of the grid while retaining the calculation accuracy of a full-blown n-phase admittance matrix.
+
+So, because of the latter, the models will be introduced in three-phase and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will sove one numerical problem per phase, and when all the phases are simulated, we will merge the results intro n-phase structures.
+
+%-------------------------------------------------------------------------------
+%	CHAPTER Magnitudes and units
+%-------------------------------------------------------------------------------
 \chapter{Magnitudes and units}
 
 
@@ -574,7 +598,13 @@ $$
 
 We observe that the calculation outcome is a fair approximation of the original $Z_{ABC}$ and that the approximated matrix is symmetric, matching the balanced assumption, which the original impedance matrix did not fully comply with. Therefore, is the original $Z_{ABC}$ was reduced assuming a balanced impedance distribution when that was not the case, if we build the approximated matrix, we will never know if it represents the reality.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER The branch element
+%-------------------------------------------------------------------------------
 \chapter{The branch element}
 
 To the effect of most calculations run in operation of a electrical system, the lines, transformers, and any other element that connects two nodes are represented by the so-called $\Pi$ model.
@@ -582,9 +612,9 @@ To the effect of most calculations run in operation of a electrical system, the 
 
 \section{$\Pi$ Model}
 
-\marginnote{The series admittance $Y_{serie}$ is computed as the inverse of $Z_{ABC}$. From the line's calculation it is obtained the series impedance matrix $Z_{ABC}$ and the shunt admittance matrix $Y_{sh}$.}
+\marginnote{In the case of lines, the series admittance $Y_{serie}$ is computed as the inverse of $Z_{ABC}$. From the line's calculation it is obtained the series impedance matrix $Z_{ABC}$ and the shunt admittance matrix $Y_{sh}$. }
 
-The pi model is composed by a series admittance and a shunt admittance divided in two, connected at the sending and receiving terminals (primary and secondary). To accomodate the transformers and voltage regulators and the possibility of at the sending and/or receiving terminals, two per-unit transformers are included as well.
+The pi model is composed by a series admittance  $Y_{serie}$ and a shunt admittance $Y_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accomodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modeled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
 
 
 \begin{center}
@@ -632,9 +662,17 @@ $\frac{Y_{series} + \frac{Y_{sh}}{2}}{\alpha^2}$ &  $\frac{-Y_{series}}{\alpha\b
 
 The formula \ref{pi_main_formula} will be used to compute the network admittance matrices.
 
+
 \section{Line}
 
 The line element, utilizes the branch model as it has been formulated, only that the use of the tap ratio relations $\alpha$ and $\beta$ is not necessary.
+
+
+\subsection{Overhead lines}
+
+
+\subsection{Underground cables}
+
 
 \paragraph{Example}
 
@@ -726,9 +764,10 @@ V_s
 \end{array}\right]
 $$
 
+\newpage
 \section{Transformer}
 
-The transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections of the transformer at the primary and at the secondary.
+The transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
 
 The most common transformer connections at the terminals are:
 
@@ -739,7 +778,7 @@ The most common transformer connections at the terminals are:
 \end{itemize}
 
 
-The table \ref{transfoemer_impedances_table} lays out the branch admittances for every pair of connections. The source for this model is the excellent book by J.Arrillaga\cite{arrillaga1990computer}.
+
 
 \begin{table}[h!]\index{typefaces!sizes}
 \begin{center}
@@ -761,6 +800,7 @@ Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
   \label{transfoemer_impedances_table}
 \end{table}
 
+The table \ref{transfoemer_impedances_table} lays out the branch admittances for every pair of connections. The source for this model is the excellent book by J.Arrillaga\cite{arrillaga1990computer}.
 
 \begin{equation}
 Y_{I} = \left[ \begin{array}{ccc}
@@ -783,22 +823,250 @@ Y_{III} = \left[ \begin{array}{ccc}
 -y_t & y_t &  0 \\
 0 & -y_t & y_t \\ 
 y_t & 0 & -y_t
-\end{array} \right] 
+\end{array} \right] \newline
 \end{equation}
 
-$y_t$ is the transformer winding per unit admittance. It is given in values per units from the transformer especifications sheet. Usually it is given either directly as leakeage resistance $r_l$ and inductance $x_l$, in which case:
+
+$y_t$ is the transformer winding per unit admittance. It is given in values per units from the transformer especifications sheet. Usually it is given either directly as magnetizing resistance $r_m$ and inductance $x_m$, in which case:
 
 \begin{equation}
-y_t = \frac{1}{r_l + jx_l}
+y_t = \frac{3}{r_l + jx_l}
 \end{equation}
 
 Or it is given as the "short circuit study" values. This is a more complete case.
 
+
+
+\subsection{Transformer definition from the short circuit study}
+
+In order to get the series impedance and shunt admittance of the transformer to match the branch model, it is advised to transform the specification sheet values of the device into the desired values. The values to take from the specs sheet are: \newline
+\begin{itemize}
+	\item $S_n$: Nominal power in MVA.
+	\item $U_{hv}$: Voltage at the high-voltage side in kV.
+	\item $U_{lv}$: Voltage at the low-voltage side in kV.
+	\item $U_{sc}$: Short circuit voltage in \%.
+	\item $P_{cu}$: Copper losses in kW.
+	\item $I_0$: No load current in \%.
+	\item $GX_{hv1}$: Reactance contribution to the HV side. Value from 0 to 1.
+	\item $GR_{hv1}$: Resistance contribution to the HV side Value from 0 to 1.\newline
+\end{itemize}
+
+Then, the series and shunt impedances are computed as follows:
+
+\begin{multicols}{2}
+Nominal impedance HV (Ohm): 
+\begin{equation}
+Zn_{hv} = U_{hv}^2 / S_n
+\end{equation}
+
+
+Nominal impedance LV (Ohm): 
+\begin{equation}
+Zn_{lv} = U_{lv}^2 / S_n
+\end{equation}
+
+Short circuit impedance (p.u.): 
+\begin{equation}
+z_{sc} = U_{sc} / 100
+\end{equation}
+
+Short circuit resistance (p.u.): 
+\begin{equation}
+r_{sc} = \frac{P_{cu} / 1000}{S_n}
+\end{equation}
+
+Short circuit reactance (p.u.):
+\begin{equation}
+x_{sc} = \sqrt{z_{sc}^2 - r_{sc} ^2}
+\end{equation}
+
+
+HV resistance (p.u.):
+\begin{equation}
+r_{cu,hv} = r_{sc} \cdot GR_{hv1}
+\end{equation}
+
+LV resistance (p.u.): 
+\begin{equation}
+r_{cu,lv} = r_{sc} \cdot (1 - GR_{hv1})
+\end{equation}
+
+HV shunt reactance (p.u.): 
+\begin{equation}
+xs_{hv} = x_{sc} \cdot GX_{hv1}
+\end{equation}
+
+LV shunt reactance (p.u.): 
+\begin{equation}
+xs_{lv} = x_{sc} \cdot (1 - GX_{hv1})
+\end{equation}
+
+Shunt resistance (p.u.): 
+\begin{equation}
+r_{fe} = \frac{Sn}{P_{fe} / 1000}
+\end{equation}
+
+Magnetization impedance (p.u.):
+\begin{equation}
+z_m = \frac{1}{I_0 / 100}
+\end{equation}
+
+Magnetization reactance (p.u.):
+\begin{equation}
+x_m = \frac{1}{\sqrt{\frac{1}{z_m^2} - \frac{1}{r_{fe}^2}}}
+\end{equation}
+
+If the content of the square root is negative, set the magnetization impedance to zero.\\
+
+
+The final complex calculated parameters in per unit are:
+
+Magnetizing impedance (or series impedance): 
+\begin{equation}
+z_{series} = Z_m = r_{sc} +j \cdot x_{sc}
+\end{equation}
+
+The series admittance is [p.u.]: 
+\begin{equation}
+y_{series} = \frac{1}{z_{series}}
+\end{equation}
+
+Leakage impedance (or shunt impedance): 
+\begin{equation}
+Z_l = r_{fe} + j \cdot x_{m}
+\end{equation}
+
+Shunt admittance [p.u.]: 
+\begin{equation}
+y_{shunt} = 1 / Z_l
+\end{equation}
+
+
+The series admittance for the three-phase model [p.u.]: 
+\begin{equation}
+y_{t} = \frac{3}{z_{series}}
+\end{equation}
+\end{multicols}
+
+\marginnote{we divide the impedance by 3, to reflect the three phases.}
+
+
+\paragraph{Example}
+
+Let's consider a distribution transformer with the following nameplate characteristics:
+
+
+\begin{multicols}{2}
+\begin{itemize}
+\item Primary connection: $\Delta$
+\item Secondary connection: $Yg$
+\item $S_n = 0.5 MVA$
+\item $U_{hv} = 20  kV$
+\item $U_{lv} = 0.4 kV$
+
+\item $U_{sc} = 6  \%$
+\item $p_{cu} = 6  kW$
+\item $p_{fe} = 1.4 kW$
+\item $I_0 = 0.28 \%$
+
+\item $GR_{hv} = 0.5$
+\item $GX_{hv} = 0.5$
+\end{itemize}
+\end{multicols}
+
+
+First we obtain the impedance value, from the short circuit study:
+\begin{multicols}{2}
+$$Zn_{hv} =  800 \quad \Omega$$
+$$Zn_{lv} =  0.3200 \quad \Omega$$
+$$z_{sc} =  0.0600 \quad p.u.$$
+$$r_{sc} =  0.0120 \quad p.u.$$
+$$x_{sc} =  17.0103 \quad p.u.$$
+$$r_{cu,hv} =  0.0060 \quad p.u.$$
+$$r_{cu,lv} =  0.0060 \quad p.u.$$
+$$x_{s,hv} =  8.5052 \quad p.u.$$
+$$x_{s,lv} =  8.5052 \quad p.u.$$
+$$r_{fe} =  357.1429 \quad p.u.$$
+$$z_m =  357.1429 \quad p.u.$$
+$$x_m =  24296003999.8084 \quad p.u.$$
+$$z_{series} =  0.0120 + j17.0103 \quad p.u.$$
+$$y_{series} =  0.0000 - j0.0588 \quad p.u.$$
+$$y_{shunt} =  0.0000 - j0.0000 \quad p.u.$$
+$$y_t =  0.0001 - j0.1764 \quad p.u.$$
+\end{multicols}
+
+Once the we have obtained the $y_t$ value, we start building the apropiate branch impedance matrices $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
+$$
+Y_{I} = \left[\begin{array}{ccc}
+0.0001 - j0.1764 & 0.0000 + j0.0000 & 0.0000 + j0.0000 \\
+0.0000 + j0.0000 & 0.0001 - j0.1764 & 0.0000 + j0.0000 \\
+0.0000 + j0.0000 & 0.0000 + j0.0000 & 0.0001 - j0.1764
+\end{array} \right]
+$$
+
+
+$$
+Y_{II} = \left[ \begin{array}{ccc}
+0.0002 - j0.3527 & -0.0001 + j0.1764 & -0.0001 + j0.1764\\
+-0.0001 + j0.1764 & 0.0002 - j0.3527 & -0.0001 + j0.1764\\
+-0.0001 + j0.1764 & -0.0001 + j0.1764 & 0.0002 - j0.3527
+\end{array} \right]
+$$
+
+$$
+Y_{III} = \left[ \begin{array}{ccc}
+-0.0001 + j0.1764 & 0.0001 - j0.1764 & 0.0000 + j0.0000\\
+0.0000 + j0.0000 & -0.0001 + j0.1764 & 0.0001 - j0.1764\\
+0.0001 - j0.1764 & 0.0000 + j0.0000 & -0.0001 + j0.1764
+\end{array} \right]
+$$
+
+
+According to the transformer $\Delta \rightarrow Yg$ connection, we build the branch model admittances using the formulas for the table \ref{transfoemer_impedances_table}:
+
+$$
+Y_{pp} =\left[ \begin{array}{ccc}
+0.0002 - j0.3527 & -0.0001 + j0.1764 & -0.0001 + j0.1764\\
+-0.0001 + j0.1764 & 0.0002 - j0.3527 & -0.0001 + j0.1764\\
+-0.0001 + j0.1764 & -0.0001 + j0.1764 & 0.0002 - j0.3527
+\end{array} \right]
+$$
+
+
+$$
+Y_{ss} =\left[ \begin{array}{ccc}
+0.0001 - j0.1764 & 0.0000 + j0.0000 & 0.0000 + j0.0000\\
+0.0000 + j0.0000 & 0.0001 - j0.1764 & 0.0000 + j0.0000\\
+0.0000 + j0.0000 & 0.0000 + j0.0000 & 0.0001 - j0.1764
+\end{array} \right]
+$$
+
+
+\marginnote{There is no computational need to assemble the 6x6 element impedance matrix in a computer program. The branch model matrices are added to the full circuit matrix instead.}
+
+$Y_{ps} = Y_{sp} =$
+$$
+\left[ \begin{array}{ccc}
+-0.0001 + j0.1764 & 0.0001 - j0.1764 & 0.0000 + j0.0000\\
+0.0000 + j0.0000 & -0.0001 + j0.1764 & 0.0001 - j0.1764\\
+0.0001 - j0.1764 & 0.0000 + j0.0000 & -0.0001 + j0.1764
+\end{array} \right]
+$$
+
+
+
+
+
 \section{Voltage regulator}
 
-Since all the electrical models are in per-unit values, the voltage regulator is modeled exactly the same as a transformer.
+Since all the electrical models are in per-unit values, the voltage regulator is modeled in the exact same way as a transformer.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER The bus and it's connected elements
+%-------------------------------------------------------------------------------
 \chapter{The bus and it's connected elements}
 
 
@@ -820,7 +1088,12 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 
 \section{Capacitor banks}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER Topology analysis and consolidation
+%-------------------------------------------------------------------------------
 \chapter{Topology analysis and consolidation}
 
 
@@ -836,7 +1109,9 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 \section{Calculation of the voltage, power and current vectors}
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER Power flow
+%-------------------------------------------------------------------------------
 \chapter{Power flow}
 
 
@@ -854,12 +1129,16 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER 2
+%-------------------------------------------------------------------------------
 \chapter{Time series power flow}
 
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER Stochastic power flow
+%-------------------------------------------------------------------------------
 \chapter{Stochastic power flow}
 
 \section{Cumulative Density Function (CDF)}
@@ -873,12 +1152,16 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER State estimation
+%-------------------------------------------------------------------------------
 \chapter{State estimation}
 
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%-------------------------------------------------------------------------------
+%	CHAPTER Short-circuit
+%-------------------------------------------------------------------------------
 \chapter{Short-circuit}
 
 
