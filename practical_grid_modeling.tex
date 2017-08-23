@@ -255,6 +255,30 @@ The goal is to provide a refference document for researchers and computer engine
 
 The book assumes that the reader has a basic understanding of matrices, vectors and complex numbers. The notation used in the book is intended to be clear and accesible as much as it is practicly possible.
 
+Most of the formulas presented will imply vectorized operations such as matrix multiplications or element-wise multiplications. This notation makes it much easier to implement the numerical methods, and in case of scripting languages such as python, enables the use of fast linear algebra libraries. This is key in the implementation of electrical systems simulators, since most articles and books provide the formulas using summations, which implementation in languages other than c or fortran would make the simulator prohibitelly slow in comparison with the vectorized version.
+
+Vectorized formulas also allow a much simpler debug and maintenance of the produced software.
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER notation
+%-------------------------------------------------------------------------------
+\chapter{Notation}
+
+\begin{itemize}
+
+\item $A \times B \rightarrow$ Matrix-Matrix dot product.
+
+\item $A \times b \rightarrow$ Matrix-Vector dot product.
+
+\item $A \cdot B \rightarrow$ Matrix-Matrix element wise multiplication.
+
+\item $a \cdot b \rightarrow$ vector-vector element wise multiplication.
+
+\item $A^{-1}\rightarrow$ Matrix inverse.
+
+\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficient matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
+\end{itemize}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER General network model
@@ -267,7 +291,7 @@ In the general network model, the the neutral wire and the earth "wire" are embe
 
 A node has power injection or consumption devices attached to it. Examples are loads, generators, capacitor banks or any other device that injects or consumes power from the grid.
 
-A branch has attached to it devices that modify the flow through the branch. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems).
+A branch might have devices attached that modify the flow through the branch. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems). 
 
 A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to calculate magnitudes of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit: a graph that does not contain further islands inside. In practice, a grid is split in its islands, each island is computed separatelly and the resuts are merged back to provide a consistent analysis interface of the whole grid.
 
@@ -277,7 +301,7 @@ The electrical grid calculations are mostly done in what is called "positive seq
 
 In this book, three-phase models will be presented, but the aplication of the numerical methods will be done in phase-by-phase basis. This is possible using the models presented by Vieira, Freitas and Morelato \cite{vieira2004phase}. In their work, the authors pick the diagonal of the elements admittance matrices to form single-phase grids, that are simulated independently. The magnetic coupling effects are included in the single-phase admittance matrices as shunt elements. This allows a very flexible model of the grid while retaining the calculation accuracy of a full-blown n-phase admittance matrix.
 
-So, because of the latter, the models will be introduced in three-phase and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will sove one numerical problem per phase, and when all the phases are simulated, we will merge the results intro n-phase structures.
+So, because of the latter, the models will be introduced in three-phases and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will sove one numerical problem per phase, and when all the phases are simulated, we will merge the results into n-phase structures.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Magnitudes and units
