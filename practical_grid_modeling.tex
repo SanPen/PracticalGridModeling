@@ -275,9 +275,36 @@ Vectorized formulas also allow a much simpler debug and maintenance of the produ
 
 \item $a \cdot b \rightarrow$ vector-vector element wise multiplication.
 
+\item $A^{*}\rightarrow$ Element-wise conjugate of the numbers composing $A$.
+
 \item $A^{-1}\rightarrow$ Matrix inverse.
 
-\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficient matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
+\item $A^{T}\rightarrow$ Transposed matrix or vector.
+
+\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficients matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
+
+\item $A[rows, :] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector $rows$.
+
+
+\item $A[:, cols] \rightarrow$ From the matrix $A$, pick the columns which indices are contained in the vector  $cols$.
+
+
+\item $A[rows, cols] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector  $rows$ and the columns which indices are contained in the vector  $cols$.
+
+
+\item $b[rows] \rightarrow$ From the vector $b$, pick the elements contained in the vector or list $rows$.
+
+\item $diag(b) \rightarrow$ Convert the vector $b$ into a diagonal matrix. 
+
+\item $diag(A) \rightarrow$ Extract the diagonal of the matrix $A$ as a vector. 
+
+\item $real(A) \rightarrow$ Extract the real part of $A$.
+
+\item $imag(A) \rightarrow$ Extract the imaginary part of $A$.
+
+\item $max(b) \rightarrow$ Maximum value of the vector $b$.
+
+\item $max(c, d) \rightarrow$ Pick the greater value between $c$ and $d$.
 \end{itemize}
 
 %-------------------------------------------------------------------------------
@@ -1138,20 +1165,577 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 %-------------------------------------------------------------------------------
 \chapter{Power flow}
 
+The power flow problem consists in finding the node voltages that correspond to the injected current and power values. The fundamental equation to be solved is:
+
+\begin{equation}
+S = V \times (Y \times V - I)^*
+\label{eq:power_flow}
+\end{equation}
+
+\marginnote{Note that the equation \ref{eq:power_flow} is nonlinear when solving for the voltage ($V$). However if there are no power injections and only current injections, the equation becomes linear. Because of the non-linearity, we will be using iterative methods to solve this equation.}
+
+Where:
+
+\begin{itemize}
+\item $S$: Vector of power injections.
+\item $I$: Vector of current injections.
+\item $V$: Vector of voltages.
+\item $Y$: Admittance matrix.
+\end{itemize}
+
+
+
 
 \section{Z-Matrix}
 
+The Z-Matriz method is a simple iterative method that provides good results, especially in distribution grids where the voltage variations are not large.
 
-\section{Newton-Raphson}
+The Z-Matrix method requires the Kron reduction of the slack nodes of the circuit. This reduction is explained below:
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{img/Matrix_reduction.eps}
+  \caption{Circuit's admittance matrix and vectors reduction. Representation for a six node circuit with two slack nodes.}
+  \label{fig:reduction}
+\end{figure}
+
+\begin{equation}
+Y_{red} = Y[pqpv, pqpv]
+\end{equation}
+
+\begin{equation}
+Y_{slack} = Y[pqpv, vd]
+\end{equation}
+
+\begin{equation}
+V_{red} = V[pqpv]
+\end{equation}
+
+\begin{equation}
+V_{slack} = V[vd]
+\end{equation}
+
+\begin{equation}
+S_{red} = S[pqpv]
+\end{equation}
+
+\begin{equation}
+I_{red} = I[pqpv]
+\end{equation}
 
 
-\section{Levenberg-Marquardt}
+Once we have all the reduced magnitudes, it means that we have removed the slack (VD) nodes from the circuit, but we must keep thir influence in the rest of the nodes in the form of current injections.
+
+First we copy $V_{red}$ into another variable $V_{prev}$.
+
+\begin{equation}
+V_{prev} = V_{red}
+\end{equation}
+
+The current injections apearing by the removal of the slack nodes are:
+\begin{equation}
+I_{slack} = Y_{slack} \times V_{slack}
+\end{equation}
+
+The voltages that arise from the slack current injections are:
+\begin{equation}
+C_k = Y_{red} \times I_{slack}
+\end{equation}
+
+The total injected currents including the power injections are:
+\begin{equation}
+I_k = \frac{S_{red}}{V_{prev}} + I_{red}
+\label{eq:zm_ik}
+\end{equation}
+
+The next step is to compute the nodes voltage due to all the power and current injections:
+
+\begin{equation}
+V_k = Y_{red}^{-1} \times I_k - C_k
+\end{equation}
+
+Now the error is the infinite norm of the voltage difference.
+
+\begin{equation}
+error = ||V_{prev} - V_k ||_{\infty} = max(abs(V_{prev} - V_k ))
+\end{equation}
+
+The infinite norm of the voltage difference between the previous iteration and the current iteration is a lawsy convergence criteria, but it is usually the only working criteria in practice for this method.
+
+Next, we copy the voltage solution to the previous voltage solution vector:
+
+\begin{equation}
+V_{prev} = V_k
+\label{eq:zm_copy_sol}
+\end{equation}
+
+We repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} untill the error is less or equal to a given tolerance not too strict like $1\times10^{-3}$
+
+Finally, since we have found the voltages for the PQ and PV nodes only, we should return a voltage vector with the voltages for all the nodes. Because of this, we copy the voltage solution for the reduced system into a copy of the original voltage vector.
+
+\begin{equation}
+V[pqpv] = V_k
+\end{equation}
+
+%double tol, max_tol;
+%int max_iter = 20;
+%int iter;
+%arma::cx_vec Ivd, Ik, Vk, Ck, Vprev;
+%
+%// slack-injected currents
+%Ivd = Yslack * Vslack;
+%
+%// slack voltages influence
+%Ck =  arma::spsolve(Yred, Ivd, "lapack");
+%
+%// copy the voltage
+%Vprev = Vred;
+%
+%// compute the currents
+%Ik = arma::conj(Sred / Vprev) + Ired;
+%
+%// compute the voltages
+%Vk = arma::spsolve(Yred, Ik, "lapack") - Ck;
+%
+%// compute the tolerance
+%tol = arma::norm(Vprev - Vk, "inf");
+%iter = 1;
+%max_tol = 1e-3;
+%
+%while (tol > max_tol && iter < max_iter){
+%
+%    // copy the voltage
+%    Vprev = Vk;
+%
+%    // compute the currents
+%    Ik = arma::conj(Sred / Vprev) + Ired;
+%
+%    // compute the voltages
+%    Vk = arma::spsolve(Yred, Ik, "lapack") - Ck;
+%
+%    // compute the tolerance
+%    tol = arma::norm(Vprev - Vk, "inf");
+%
+%    // increase the iterations counter
+%    iter++;
+%}
+
+\section{Jacobian based power flow}
+
+The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of beign more computationally expensive. In this section we'll start by introducing the Jacobian matrix, which is the system derivative for a certain set of voltage values and then we'll introduce the methods that use this matrix to solve the power flow problem.
+
+
+\subsection{Building the Jacobian matrix} \label{Jacobian_chapter}
+
+Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented below.
+
+First we compute the total current injection. It is a sparse diagonal matrix, so do not use a dense matrix format.
+\begin{equation}
+I_{diag} = diag(Y \times V - I_{bus})
+\end{equation}
+
+Then we convert the buses voltage solution $V$ into a square diagonal matrix. Use a sparse format for this.
+\begin{equation}
+V_{diag} = diag(V)
+\end{equation}
+
+Compute the buses voltage normalized solution $V$ into a square diagonal matrix. This is acomplished by dividing each complex voltage by its absolute value. Use a sparse format for this.
+\begin{equation}
+E_{diag} = diag(V / |V|)
+\end{equation}
+
+Now, Compute the derivative of the power injections $S$ with respect to the voltage module $|V|$:
+\begin{equation}
+\frac{\partial S}{\partial |V|} = V_{diag} \times (Y \times E_{diag})^* + I_{diag}^* \times  E_{diag}
+\end{equation}
+    
+Compute the derivative of the power injections $S$ with respect to the voltage angle $\delta$:
+\begin{equation}
+\frac{\partial S}{\partial \delta} = 1j \cdot V_{diag} \times (I_{diag} - Y \times V_{diag})^*
+\end{equation}
+
+Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and only contains real values. If the circuit contains $npq$ buses of type $PQ$ and $npv$ buses of type $PV$, the Jacobian matrix is a square matrix with $2 npq + npv$ rows and the same number of columns.
+
+\begin{equation}
+J=
+\left[
+\begin{array}{cc}
+real\left(\frac{\partial S}{\partial \delta}[pqpv, pqpv]\right) &
+real\left(\frac{\partial S}{\partial |V|}[pqpv, pq]\right) \\
+imag\left(\frac{\partial S}{\partial \delta}[pq, pqpv]\right) &
+imag\left(\frac{\partial S}{\partial |V|}[pq, pq]\right)
+\end{array}
+\right]
+\end{equation}
+
+Observe that the Jacobian matrix is composed of four subsets of the previously computed derivatives $\frac{\partial S}{\partial \delta}$ and $\frac{\partial S}{\partial |V|}$, where combinations of the $PQ$ and $PV$ node indices are selected.
+
+$pqpv$ is a vector that contains the indices of the $PQ$ and $PV$ type indices in sequential order.
+
+$pq$ is a vector that contains the indices of the $PQ$  type indices in sequential order.
+
+\subsection{Newton-Raphson}
+
+Newton-Raphson is a iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
+
+\begin{equation}
+s_{calc} = V \times (Y \times V - I_{bus})^*
+\label{eq:nr_Scalc}
+\end{equation}
+
+\begin{equation}
+\Delta S = S_{especified} - S_{calc} 
+\end{equation}
+
+
+Since the mismatch ($\Delta S$) is a vector of complex values, we transform it into a vector ($F$) with the real part of $\Delta S$ for the PQ and PV bus indices and the imaginary part of $\Delta S$ for the PQ bus indices of the vector. Observe that the length of the vector is $2npq+npv$, matching the Jacobian dimensions.
+
+
+
+\begin{equation}
+F =  \left[
+\begin{array}{c}
+real(\Delta S[pqpv]) \\
+ imag(\Delta S[pq]) 
+\end{array}
+\right]
+\label{eq:nr_mismatch}
+\end{equation}
+
+Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the especified tolerance, we stop the iterations otherwise, continue untill a certain number of iterations considered as the maximum (for example 20).
+
+\begin{equation}
+error = ||F||_{\infty} = max(abs(F))
+\label{eq:nr_error}
+\end{equation}
+
+If the error is higher than the tolerance, we need to solve the voltages increment ($\Delta x$), for which we must compute the Jacobian first. Some simplifications of the method only compute the Jacobian one time, but for better accuracy, the Jacobian needs to be calculated on every iteration.
+
+\begin{equation}
+\Delta x = J^{-1} \times F
+\label{eq:nr_solve}
+\end{equation}
+
+Notice that $\Delta x$ is a vector with the voltage angles ($\delta$) for the PQ and PV nodes followed by the voltage modules ($|V|$) for the PQ nodes. This matches the way we built the Jacobian ($J$) and the mismatch ($F$). Now we must assign those polar voltage angle and module increments to the rectangular voltage vector that we use to compute the Jacobian and the mismatch.
+
+To acomplish this, we declare two polar voltage increment vectors $\Delta |V|$ and $\Delta \delta$, initialize them to zero, and we fill the corresponding values with the following:
+
+\marginnote{Here we use the auxiliary vectors $pqpv$ and $pq$ wich contain the indices of the pq and pv type buses, and the pq type buses respectivelly. $npqpv$ and $npq$ are the sizes of those two vectors.}
+\begin{equation}
+\Delta \delta[pqpv[i]] = \Delta x[i]  \quad \forall i \in {0..npqpv}
+\label{eq:nr_dd1}
+\end{equation}
+
+\begin{equation}
+\Delta  |V|[pq[i]] = \Delta x[i+npqpv]  \quad \forall i \in {0..npq}
+\end{equation}
+
+Then we need to add those values to the voltage module and angle vectors $|V|$ and $\delta$:
+
+\marginnote{Here we introduce the notion of the $k_{th}$ iteration wich represents the current iteration and the $k_{th}+1$ represents the next iteration.}
+
+\begin{equation}
+|V|^{(k+1} = |V|^{(k} + \Delta |V|^{(k}
+\end{equation}
+
+\begin{equation}
+\delta^{(k+1} = \delta^{(k} + \Delta \delta^{(k}
+\end{equation}
+
+At last, we convert the polar vectors  $|V|$ and $\delta$ into a single complex voltage vector $V$.
+
+\begin{equation}
+V^{(k+1} = |V|^{(k+1} \cdot \left( cos(\delta^{(k+1})  1j \cdot sin(\delta^{(k+1})\right)
+\label{eq:nr_voltage_conversion}
+\end{equation}
+
+The method consists in repeating formulas \ref{eq:nr_Scalc} to \ref{eq:nr_voltage_conversion} untill the error is less or equal to the tolerance or a number of iterations is reached.
+
+The algorithm is then:
+
+\begin{enumerate}
+
+\item Start.
+
+\item Compute the mismatch function ($F$) using the initial voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+
+\item Compute the error. Equation \ref{eq:nr_error}.
+
+\item While $error > tolerance$ or $iterations < max\_iterations$:
+
+	\begin{enumerate}
+	\item Compute the Jacobian
+	
+	\item Solve the linear system. Equation \ref{eq:nr_solve}.
+	
+	\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+	
+	\item Compute the mismatch function ($F$) using the lattest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	
+	\item Compute the error. Equation \ref{eq:nr_error}.
+	
+	\item $iterations = iterations + 1$
+	\end{enumerate}
+
+\item End.
+\end{enumerate}
+
+
+\subsection{Levenberg-Marquardt}
+
+The Levenbarg-Marquardt iterative technique is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of more computational effort.
+
+
+At each iteration we need to assemble the system matrix $A$ as follows:
+%    // system matrix
+%    H1 = H.t();
+%
+%    // H2 = H1 x H
+%    H2 = H1 * H;
+%
+%    // set first value of lmbda
+%    if (iter == 0)
+%        lbmda = 1e-3 * H2.diag().max();
+%
+%    // compute system matrix A = H^T·H - lambda·I
+%    A = H2 + lbmda * Idn;
+
+
+\begin{equation}
+A = J^T \times J + \lambda \cdot I
+\label{eq:lm_A}
+\end{equation}
+
+Where $\lambda$ is computed only in the first iteration as:
+
+\begin{equation}
+\lambda = 0.001 \cdot max(diag(J \times J^T))
+\end{equation}
+
+The right hand side of the linear system to obtain the voltage increments is:
+
+\marginnote{$F$ is provided in the equation \ref{eq:nr_mismatch}.}
+
+\begin{equation}
+rhs = J^T \times F
+\label{eq:lm_rhs}
+\end{equation}
+
+%    dx = arma::spsolve(A, rhs, "lapack");
+%
+%    // objective function to minimize
+%    f = 0.5 * arma::dot(dz, dz);
+%
+%    // decision function
+%    rho = (f_prev - f) / (0.5 * arma::dot(dx, lbmda * dx + rhs));
+
+Next, we solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method.
+
+\begin{equation}
+\Delta x = A^{-1} \times rhs
+\label{eq:lm_solve}
+\end{equation}
+
+Then, compute the objective function to minimize $f$. It is a value.
+
+\begin{equation}
+f = \frac{1}{2} \cdot (F \times F^T)
+\label{eq:lm_f}
+\end{equation}
+
+Then the decision function value $\rho$. It is a value.
+
+\marginnote{$f^{(k-1}$ is the value of $f$ in the previous iteration. $f^{(k}$ is the value of $f$ computed in the current iteration. The value of  $f^{(k-1}$  in the first iteration should be a very large number  i.e. $1 \times 10^9$.}
+
+\begin{equation}
+\rho = \frac{f^{(k-1}-f^{(k}}{\frac{1}{2} \cdot (\Delta x \times (\lambda \cdot \Delta x + rhs)^T)}
+\label{eq:lm_rho}
+\end{equation}
+
+Now, based on the value of $\rho$ we decide what to do in the next iteration.
+
+If $\rho$ is greater than zero, we mark a flag to update the jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
+
+%        lbmda *= std::max(1.0 / 3.0, 1 - std::pow(2 * rho - 1, 3.0));
+%        nu = 2.0;
+
+\begin{equation}
+\lambda = \lambda \cdot max(\frac{1}{3}, 1-(2\cdot \rho -1)^3)
+\label{eq:lm_update_l}
+\end{equation}
+
+And set a variable $\nu=2$ .
+
+%        update_jacobian = false;
+%        lbmda *= nu;
+%        nu *= 2.0;
+
+If $\rho$ is less or equal to zero, then the values of $\Delta x$ will not improve the solution and we need to take corrective actions. We mark a flag to not to update the Jacobian in the next iteration, we set $\lambda=\lambda \cdot \nu$ and $\nu = \nu \cdot 2$.
+
+
+The complete algorithm is: 
+
+\begin{enumerate}
+
+\item Start.
+
+\item Compute the mismatch function ($F$) using the initial voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+
+\item Compute the error. Equation \ref{eq:nr_error}.
+
+\item While $error > tolerance$ or $iterations < max\_iterations$:
+
+	\begin{enumerate}
+	\item If the computation of the Jacobian is enabled, compute the Jacobian and the system matrix $A$ using equation \ref{eq:lm_A}.
+	
+	\item Compute the linear system right hand side using equation \ref{eq:lm_rhs}.
+	
+	\item Solve the linear system to obtain $\Delta x$. Equation \ref{eq:lm_solve}.
+	
+	\item Compute the objective function $f$ using equation \ref{eq:lm_f}.
+	
+	\item Compute the decision value $\rho$ using equation \ref{eq:lm_rho}.
+	
+	\item If $\rho > 0$:
+	
+		\begin{enumerate}
+		\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+		
+		\item Update $\lambda$ using equation \ref{eq:lm_update_l}.
+		
+		\item Set $\nu = 2$.
+		
+		\item Set the Jacobian update flag to true.
+		\end{enumerate}
+		
+	\item If $\rho \leq 0$:
+	
+		\begin{enumerate}
+		\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+		
+		\item Update $\lambda = \nu \cdot \lambda$.
+		
+		\item Update $\nu = 2 \cdot \nu$.
+		
+		\item Set the Jacobian update flag to false.
+		\end{enumerate}
+	
+	\item Compute the mismatch function ($F$) using the lattest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	
+	\item Compute the error. Equation \ref{eq:nr_error}.
+	
+	\item $iterations = iterations + 1$
+	\end{enumerate}
+
+\item End.
+\end{enumerate}
+
+
+%unsigned int iter = 0;
+%unsigned int max_iter = 10;
+%double tol = 1e-6;
+%double err;
+%bool converged = false;
+%bool update_jacobian = true;
+%double nu = 2.0;
+%double lbmda = 0.0;
+%double f_prev = 1e9;  // very large number
+%double f;
+%double rho;
+%unsigned long npq = calc->pq.size();
+%unsigned long npqpv = calc->pqpv.size();
+%
+%
+%arma::sp_mat Idn; // identity matrix
+%Idn.eye(2 * npqpv, 2 * npqpv);
+%
+%arma::sp_mat H, H1, H2, A;
+%arma::vec dz, dx, rhs;
+%arma::vec dVm(calc->n_buses);
+%arma::vec dVa(calc->n_buses);
+%arma::cx_vec Vsol = calc->Vbus[p];
+%arma::vec Vm = arma::abs(Vsol);
+%arma::vec Va = arma::arg(Vsol);
+%
+%// fill zeros only where needed
+%for(unsigned int i:calc->vdpv)
+%    dVm(i) = 0.0;
+%for(unsigned int i:calc->vd)
+%    dVa(i) = 0.0;
+%
+%// fill the Jacobian and the mismatch
+%calcJ(&H, &dz, &(calc->Ybus[p]), &Vsol, &(calc->Ibus[p]), &(calc->Sbus[p]));
+%
+%err = arma::norm(dz, "inf");
+%converged = err < tol;
+%
+%while (iter < max_iter && !converged){
+%
+%    // system matrix
+%    H1 = H.t();
+%
+%    // H2 = H1 x H
+%    H2 = H1 * H;
+%
+%    // set first value of lmbda
+%    if (iter == 0)
+%        lbmda = 1e-3 * H2.diag().max();
+%
+%    // compute system matrix A = H^T·H - lambda·I
+%    A = H2 + lbmda * Idn;
+%
+%    // right hand side: H^t·dz
+%    rhs = H1 * dz;
+%
+%    // solve the liear system: is negative so, it is summed to the voltage solution
+%    dx = arma::spsolve(A, rhs, "lapack");
+%
+%    // objective function to minimize
+%    f = 0.5 * arma::dot(dz, dz);
+%
+%    // decision function
+%    rho = (f_prev - f) / (0.5 * arma::dot(dx, lbmda * dx + rhs));
+%
+%    // lambda update
+%    if (rho > 0.0){
+%        update_jacobian = true;
+%        lbmda *= std::max(1.0 / 3.0, 1 - std::pow(2 * rho - 1, 3.0));
+%        nu = 2.0;
+%
+%        // convert dx to voltage increments
+%        solution_to_va(&dVm, &dVa, &dx, npqpv, npq);
+%
+%        // modify the voltage solution properly
+%        Vm += dVm;
+%        Va += dVa;
+%        Vsol = Vm % (arma::cos(Va) + arma::cx_double(0.0, 1.0) * arma::sin(Va));
+%        // update Vm and Va again in case we wrapped around with a negative Vm (numerical trick!)
+%        Vm = arma::abs(Vsol);
+%        Va = arma::arg(Vsol);
+%
+%    } else {
+%        update_jacobian = false;
+%        lbmda *= nu;
+%        nu *= 2.0;
+%    }
+%
+%    if (update_jacobian){
+%        // fill the Jacobian and the mismatch
+%        calcJ(&H, &dz, &(calc->Ybus[p]), &Vsol, &(calc->Ibus[p]), &(calc->Sbus[p]));
+%    }
+%
+%    err = arma::norm(dz, "inf");
+%    converged = err < tol;
+%
+%    iter++;
+%}
 
 
 \section{Holomorphic embedding}
 
 
+\section{Post voltage solution: Compute the power flows}
 
+Ironically, what is called the power flow problem does not compute the power flows in the branches of a grid. It computes the node voltages. In this section we explain how to compute the current and power that flows through the grid branches upon a given voltage solution vector.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER 2
