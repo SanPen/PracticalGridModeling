@@ -1268,7 +1268,7 @@ V_{prev} = V_k
 \label{eq:zm_copy_sol}
 \end{equation}
 
-We repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} untill the error is less or equal to a given tolerance not too strict like $1\times10^{-3}$
+Repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} untill the error is less or equal to a given tolerance not too strict like $1\times10^{-3}$.
 
 Finally, since we have found the voltages for the PQ and PV nodes only, we should return a voltage vector with the voltages for all the nodes. Because of this, we copy the voltage solution for the reduced system into a copy of the original voltage vector.
 
@@ -1276,52 +1276,19 @@ Finally, since we have found the voltages for the PQ and PV nodes only, we shoul
 V[pqpv] = V_k
 \end{equation}
 
-%double tol, max_tol;
-%int max_iter = 20;
-%int iter;
-%arma::cx_vec Ivd, Ik, Vk, Ck, Vprev;
-%
-%// slack-injected currents
-%Ivd = Yslack * Vslack;
-%
-%// slack voltages influence
-%Ck =  arma::spsolve(Yred, Ivd, "lapack");
-%
-%// copy the voltage
-%Vprev = Vred;
-%
-%// compute the currents
-%Ik = arma::conj(Sred / Vprev) + Ired;
-%
-%// compute the voltages
-%Vk = arma::spsolve(Yred, Ik, "lapack") - Ck;
-%
-%// compute the tolerance
-%tol = arma::norm(Vprev - Vk, "inf");
-%iter = 1;
-%max_tol = 1e-3;
-%
-%while (tol > max_tol && iter < max_iter){
-%
-%    // copy the voltage
-%    Vprev = Vk;
-%
-%    // compute the currents
-%    Ik = arma::conj(Sred / Vprev) + Ired;
-%
-%    // compute the voltages
-%    Vk = arma::spsolve(Yred, Ik, "lapack") - Ck;
-%
-%    // compute the tolerance
-%    tol = arma::norm(Vprev - Vk, "inf");
-%
-%    // increase the iterations counter
-%    iter++;
-%}
 
 \section{Jacobian based power flow}
 
 The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of beign more computationally expensive. In this section we'll start by introducing the Jacobian matrix, which is the system derivative for a certain set of voltage values and then we'll introduce the methods that use this matrix to solve the power flow problem.
+
+\begin{center}
+\begin{figure}[h!]
+  \includegraphics[width=0.9\linewidth]{img/JacobianBased.eps}
+  \caption{Jacobian based linear system to compute the voltage increments.}
+  \label{fig:jacobian_based}
+\end{figure}
+\end{center}
+
 
 
 \subsection{Building the Jacobian matrix} \label{Jacobian_chapter}
@@ -1394,11 +1361,21 @@ Since the mismatch ($\Delta S$) is a vector of complex values, we transform it i
 \begin{equation}
 F =  \left[
 \begin{array}{c}
-real(\Delta S[pqpv]) \\
- imag(\Delta S[pq]) 
+\Delta P \\
+\Delta Q  
 \end{array}
 \right]
 \label{eq:nr_mismatch}
+\end{equation}
+
+\begin{equation}
+\Delta Q = imag(\Delta S[pq]) 
+\label{eq:nr_q_inc}
+\end{equation}
+
+\begin{equation}
+\Delta P = real(\Delta S[pqpv])
+\label{eq:nr_p_inc}
 \end{equation}
 
 Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the especified tolerance, we stop the iterations otherwise, continue untill a certain number of iterations considered as the maximum (for example 20).
