@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % How to use writeLaTeX: 
 %
-% You edit the source code here on the left, and the preview on the
+% You edit the source code here on the left, and the preview on thes
 % right shows you the result within a few seconds.
 %
 % Bookmark this page and share the URL with your co-authors. They can
@@ -26,7 +26,7 @@
 
 %%
 % Book metadata
-\title{Practical Grid\\Modeling}
+\title{Practical Grid\\Modelling}
 \author[]{Santiago Pe\~nate Vera}
 \publisher{}
 
@@ -251,11 +251,11 @@
 
 This book aims at explaining grid modelling from a practical perspective, providing state of the art models, algorithms as well as implementation hints and examples.
 
-The goal is to provide a refference document for researchers and computer engineers in the field of electric systems modelling, so that the task of building your own simulator or extend the already available open source ones becomes feasible.
+The goal is to provide a reference document for researchers and computer engineers in the field of electric systems modelling, so that the task of building your own simulator or extend the already available open source ones becomes feasible.
 
-The book assumes that the reader has a basic understanding of matrices, vectors and complex numbers. The notation used in the book is intended to be clear and accesible as much as it is practicly possible.
+The book assumes that the reader has a basic understanding of matrices, vectors and complex numbers. The notation used in the book is intended to be clear and accessible as much as it is practically possible.
 
-Most of the formulas presented will imply vectorized operations such as matrix multiplications or element-wise multiplications. This notation makes it much easier to implement the numerical methods, and in case of scripting languages such as python, enables the use of fast linear algebra libraries. This is key in the implementation of electrical systems simulators, since most articles and books provide the formulas using summations, which implementation in languages other than c or fortran would make the simulator prohibitelly slow in comparison with the vectorized version.
+Most of the formulas presented will imply vectorized operations such as matrix multiplications or element-wise multiplications. This notation makes it much easier to implement the numerical methods, and in case of scripting languages such as python, enables the use of fast linear algebra libraries. This is key in the implementation of electrical systems simulators, since most articles and books provide the formulas using summations, which implementation in languages other than c or Fortran would make the simulator prohibitively slow in comparison with the vectorized version.
 
 Vectorized formulas also allow a much simpler debug and maintenance of the produced software.
 
@@ -312,7 +312,7 @@ Vectorized formulas also allow a much simpler debug and maintenance of the produ
 %-------------------------------------------------------------------------------
 \chapter{General network model}
 
-The electrical grid can be assimilated to a graph. A graph is a mathematical object composed of nodes and edges (or branches). From a calculation point of view, a node is the place where the voltage is calculated given power and currnt injections, and a branch is the place where the current and power that flows through it are computed given the nodes voltage.
+The electrical grid can be assimilated to a graph. A graph is a mathematical object composed of nodes and edges (or branches). From a calculation point of view, a node is the place where the voltage is calculated given power and current injections, and a branch is the place where the current and power that flows through it are computed given the nodes voltage.
 
 In the general network model, the the neutral wire and the earth "wire" are embedded into the three-phase equivalent using Kron's reduction. See \cite{dorfler2013kron} for a comprehensive explanation or simply \cite{kersting2012distribution} for practical application.
 
@@ -320,15 +320,15 @@ A node has power injection or consumption devices attached to it. Examples are l
 
 A branch might have devices attached that modify the flow through the branch. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems). 
 
-A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to calculate magnitudes of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit: a graph that does not contain further islands inside. In practice, a grid is split in its islands, each island is computed separatelly and the resuts are merged back to provide a consistent analysis interface of the whole grid.
+A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to calculate magnitudes of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit: a graph that does not contain further islands inside. In practice, a grid is split in its islands, each island is computed separately and the results are merged back to provide a consistent analysis interface of the whole grid.
 
 \section{n-phase modeling}
 
-The electrical grid calculations are mostly done in what is called "positive sequence equivalent. This is a single phase equivalent of a three-phase grid. In practice the positive sequence equivalent is applied to branches with one, two or three phases, this simplifies the modeling, but makes the ralistic analysis of the grid much harder since the phases inbalance has been neglected.
+The electrical grid calculations are mostly done in what is called "positive sequence equivalent. This is a single phase equivalent of a three-phase grid. In practice the positive sequence equivalent is applied to branches with one, two or three phases, this simplifies the modelling, but makes the realistic analysis of the grid much harder since the phases imbalance has been neglected.
 
 In this book, three-phase models will be presented, but the aplication of the numerical methods will be done in phase-by-phase basis. This is possible using the models presented by Vieira, Freitas and Morelato \cite{vieira2004phase}. In their work, the authors pick the diagonal of the elements admittance matrices to form single-phase grids, that are simulated independently. The magnetic coupling effects are included in the single-phase admittance matrices as shunt elements. This allows a very flexible model of the grid while retaining the calculation accuracy of a full-blown n-phase admittance matrix.
 
-So, because of the latter, the models will be introduced in three-phases and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will sove one numerical problem per phase, and when all the phases are simulated, we will merge the results into n-phase structures.
+So, because of the latter, the models will be introduced in three-phases and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will solve one numerical problem per phase, and when all the phases are simulated, we will merge the results into n-phase structures.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Magnitudes and units
@@ -337,7 +337,7 @@ So, because of the latter, the models will be introduced in three-phases and whe
 
 
 
-As the electric energy is mostly distributed in altern current, electrical magnitudes are waves that vary their polarity (positive and negative value) and amplitude in time. because of this, the electrical magnitudes are expressed by complex numbers to denote the position of the value in the two-dimensional plane amplitude-time. 
+As the electric energy is mostly distributed in alternating current, electrical magnitudes are waves that vary their polarity (positive and negative value) and amplitude in time. because of this, the electrical magnitudes are expressed by complex numbers to denote the position of the value in the two-dimensional plane amplitude-time. 
 
 \begin{marginfigure}
   \includegraphics[width=\linewidth]{img/VoltageDelay.eps}
@@ -354,11 +354,11 @@ The units in electrical grid modelling are represented in the tables \ref{units_
 \footnotesize
 \begin{tabular}{lll}
 \toprule
-Magnitude & Unit & Recomended user input unit\\
+Magnitude & Unit & Recommended user input unit\\
 \midrule
 Voltage & $V$ (Volt) & $kV$ (kilo-Volt)\\
 Current & $A$ (Ampere) & $kA$ (kilo-Ampere)\\
-Potencia & $VA$ (Volt-Ampere) & $MVA$ (Mega-Volt-Ampere)\\
+Power & $VA$ (Volt-Ampere) & $MVA$ (Mega-Volt-Ampere)\\
 Active power & $W$ (Watt) & $MW$ (Mega-Watt)\\
 Reactive power & $VAr$ (Volt-Ampere-reactive) & $MVAr$ (Mega-Volt-Ampere-reactive)\\
 Impedance & $\Omega$ (Ohm) & $\Omega$ (Ohm) or per-unit\\
@@ -415,9 +415,9 @@ Let us assume a three-phase grid. The phases of the grid are denoted by the name
 
 The wye and delta connections provide the ground to introduce the \textit{phase} and \textit{line} voltages. The phase to neutral voltage is called \textit{phase voltage}, those are $V_A$, $V_B$ and $V_C$. The phase to phase voltage is called \textit{line voltage}, those are $V_{AB}$, $V_{AC}$ and $V_{BC}$.
 
-\paragraph{The delta connection} is depicted in the figure \ref{fig:delta}. The delta conection has no neutral.
+\paragraph{The delta connection} is depicted in the figure \ref{fig:delta}. The delta connection has no neutral.
 
-\paragraph{The wye connection} is depicted in the figure \ref{fig:star}. The star conection does have neutral ($N$). The wye connection is also known as star connection.
+\paragraph{The wye connection} is depicted in the figure \ref{fig:star}. The star connection does have neutral ($N$). The wye connection is also known as star connection.
 
 \begin{marginfigure}
   \includegraphics[width=0.9\linewidth]{img/Delta.eps}
@@ -504,11 +504,11 @@ Z_C
 
 \section{Per unit system}
 
-In an electrical grid there are multiple levels of voltage. This situation intruduces discontinuities in the numerical methods used to solve power flows and state estimations among others, producing an unstable convergence behaviour. To avoid this, the per unit system is introduced. A side effect of the per unit representation is to have a very convenient way of visualizing the grid magnitudes, all referenced to their base. In the per unit system, all the voltages are expressed in terms of their nominal value. In this case, all the grid voltage values are around one. For instance, a voltage value of 0.98 means that the voltage is 98 \% of the nominal voltage value at that point.
+In an electrical grid there are multiple levels of voltage. This situation introduces discontinuities in the numerical methods used to solve power flows and state estimations among others, producing an unstable convergence behaviour. To avoid this, the per unit system is introduced. A side effect of the per unit representation is to have a very convenient way of visualizing the grid magnitudes, all referenced to their base. In the per unit system, all the voltages are expressed in terms of their nominal value. In this case, all the grid voltage values are around one. For instance, a voltage value of 0.98 means that the voltage is 98 \% of the nominal voltage value at that point.
 
 For most exchange formats in computer programs, the element's magnitudes are expressed with a mix of actual units and per unit values. Regardless of this, a practical way of converting any electrical magnitude to its per unit equivalent is presented.
 
-First, we must choose an arbitrary value of power base conversion. This value can be seen as the grid's nominal power, even though that concept is not related to any phisical quantity, but it is rather a numerical aritifice. 
+First, we must choose an arbitrary value of power base conversion. This value can be seen as the grid's nominal power, even though that concept is not related to any physical quantity, but it is rather a numerical artifice. 
 
 \marginnote{ The base power is most commonly chosen to be $S_{Base} = 100 MVA$.}
 
@@ -609,9 +609,9 @@ Z_2 = 0.3061  +  j 0.6270
 \end{array}
 $$
 
-Observe that $Z_1$ and $Z_2$ are identical (with the shown numerical precission). It is very common in utilities to store only $Z_0$ and $Z_1$ to define a line. The balanced element assumption is very common and should be carefully used.
+Observe that $Z_1$ and $Z_2$ are identical (with the shown numerical precision). It is very common in utilities to store only $Z_0$ and $Z_1$ to define a line. The balanced element assumption is very common and should be carefully used.
 
-\section{Bulding $Z_{ABC}$ from the sequence components}
+\section{Building $Z_{ABC}$ from the sequence components}
 
 Once the complete 3x3 impedance matrix has been reduced to the sequence components and only those have been stored in the utility database, the obtaining of the full 3x3 matrix might be necessary to perform unbalanced calculations. Of course we will not be able to obtain the exact original $Z_{ABC}$ from the reduced sequence components, but the approximation is fair.
 
@@ -627,7 +627,7 @@ Z_0 - Z_1 & Z_0 - Z_1 & 2Z_1 + Z_0
 
 \paragraph{Example}
 
-We need to compute two values, before assambling the 3x3 matrix:
+We need to compute two values, before assembling the 3x3 matrix:
 
 $$
 \frac{1}{3}(2 \cdot Z_1 + Z_0) = \frac{1}{3} (2\cdot(0.3061 + j 0.6270) + (0.7735 + j 1.9373)) = 0.4619 + j1.0638
@@ -665,7 +665,7 @@ To the effect of most calculations run in operation of a electrical system, the 
 
 \marginnote{In the case of lines, the series admittance $Y_{serie}$ is computed as the inverse of $Z_{ABC}$. From the line's calculation it is obtained the series impedance matrix $Z_{ABC}$ and the shunt admittance matrix $Y_{sh}$. }
 
-The pi model is composed by a series admittance  $Y_{serie}$ and a shunt admittance $Y_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accomodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modeled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
+The pi model is composed by a series admittance  $Y_{serie}$ and a shunt admittance $Y_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accommodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modelled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
 
 
 \begin{center}
@@ -878,7 +878,7 @@ y_t & 0 & -y_t
 \end{equation}
 
 
-$y_t$ is the transformer winding per unit admittance. It is given in values per units from the transformer especifications sheet. Usually it is given either directly as magnetizing resistance $r_m$ and inductance $x_m$, in which case:
+$y_t$ is the transformer winding per unit admittance. It is given in values per units from the transformer specifications sheet. Usually it is given either directly as magnetizing resistance $r_m$ and inductance $x_m$, in which case:
 
 \begin{equation}
 y_t = \frac{3}{r_l + jx_l}
@@ -890,7 +890,7 @@ Or it is given as the "short circuit study" values. This is a more complete case
 
 \subsection{Transformer definition from the short circuit study}
 
-In order to get the series impedance and shunt admittance of the transformer to match the branch model, it is advised to transform the specification sheet values of the device into the desired values. The values to take from the specs sheet are: \newline
+In order to get the series impedance and shunt admittance of the transformer to match the branch model, it is advised to transform the specification sheet values of the device into the desired values. The values to take from the specifications sheet are: \newline
 \begin{itemize}
 	\item $S_n$: Nominal power in MVA.
 	\item $U_{hv}$: Voltage at the high-voltage side in kV.
@@ -1046,7 +1046,7 @@ $$y_{shunt} =  0.0000 - j0.0000 \quad p.u.$$
 $$y_t =  0.0001 - j0.1764 \quad p.u.$$
 \end{multicols}
 
-Once the we have obtained the $y_t$ value, we start building the apropiate branch impedance matrices $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
+Once the we have obtained the $y_t$ value, we start building the appropriate branch impedance matrices $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
 $$
 Y_{I} = \left[\begin{array}{ccc}
 0.0001 - j0.1764 & 0.0000 + j0.0000 & 0.0000 + j0.0000 \\
@@ -1110,7 +1110,7 @@ $$
 
 \section{Voltage regulator}
 
-Since all the electrical models are in per-unit values, the voltage regulator is modeled in the exact same way as a transformer.
+Since all the electrical models are in per-unit values, the voltage regulator is modelled in the exact same way as a transformer.
 
 
 
@@ -1172,7 +1172,7 @@ S = V \times (Y \times V - I)^*
 \label{eq:power_flow}
 \end{equation}
 
-\marginnote{Note that the equation \ref{eq:power_flow} is nonlinear when solving for the voltage ($V$). However if there are no power injections and only current injections, the equation becomes linear. Because of the non-linearity, we will be using iterative methods to solve this equation.}
+\marginnote{Note that the equation \ref{eq:power_flow} is non-linear when solving for the voltage ($V$). However if there are no power injections and only current injections, the equation becomes linear. Because of the non-linearity, we will be using iterative methods to solve this equation.}
 
 Where:
 
@@ -1188,7 +1188,7 @@ Where:
 
 \section{Z-Matrix}
 
-The Z-Matriz method is a simple iterative method that provides good results, especially in distribution grids where the voltage variations are not large.
+The Z-Matrix method is a simple iterative method that provides good results, especially in distribution grids where the voltage variations are not large.
 
 The Z-Matrix method requires the Kron reduction of the slack nodes of the circuit. This reduction is explained below:
 
@@ -1223,7 +1223,7 @@ I_{red} = I[pqpv]
 \end{equation}
 
 
-Once we have all the reduced magnitudes, it means that we have removed the slack (VD) nodes from the circuit, but we must keep thir influence in the rest of the nodes in the form of current injections.
+Once we have all the reduced magnitudes, it means that we have removed the slack (VD) nodes from the circuit, but we must keep their influence in the rest of the nodes in the form of current injections.
 
 First we copy $V_{red}$ into another variable $V_{prev}$.
 
@@ -1231,7 +1231,7 @@ First we copy $V_{red}$ into another variable $V_{prev}$.
 V_{prev} = V_{red}
 \end{equation}
 
-The current injections apearing by the removal of the slack nodes are:
+The current injections appearing by the removal of the slack nodes are:
 \begin{equation}
 I_{slack} = Y_{slack} \times V_{slack}
 \end{equation}
@@ -1259,7 +1259,7 @@ Now the error is the infinite norm of the voltage difference.
 error = ||V_{prev} - V_k ||_{\infty} = max(abs(V_{prev} - V_k ))
 \end{equation}
 
-The infinite norm of the voltage difference between the previous iteration and the current iteration is a lawsy convergence criteria, but it is usually the only working criteria in practice for this method.
+The infinite norm of the voltage difference between the previous iteration and the current iteration is a poor convergence criteria, but it is usually the only working criteria in practice for this method.
 
 Next, we copy the voltage solution to the previous voltage solution vector:
 
@@ -1268,7 +1268,7 @@ V_{prev} = V_k
 \label{eq:zm_copy_sol}
 \end{equation}
 
-Repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} untill the error is less or equal to a given tolerance not too strict like $1\times10^{-3}$.
+Repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} until the error is less or equal to a given tolerance not too strict like $1\times10^{-3}$.
 
 Finally, since we have found the voltages for the PQ and PV nodes only, we should return a voltage vector with the voltages for all the nodes. Because of this, we copy the voltage solution for the reduced system into a copy of the original voltage vector.
 
@@ -1279,7 +1279,7 @@ V[pqpv] = V_k
 
 \section{Jacobian based power flow}
 
-The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of beign more computationally expensive. In this section we'll start by introducing the Jacobian matrix, which is the system derivative for a certain set of voltage values and then we'll introduce the methods that use this matrix to solve the power flow problem.
+The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of being more computationally expensive. In this section we'll start by introducing the Jacobian matrix, which is the system derivative for a certain set of voltage values and then we'll introduce the methods that use this matrix to solve the power flow problem.
 
 \begin{center}
 \begin{figure}[h!]
@@ -1295,7 +1295,7 @@ The derivative based methods are more accurate than the derivative free methods.
 
 The Jacobian matrix ($J$) is the derivative of the fundamental power flow equation \ref{eq:power_flow}, with respect to the voltage magnitudes to be solved $|V|$ and $\delta$. It is one of the most expensive parts of the derivative based power flow methods.
 
-In most literature, the reader will find the Jacobian presented with non matricial formulas which are hard to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented as follows.
+In most literature, the reader will find the Jacobian presented with non matrix formulas which are hard to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented as follows.
 
 First we compute the total current injection. It is a sparse diagonal matrix, so do not use a dense matrix format.
 \begin{equation}
@@ -1353,7 +1353,7 @@ s_{calc} = V \times (Y \times V - I_{bus})^*
 \end{equation}
 
 \begin{equation}
-\Delta S = S_{especified} - S_{calc} 
+\Delta S = S_{specified} - S_{calc} 
 \end{equation}
 
 
@@ -1381,7 +1381,7 @@ F =  \left[
 \label{eq:nr_p_inc}
 \end{equation}
 
-Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the especified tolerance, we stop the iterations otherwise, continue untill a certain number of iterations considered as the maximum (for example 20).
+Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the specified tolerance, we stop the iterations otherwise, continue until a certain number of iterations considered as the maximum (for example 20).
 
 \begin{equation}
 error = ||F||_{\infty} = max(abs(F))
@@ -1397,9 +1397,9 @@ If the error is higher than the tolerance, we need to solve the voltages increme
 
 Notice that $\Delta x$ is a vector with the voltage angles ($\delta$) for the PQ and PV nodes followed by the voltage modules ($|V|$) for the PQ nodes. This matches the way we built the Jacobian ($J$) and the mismatch ($F$). Now we must assign those polar voltage angle and module increments to the rectangular voltage vector that we use to compute the Jacobian and the mismatch.
 
-To acomplish this, we declare two polar voltage increment vectors $\Delta |V|$ and $\Delta \delta$, initialize them to zero, and we fill the corresponding values with the following:
+To accomplish this, we declare two polar voltage increment vectors $\Delta |V|$ and $\Delta \delta$, initialize them to zero, and we fill the corresponding values with the following:
 
-\marginnote{Here we use the auxiliary vectors $pqpv$ and $pq$ wich contain the indices of the pq and pv type buses, and the pq type buses respectivelly. $npqpv$ and $npq$ are the sizes of those two vectors.}
+\marginnote{Here we use the auxiliary vectors $pqpv$ and $pq$ which contain the indices of the pq and pv type buses, and the pq type buses respectively. $npqpv$ and $npq$ are the sizes of those two vectors.}
 \begin{equation}
 \Delta \delta[pqpv[i]] = \Delta x[i]  \quad \forall i \in {0..npqpv}
 \label{eq:nr_dd1}
@@ -1428,7 +1428,7 @@ V^{(k+1} = |V|^{(k+1} \cdot \left( cos(\delta^{(k+1}) + 1j \cdot sin(\delta^{(k+
 \label{eq:nr_voltage_conversion}
 \end{equation}
 
-The method consists in repeating formulas \ref{eq:nr_Scalc} to \ref{eq:nr_voltage_conversion} untill the error is less or equal to the tolerance or a number of iterations is reached.
+The method consists in repeating formulas \ref{eq:nr_Scalc} to \ref{eq:nr_voltage_conversion} until the error is less or equal to the tolerance or a number of iterations is reached.
 
 The algorithm is then:
 
@@ -1449,7 +1449,7 @@ The algorithm is then:
 	
 	\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
 	
-	\item Compute the mismatch function ($F$) using the lattest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	\item Compute the mismatch function ($F$) using the latest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
 	
 	\item Compute the error. Equation \ref{eq:nr_error}.
 	
@@ -1528,7 +1528,7 @@ Calculate the decision function $\rho$. It is a value.
 
 Now, based on the value of $\rho$ we decide what to do in the next iteration.
 
-If $\rho$ is greater than zero, we mark a flag to update the jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
+If $\rho$ is greater than zero, we mark a flag to update the Jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
 
 
 \begin{equation}
@@ -1589,7 +1589,7 @@ The complete algorithm is:
 		\item Set the Jacobian update flag to false.
 		\end{enumerate}
 	
-	\item Compute the mismatch function ($F$) using the lattest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	\item Compute the mismatch function ($F$) using the latest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
 	
 	\item Compute the error. Equation \ref{eq:nr_error}.
 	
