@@ -1295,11 +1295,11 @@ The derivative based methods are more accurate than the derivative free methods.
 
 The Jacobian matrix ($J$) is the derivative of the fundamental power flow equation \ref{eq:power_flow}, with respect to the voltage magnitudes to be solved $|V|$ and $\delta$. It is one of the most expensive parts of the derivative based power flow methods.
 
-In most literature, the reader will find the Jacobian presented with non matricil formulas which are to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented below.
+In most literature, the reader will find the Jacobian presented with non matricial formulas which are hard to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented as follows.
 
 First we compute the total current injection. It is a sparse diagonal matrix, so do not use a dense matrix format.
 \begin{equation}
-I_{diag} = diag(Y \times V - I_{bus})
+I_{diag} = diag(Y \times V - I)
 \end{equation}
 
 Then we convert the buses voltage solution $V$ into a square diagonal matrix. Use a sparse format for this.
@@ -1322,7 +1322,7 @@ Compute the derivative of the power injections $S$ with respect to the voltage a
 \frac{\partial S}{\partial \delta} = 1j \cdot V_{diag} \times (I_{diag} - Y \times V_{diag})^*
 \end{equation}
 
-Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and only contains real values. If the circuit contains $npq$ buses of type $PQ$ and $npv$ buses of type $PV$, the Jacobian matrix is a square matrix with $2 npq + npv$ rows and the same number of columns.
+Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and only contains real values. If the circuit contains $npq$ buses of type $PQ$ and $npv$ buses of type $PV$, the Jacobian matrix is a square matrix with $2 npq + npv$ rows and the same number of columns. See the figure \ref{fig:jacobian_based}.
 
 \begin{equation}
 J=
@@ -1345,7 +1345,7 @@ $pq$ is a vector that contains the indices of the $PQ$  type indices in sequenti
 \newpage
 \subsection{Newton-Raphson}
 
-Newton-Raphson is a iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
+Newton-Raphson is a recursive, iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
 
 \begin{equation}
 s_{calc} = V \times (Y \times V - I_{bus})^*
@@ -1464,7 +1464,7 @@ The algorithm is then:
 \newpage
 \subsection{Levenberg-Marquardt}
 
-The Levenbarg-Marquardt iterative technique is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of a higher computational effort.
+The Levenbarg-Marquardt is a recursive and iterative technique that is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of a higher computational effort.
 
 
 At each iteration we need to assemble the system matrix $A$ as follows:
@@ -1502,29 +1502,22 @@ rhs = J^T \times F
 \label{eq:lm_rhs}
 \end{equation}
 
-%    dx = arma::spsolve(A, rhs, "lapack");
-%
-%    // objective function to minimize
-%    f = 0.5 * arma::dot(dz, dz);
-%
-%    // decision function
-%    rho = (f_prev - f) / (0.5 * arma::dot(dx, lbmda * dx + rhs));
 
-Next, we solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method.
+Solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method. See figure \ref{fig:jacobian_based}.
 
 \begin{equation}
 \Delta x = A^{-1} \times rhs
 \label{eq:lm_solve}
 \end{equation}
 
-Then, compute the objective function to minimize $f$. It is a value.
+Compute the objective function to minimize $f$. It is a value.
 
 \begin{equation}
 f = \frac{1}{2} \cdot (F \times F^T)
 \label{eq:lm_f}
 \end{equation}
 
-Then the decision function value $\rho$. It is a value.
+Calculate the decision function $\rho$. It is a value.
 
 \marginnote{$f^{(k-1}$ is the value of $f$ in the previous iteration. $f^{(k}$ is the value of $f$ computed in the current iteration. The value of  $f^{(k-1}$  in the first iteration should be a very large number  i.e. $1 \times 10^9$.}
 
@@ -1537,8 +1530,6 @@ Now, based on the value of $\rho$ we decide what to do in the next iteration.
 
 If $\rho$ is greater than zero, we mark a flag to update the jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
 
-%        lbmda *= std::max(1.0 / 3.0, 1 - std::pow(2 * rho - 1, 3.0));
-%        nu = 2.0;
 
 \begin{equation}
 \lambda = \lambda \cdot max(\frac{1}{3}, 1-(2\cdot \rho -1)^3)
@@ -1547,9 +1538,6 @@ If $\rho$ is greater than zero, we mark a flag to update the jacobian in the nex
 
 And set a variable $\nu=2$ .
 
-%        update_jacobian = false;
-%        lbmda *= nu;
-%        nu *= 2.0;
 
 If $\rho$ is less or equal to zero, then the values of $\Delta x$ will not improve the solution and we need to take corrective actions. We mark a flag to not to update the Jacobian in the next iteration, we set $\lambda=\lambda \cdot \nu$ and $\nu = \nu \cdot 2$.
 
@@ -1611,105 +1599,6 @@ The complete algorithm is:
 \item End.
 \end{enumerate}
 
-
-%unsigned int iter = 0;
-%unsigned int max_iter = 10;
-%double tol = 1e-6;
-%double err;
-%bool converged = false;
-%bool update_jacobian = true;
-%double nu = 2.0;
-%double lbmda = 0.0;
-%double f_prev = 1e9;  // very large number
-%double f;
-%double rho;
-%unsigned long npq = calc->pq.size();
-%unsigned long npqpv = calc->pqpv.size();
-%
-%
-%arma::sp_mat Idn; // identity matrix
-%Idn.eye(2 * npqpv, 2 * npqpv);
-%
-%arma::sp_mat H, H1, H2, A;
-%arma::vec dz, dx, rhs;
-%arma::vec dVm(calc->n_buses);
-%arma::vec dVa(calc->n_buses);
-%arma::cx_vec Vsol = calc->Vbus[p];
-%arma::vec Vm = arma::abs(Vsol);
-%arma::vec Va = arma::arg(Vsol);
-%
-%// fill zeros only where needed
-%for(unsigned int i:calc->vdpv)
-%    dVm(i) = 0.0;
-%for(unsigned int i:calc->vd)
-%    dVa(i) = 0.0;
-%
-%// fill the Jacobian and the mismatch
-%calcJ(&H, &dz, &(calc->Ybus[p]), &Vsol, &(calc->Ibus[p]), &(calc->Sbus[p]));
-%
-%err = arma::norm(dz, "inf");
-%converged = err < tol;
-%
-%while (iter < max_iter && !converged){
-%
-%    // system matrix
-%    H1 = H.t();
-%
-%    // H2 = H1 x H
-%    H2 = H1 * H;
-%
-%    // set first value of lmbda
-%    if (iter == 0)
-%        lbmda = 1e-3 * H2.diag().max();
-%
-%    // compute system matrix A = H^T·H - lambda·I
-%    A = H2 + lbmda * Idn;
-%
-%    // right hand side: H^t·dz
-%    rhs = H1 * dz;
-%
-%    // solve the liear system: is negative so, it is summed to the voltage solution
-%    dx = arma::spsolve(A, rhs, "lapack");
-%
-%    // objective function to minimize
-%    f = 0.5 * arma::dot(dz, dz);
-%
-%    // decision function
-%    rho = (f_prev - f) / (0.5 * arma::dot(dx, lbmda * dx + rhs));
-%
-%    // lambda update
-%    if (rho > 0.0){
-%        update_jacobian = true;
-%        lbmda *= std::max(1.0 / 3.0, 1 - std::pow(2 * rho - 1, 3.0));
-%        nu = 2.0;
-%
-%        // convert dx to voltage increments
-%        solution_to_va(&dVm, &dVa, &dx, npqpv, npq);
-%
-%        // modify the voltage solution properly
-%        Vm += dVm;
-%        Va += dVa;
-%        Vsol = Vm % (arma::cos(Va) + arma::cx_double(0.0, 1.0) * arma::sin(Va));
-%        // update Vm and Va again in case we wrapped around with a negative Vm (numerical trick!)
-%        Vm = arma::abs(Vsol);
-%        Va = arma::arg(Vsol);
-%
-%    } else {
-%        update_jacobian = false;
-%        lbmda *= nu;
-%        nu *= 2.0;
-%    }
-%
-%    if (update_jacobian){
-%        // fill the Jacobian and the mismatch
-%        calcJ(&H, &dz, &(calc->Ybus[p]), &Vsol, &(calc->Ibus[p]), &(calc->Sbus[p]));
-%    }
-%
-%    err = arma::norm(dz, "inf");
-%    converged = err < tol;
-%
-%    iter++;
-%}
 
 
 \section{Holomorphic embedding}
