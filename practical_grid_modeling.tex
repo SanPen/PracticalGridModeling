@@ -1293,7 +1293,9 @@ The derivative based methods are more accurate than the derivative free methods.
 
 \subsection{Building the Jacobian matrix} \label{Jacobian_chapter}
 
-Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented below.
+The Jacobian matrix ($J$) is the derivative of the fundamental power flow equation \ref{eq:power_flow}, with respect to the voltage magnitudes to be solved $|V|$ and $\delta$. It is one of the most expensive parts of the derivative based power flow methods.
+
+In most literature, the reader will find the Jacobian presented with non matricil formulas which are to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented below.
 
 First we compute the total current injection. It is a sparse diagonal matrix, so do not use a dense matrix format.
 \begin{equation}
@@ -1340,6 +1342,7 @@ $pqpv$ is a vector that contains the indices of the $PQ$ and $PV$ type indices i
 
 $pq$ is a vector that contains the indices of the $PQ$  type indices in sequential order.
 
+\newpage
 \subsection{Newton-Raphson}
 
 Newton-Raphson is a iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
@@ -1421,7 +1424,7 @@ Then we need to add those values to the voltage module and angle vectors $|V|$ a
 At last, we convert the polar vectors  $|V|$ and $\delta$ into a single complex voltage vector $V$.
 
 \begin{equation}
-V^{(k+1} = |V|^{(k+1} \cdot \left( cos(\delta^{(k+1})  1j \cdot sin(\delta^{(k+1})\right)
+V^{(k+1} = |V|^{(k+1} \cdot \left( cos(\delta^{(k+1}) + 1j \cdot sin(\delta^{(k+1})\right)
 \label{eq:nr_voltage_conversion}
 \end{equation}
 
@@ -1457,9 +1460,11 @@ The algorithm is then:
 \end{enumerate}
 
 
+
+\newpage
 \subsection{Levenberg-Marquardt}
 
-The Levenbarg-Marquardt iterative technique is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of more computational effort.
+The Levenbarg-Marquardt iterative technique is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of a higher computational effort.
 
 
 At each iteration we need to assemble the system matrix $A$ as follows:
