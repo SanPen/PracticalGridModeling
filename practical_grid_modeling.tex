@@ -1133,12 +1133,20 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 %-------------------------------------------------------------------------------
 \chapter{The bus and it's connected elements}
 
+The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), power ($S$), admittance ($Y$) and current ($I$) potentially connected.
+
+
+\begin{marginfigure}
+	\includegraphics[width=0.99\linewidth]{img/NodeElements.eps}
+	\caption{$YISV$ Bus model.}
+	\label{bus_model}
+\end{marginfigure}
+
+The admittance, power and currents connected to the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
 
 \section{The substation}
 
 
-
-\section{Types of buses}
 
 
 \section{Load}
@@ -1195,6 +1203,42 @@ Where:
 \item $V$: Vector of voltages.
 \item $Y$: Admittance matrix.
 \end{itemize}
+
+
+\section{Types of buses}
+
+At each node, we can consider the following magnitudes to exist:
+\begin{itemize}
+	\item $|V|$: Voltage module.
+	\item $\delta$: Voltage angle.
+	\item $P$: Active power injection/consumption.
+	\item $Q$: Reactive power injection/consumption.
+\end{itemize}
+
+In some nodes we know the active power injection (generation nodes), in some nodes we just know the consumption power (load nodes), and in some nodes we artificially define the voltage (slack nodes). The power flow problem is formulated such that in every node two variables are set and the other two are computed. Thus we can define the node types as:
+
+\begin{table}[h!]
+	\begin{center}
+		\begin{tabular}{ccccc}
+			\toprule
+			
+			Bus type & $|V|$ &  $\delta$ & $P$ & $Q$\\
+			
+			\midrule
+			
+			$PQ$ & Calc. &  Calc. & Set & Set\\
+			$PV$ & Set &  Calc. & Set & Calc.\\
+			$VD$ & Set &  Set & Calc. & Calc.\\
+			
+			
+			\bottomrule
+		\end{tabular}
+	\end{center}
+	\caption{Bus types.}
+	\label{bus__types}
+\end{table}
+
+There must be at least one $VD$ or slack node in order to be able to compute the power flow problem. 
 
 
 
@@ -1292,7 +1336,7 @@ V[pqpv] = V_k
 
 \section{Jacobian based power flow}
 
-The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of being more computationally expensive. In this section we'll start by introducing the Jacobian matrix, which is the system derivative for a certain set of voltage values and then we'll introduce the methods that use this matrix to solve the power flow problem.
+The derivative based methods are more accurate than the derivative free methods. They are usually more robust at the cost of being more computationally expensive. In this section we'll start by introducing the Jacobian matrix. It is the derivative of the power flow equation  [\ref{eq:power_flow}] with respect to a set of voltage values. The section continues by introducing the methods that use this matrix to solve the power flow problem.
 
 \begin{center}
 \begin{figure}[h!]
@@ -1302,6 +1346,7 @@ The derivative based methods are more accurate than the derivative free methods.
 \end{figure}
 \end{center}
 
+The Jacobian linear system ($J \times \Delta x = F$), allows the computation of the voltage increment ($\Delta x$) to apply to the voltage solution ($V$) in order to achieve a voltage that solves the power flow equation \ref{eq:power_flow}. This process is iterative and recursive, hence to have a initial voltage solution in the vicinity of the final solution is crucial. Otherwise the method will converge to a non physical solution. A common good-enough voltage initial solution is to set all the voltages according to the slack voltage value.
 
 
 \subsection{Building the Jacobian matrix} \label{Jacobian_chapter}
