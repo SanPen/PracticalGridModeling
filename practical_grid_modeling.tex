@@ -1,20 +1,7 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% How to use writeLaTeX: 
-%
-% You edit the source code here on the left, and the preview on thes
-% right shows you the result within a few seconds.
-%
-% Bookmark this page and share the URL with your co-authors. They can
-% edit at the same time!
-%
-% You can upload figures, bibliographies, custom classes and
-% styles using the files menu.
-%
-% If you're new to LaTeX, the wikibook is a great place to start:
-% http://en.wikibooks.org/wiki/LaTeX
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{tufte-book}
+
+%\documentclass{tufte-book}
+\documentclass[a4paper,twoside]{tufte-book}
+\setcounter{secnumdepth}{2}
 
 \usepackage[
     type={CC},
@@ -42,9 +29,15 @@
 % Just some sample text
 \usepackage{lipsum}
 
+\usepackage{xcolor} % for colour
+
+
 %%
 % For nicely typeset tabular material
 \usepackage{booktabs}
+
+% add numbers to chapters, sections, subsections
+
 
 %%
 % For graphics / images
@@ -163,6 +156,35 @@
 \newcommand{\docfilehook}[2]{\texttt{#1}\index{file hooks!#2}\index{#1@\texttt{#1}}}
 \newcommand{\doccounter}[1]{\texttt{#1}\index{#1 counter@\texttt{#1} counter}}
 
+
+
+
+% chapter format
+\titleformat{\chapter}%
+{\huge\rmfamily\itshape\color{black}}% format applied to label+text
+{\llap{\colorbox{black}{\parbox{1.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
+{2pt}% horizontal separation between label and title body
+{}% before the title body
+[]% after the title body
+
+% section format
+\titleformat{\section}%
+{\normalfont\Large\itshape\color{gray}}% format applied to label+text
+{\llap{\colorbox{gray}{\parbox{1.5cm}{\hfill\color{white}\thesection}}}}% label
+{1em}% horizontal separation between label and title body
+{}% before the title body
+[]% after the title body
+
+% subsection format
+\titleformat{\subsection}%
+{\normalfont\large\itshape\color{gray}}% format applied to label+text
+{\llap{\colorbox{gray}{\parbox{1.5cm}{\hfill\color{white}\thesubsection}}}}% label
+{1em}% horizontal separation between label and title body
+{}% before the title body
+[]% after the title body
+
+
+
 % Generates the index
 \usepackage{makeidx}
 \makeindex
@@ -247,6 +269,7 @@
 %-------------------------------------------------------------------------------
 %	CHAPTER Introduction
 %-------------------------------------------------------------------------------
+\mainmatter
 \chapter{Introduction}
 
 This book aims at explaining grid modelling from a practical perspective, providing state of the art models, algorithms as well as implementation hints and examples.
@@ -264,48 +287,57 @@ Vectorized formulas also allow a much simpler debug and maintenance of the produ
 %	CHAPTER notation
 %-------------------------------------------------------------------------------
 \chapter{Notation}
+\begin{fullwidth}
+
+\begin{multicols}{2}
 
 \begin{itemize}
-
-\item $A \times B \rightarrow$ Matrix-Matrix dot product.
-
-\item $A \times b \rightarrow$ Matrix-Vector dot product.
-
-\item $A \cdot B \rightarrow$ Matrix-Matrix element wise multiplication.
-
-\item $a \cdot b \rightarrow$ vector-vector element wise multiplication.
-
-\item $A^{*}\rightarrow$ Element-wise conjugate of the numbers composing $A$.
-
-\item $A^{-1}\rightarrow$ Matrix inverse.
-
-\item $A^{T}\rightarrow$ Transposed matrix or vector.
-
-\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficients matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
-
-\item $A[rows, :] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector $rows$.
-
-
-\item $A[:, cols] \rightarrow$ From the matrix $A$, pick the columns which indices are contained in the vector  $cols$.
-
-
-\item $A[rows, cols] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector  $rows$ and the columns which indices are contained in the vector  $cols$.
-
-
-\item $b[rows] \rightarrow$ From the vector $b$, pick the elements contained in the vector or list $rows$.
-
-\item $diag(b) \rightarrow$ Convert the vector $b$ into a diagonal matrix. 
-
-\item $diag(A) \rightarrow$ Extract the diagonal of the matrix $A$ as a vector. 
-
-\item $real(A) \rightarrow$ Extract the real part of $A$.
-
-\item $imag(A) \rightarrow$ Extract the imaginary part of $A$.
-
-\item $max(b) \rightarrow$ Maximum value of the vector $b$.
-
-\item $max(c, d) \rightarrow$ Pick the greater value between $c$ and $d$.
+	
+	\item $A \times B \rightarrow$ Matrix-Matrix dot product.
+	
+	\item $A \times b \rightarrow$ Matrix-Vector dot product.
+	
+	\item $a \times b^\top \rightarrow$ vector-vector dot product. The result is a number.
+	
+	\item $A \cdot B \rightarrow$ Matrix-Matrix element wise multiplication. A and B must have the same dimensions. The result is a matrix.
+	
+	\item $a \cdot b \rightarrow$ vector-vector element wise multiplication. The result is a vector.
+	
+	\item $A^{*}\rightarrow$ Element-wise conjugate of the numbers composing $A$.
+	
+	\item $A^{-1}\rightarrow$ Matrix inverse.
+	
+	\item $A^{T}\rightarrow$ Transposed matrix or vector.
+	
+	\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficients matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
+	
+	\item $A[rows, :] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector $rows$.
+	
+	
+	\item $A[:, cols] \rightarrow$ From the matrix $A$, pick the columns which indices are contained in the vector  $cols$.
+	
+	
+	\item $A[rows, cols] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector  $rows$ and the columns which indices are contained in the vector  $cols$.
+	
+	
+	\item $b[rows] \rightarrow$ From the vector $b$, pick the elements contained in the vector or list $rows$.
+	
+	\item $diag(b) \rightarrow$ Convert the vector $b$ into a diagonal matrix. 
+	
+	\item $diag(A) \rightarrow$ Extract the diagonal of the matrix $A$ as a vector. 
+	
+	\item $real(A) \rightarrow$ Extract the real part of $A$.
+	
+	\item $imag(A) \rightarrow$ Extract the imaginary part of $A$.
+	
+	\item $max(b) \rightarrow$ Maximum value of the vector $b$.
+	
+	\item $max(c, d) \rightarrow$ Pick the greater value between $c$ and $d$.
 \end{itemize}
+
+\end{multicols}
+
+\end{fullwidth}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER General network model
@@ -342,6 +374,8 @@ So, because of the latter, the models will be introduced in three-phases and whe
   \caption{Two node system in 3 phases, split into three systems of two nodes each.}
   \label{fig:3p_to_1p}
 \end{figure}
+
+Further details about how to decouple the three-phase impedance matrices into three single phase impedances are presented in the section \ref{sec:decoupling_branch}.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Magnitudes and units
@@ -669,7 +703,9 @@ We observe that the calculation outcome is a fair approximation of the original 
 %-------------------------------------------------------------------------------
 %	CHAPTER The branch element
 %-------------------------------------------------------------------------------
-\chapter{The branch element}
+
+\chapter{The branch element} 
+\label{ch:branch}
 
 To the effect of most calculations run in operation of a electrical system, the lines, transformers, and any other element that connects two nodes are represented by the so-called $\Pi$ model.
 
@@ -1126,6 +1162,126 @@ $$
 Since all the electrical models are in per-unit values, the voltage regulator is modelled in the exact same way as a transformer.
 
 
+\label{sec:decoupling_branch}
+\section{Decoupling the three-phase model. Delta branch to Y branch transformation}
+
+We have presented a three-phase branch model with 3x3 matrices. However we indicated at the beginning of this book that we would not perform the three-phase calculations using the coupled matrices (which would lead to larger linear systems to solve and the impossibility to solve multi-phase grids). This is why we are going to introduce a technique to decouple the phases while keeping the phase-phase influences (the non diagonal elements of the branch element matrix.)
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{img/D-Y-Branch.eps}
+	\caption{Conversion from the Delta branch model to the Y branch model.}
+	\label{fig:DYBranch}
+\end{figure}
+
+The three-phase series admittance matrix can be immediately split into three single-phase systems each of them represented by one of the admittances of the diagonal of the three-phase matrix. However by doing this we would be neglecting the phase coupling that is present in the 3x3 matrix.
+$$
+Y_{series, \Delta} = \left[ \begin{array}{ccc}
+Y_{AA} & Y_{AB} & Y_{AC} \\
+Y_{BA} & Y_{BB} & Y_{BC} \\ 
+Y_{CA} & Y_{CB} & Y_{CC}
+\end{array} \right] \longrightarrow Y_{AA}, Y_{BB}, Y_{CC}, couplings?
+$$
+
+In order to take into account the phase couplings we need to perform the delta to star conversion of the magnitudes.
+
+\begin{equation}
+\left[ \begin{array}{c}
+Y_A' \\
+Y_B' \\
+Y_C'
+\end{array} \right] = \left[ \begin{array}{ccc}
+1 & -1 & 0 \\
+0 & 1 & -1 \\
+-1 & 0 & 1
+\end{array} \right] \times \left[ \begin{array}{c}
+Y_{AB} + Y_{AC} \\
+Y_{BC} + Y_{BA}\\
+Y_{CA} + Y_{CB}
+\end{array} \right]
+\end{equation}
+
+$Y_A'$, $Y_B'$ and $Y_C'$ are the shunt magnitudes that appear by embedding the phase-phase coupling admittances by performing the delta-star transformation.
+
+Now we can perform the same operation on the shunt admittance matrix:
+
+$$
+Y_{shunt, \Delta} = \left[ \begin{array}{ccc}
+Y_{sh,AA} & Y_{sh,AB} & Y_{sh,AC} \\
+Y_{sh,BA} & Y_{sh,BB} & Y_{sh,BC} \\ 
+Y_{sh,CA} & Y_{sh,CB} & Y_{sh,CC}
+\end{array} \right] \longrightarrow Y_{sh,AA}, Y_{sh,BB}, Y_{sh,CC}, couplings?
+$$
+
+
+\begin{equation}
+\left[ \begin{array}{c}
+Y_{sh, A}' \\
+Y_{sh, B}' \\
+Y_{sh, C}'
+\end{array} \right] = \left[ \begin{array}{ccc}
+1 & -1 & 0 \\
+0 & 1 & -1 \\
+-1 & 0 & 1
+\end{array} \right] \times \left[ \begin{array}{c}
+Y_{sh,AB} + Y_{sh,AC} \\
+Y_{sh,BC} + Y_{sh,BA}\\
+Y_{sh,CA} + Y_{sh,CB}
+\end{array} \right]
+\end{equation}
+
+Finally we can formulate the three single-phase systems:
+
+\begin{itemize}
+	\item System A
+	
+	$Y_{series} = Y_{AA} $\newline
+	$Y_{shunt} = Y_{sh, AA} + Y_{A}' + Y_{sh, A}'$
+	
+	\item System B
+	
+	$Y_{series} = Y_{BB} $\newline
+	$Y_{shunt} = Y_{sh, BB} + Y_{B}' + Y_{sh, B}'$
+	
+	\item System C
+	
+	$Y_{series} = Y_{CC} $\newline
+	$Y_{shunt} = Y_{sh, C} + Y_{C}' + Y_{sh, C}'$
+\end{itemize}
+
+In Matrix form:
+
+\begin{equation}
+\left[ \begin{array}{c}
+Y_{series,decoupled,A} \\
+Y_{series,decoupled,B} \\
+Y_{series,decoupled,C}
+\end{array} \right] = \left[ \begin{array}{c}
+Y_{AA} \\
+Y_{BB} \\
+Y_{CC}
+\end{array} \right]
+\end{equation}
+
+\begin{equation}
+\left[ \begin{array}{c}
+Y_{sh, decoupled, A} \\
+Y_{sh, decoupled, B} \\
+Y_{sh, decoupled, C}
+\end{array} \right] = \left[ \begin{array}{c}
+Y_{sh,A} \\
+Y_{sh,B} \\
+Y_{sh,C}
+\end{array} \right] + \left[ \begin{array}{ccc}
+1 & -1 & 0 \\
+0 & 1 & -1 \\
+-1 & 0 & 1
+\end{array} \right] \times \left[ \begin{array}{c}
+Y_{AB} + Y_{AC} + Y_{sh,AB} + Y_{sh,AC} \\
+Y_{BC} + Y_{BA} + Y_{sh,BC} + Y_{sh,BA}\\
+Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
+\end{array} \right]
+\end{equation}
+
 
 
 %-------------------------------------------------------------------------------
@@ -1541,14 +1697,14 @@ At each iteration we need to assemble the system matrix $A$ as follows:
 
 
 \begin{equation}
-A = J^T \times J + \lambda \cdot I
+A = J^\top \times J + \lambda \cdot I
 \label{eq:lm_A}
 \end{equation}
 
 Where $\lambda$ is computed only in the first iteration as:
 
 \begin{equation}
-\lambda = 0.001 \cdot max(diag(J \times J^T))
+\lambda = 0.001 \cdot max(diag(J \times J^\top))
 \end{equation}
 
 The right hand side of the linear system to obtain the voltage increments is:
@@ -1556,7 +1712,7 @@ The right hand side of the linear system to obtain the voltage increments is:
 \marginnote{$F$ is provided in the equation \ref{eq:nr_mismatch}.}
 
 \begin{equation}
-rhs = J^T \times F
+rhs = J^\top \times F
 \label{eq:lm_rhs}
 \end{equation}
 
@@ -1571,7 +1727,7 @@ Solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vecto
 Compute the objective function to minimize $f$. It is a value.
 
 \begin{equation}
-f = \frac{1}{2} \cdot (F \times F^T)
+f = \frac{1}{2} \cdot (F \times F^\top)
 \label{eq:lm_f}
 \end{equation}
 
@@ -1580,7 +1736,7 @@ Calculate the decision function $\rho$. It is a value.
 \marginnote{$f^{(k-1}$ is the value of $f$ in the previous iteration. $f^{(k}$ is the value of $f$ computed in the current iteration. The value of  $f^{(k-1}$  in the first iteration should be a very large number  i.e. $1 \times 10^9$.}
 
 \begin{equation}
-\rho = \frac{f^{(k-1}-f^{(k}}{\frac{1}{2} \cdot (\Delta x \times (\lambda \cdot \Delta x + rhs)^T)}
+\rho = \frac{f^{(k-1}-f^{(k}}{\frac{1}{2} \cdot (\Delta x \times (\lambda \cdot \Delta x + rhs)^\top)}
 \label{eq:lm_rho}
 \end{equation}
 
