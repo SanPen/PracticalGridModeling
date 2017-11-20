@@ -1289,7 +1289,7 @@ Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
 %-------------------------------------------------------------------------------
 \chapter{The bus and it's connected elements}
 
-The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), power ($S$), admittance ($Y$) and current ($I$) potentially connected.
+The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), and a power ($S$), an admittance ($Y$) and a current ($I$) potentially connected.
 
 
 \begin{marginfigure}
@@ -1298,12 +1298,50 @@ The bus model is based upon the traditionally called \textit{ZIP} bus model to i
 	\label{bus_model}
 \end{marginfigure}
 
-The admittance, power and currents connected to the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
+The admittance, power and current values at the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
+
 
 \section{The substation}
 
+In reality a substation is a collection of real busbars (metal bars usually made of copper or aluminium) switchgear and shunt devices. The use of a substation is to change the connectivity topology of the grid.
+
+For calculation, the substation connectivity is solved first, originating one or more calculation buses. Therefore, the substations are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation.
+
+\begin{figure}
+	\includegraphics[width=0.99\linewidth]{img/Substation.eps}
+	\caption{Substation example. The substation becomes a calculation bus.}
+	\label{substation_model}
+\end{figure}
+
+In the example depicted in the figure \ref{substation_model} it is shown how a node system is reduced from three real buses to two calculation buses by eliminating the non connected elements and associating the connected ones. The buses1, 2 are connected because the switches between them are closed, hence the three buses become one. the bus 3 is isolated from the others, but still connected to a line. The lines 1b, 2 and 3 are also connected through closed switches, hence those remain connected to their respective buses. However the line 1a is connected through an open switch, therefore is left out for calculation purposes.
+
+In order to calculate this reduction, we need to introduce extra nodes in the substation model. These are topological nodes that will help us to perform the connectivity calculation. Then we represent the substation as a node-branch graph:
+
+\begin{center}
+\begin{figure}
+	\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
+	\caption{Substation example graph.}
+	\label{substation_graph}
+\end{figure}
+\end{center}
 
 
+Observe the islands formed:
+
+\begin{itemize}
+	\item Island 1: \textbf{Bus1}, \textbf{Bus2}, nL1b, nL2, nS12, nS13, nS21, nS31, nSL1b, nSL2, nground.
+	\item Island 2: \textbf{Bus3}, nL3, nSL3.
+	\item Island 3: nL1a, nSL1a.
+\end{itemize}
+
+Removing the topological nodes, only two islands remain:
+
+\begin{itemize}
+	\item Island 1: \textbf{Bus1, Bus2}.  -> these two form a joint calculation node.
+	\item Island 2: \textbf{Bus3}.
+\end{itemize}
+
+Now we only need to check which non topological branches are in every island and associate them to the formed calculation node.
 
 \section{Load}
 
@@ -1604,6 +1642,8 @@ error = ||F||_{\infty} = max(abs(F))
 
 If the error is higher than the tolerance, we need to solve the voltages increment ($\Delta x$), for which we must compute the Jacobian first. Some simplifications of the method only compute the Jacobian one time, but for better accuracy, the Jacobian needs to be calculated on every iteration.
 
+\marginnote{Do not invert $J$, instead use a linear system solver, to solve the linear system $J \times \Delta x  = F$.}
+
 \begin{equation}
 \Delta x = J^{-1} \times F
 \label{eq:nr_solve}
@@ -1719,10 +1759,14 @@ rhs = J^\top \times F
 
 Solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method. See figure \ref{fig:jacobian_based}.
 
+\marginnote{Do not invert $A$, instead use a linear system solver, to solve the linear system $A \times \Delta x  = rhs$.}
+
 \begin{equation}
 \Delta x = A^{-1} \times rhs
 \label{eq:lm_solve}
 \end{equation}
+
+
 
 Compute the objective function to minimize $f$. It is a value.
 
@@ -1742,7 +1786,7 @@ Calculate the decision function $\rho$. It is a value.
 
 Now, based on the value of $\rho$ we decide what to do in the next iteration.
 
-If $\rho$ is greater than zero, we mark a flag to update the Jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
+If $\rho$ is greater than zero, we mark a flag to update the Jacobian in the next iteration, and we update the voltage solution using $\Delta x$ as described in equations  \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}. We also need to modify $\lambda$:
 
 
 \begin{equation}
