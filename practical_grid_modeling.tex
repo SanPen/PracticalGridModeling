@@ -571,9 +571,9 @@ First, we must choose an arbitrary value of power base conversion. This value ca
 Magnitude &  Base\\
 \midrule
 $V$ (Voltage) & $V_{Base}$: terminal's nominal voltage. \\
-$S$ (Power) & $S_{Base}$: Arbitrary value. \\
+$S$ (Power) & $S_{Base}$: Arbitrary value, usually 10 MVA. \\
 $I$ (Current) & $I_{Base} = S_{Base} / Vline_{Base} = S_{Base} / (V_{Base} \cdot \sqrt{3})$ \\
-$Z$ (Impedance) & $Z_{Base} = S_{Base} / V_{Base}^2$ \\
+$Z$ (Impedance) & $Z_{Base} = V_{Base}^2 / S_{Base}$ \\
 $Y$ (Admittance) & $Y_{Base} = 1 / Z_{Base}$ \\
 \bottomrule
 \end{tabular}
@@ -1857,6 +1857,7 @@ The complete algorithm is:
 \item End.
 \end{enumerate}
 
+\section{DC approximation}
 
 
 \section{Holomorphic embedding}
@@ -1865,6 +1866,14 @@ The complete algorithm is:
 \section{Post voltage solution: Compute the power flows}
 
 Ironically, what is called the power flow problem does not compute the power flows in the branches of a grid. It computes the node voltages. In this section we explain how to compute the current and power that flows through the grid branches using a given voltage solution vector.
+
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER Short-circuit
+%-------------------------------------------------------------------------------
+\chapter{Optimal power flow}
+
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Time series power flow
