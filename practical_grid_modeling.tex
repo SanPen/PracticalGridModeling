@@ -1345,9 +1345,58 @@ Now we only need to check which non topological branches are in every island and
 
 \section{Load}
 
+The modelling of a load is done as a composition of fixed impedance, fixed current and fixed power. This is known to match best the real behaviour of loads in electrical grids (Although in transmission they tend to be more fixed power-dominated). This is known as the ZIP model of a load. Here we are going to refer to it as ZIS, given that we actually specify the complex power ($S$) and not the real power ($P$).
+
+The main calculation parameters of a load are:\\
+\begin{tabular}{|l|p{3cm}|p{4cm}|}
+	\hline 
+	Parameter & Description & Unit \\ 
+	\hline 
+	Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
+	\hline 
+	I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
+	\hline 
+	S & Power (complex number) & MW, MVAr \\ 
+	\hline
+\end{tabular} 
+\newline
+The impedance $Z$ is converter to admittance with $Y=1/Z$.
+
+\begin{marginfigure}
+	\includegraphics[width=0.49\linewidth]{img/ZIP_model.eps}
+	\caption{$ZIP$ Bus model.}
+	\label{zip_bus_model}
+\end{marginfigure}
+
+When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$).
+
+Remember that the system power equilibrium equation is:
+
+$$
+S_{bus} = V_{bus} \cdot (I_{bus} + Y_{bus} \times V_{bus})^*
+$$
+
 
 \section{Voltage controlled generator}
 
+A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
+
+The main parameters of a voltage controlled generator are:\\
+\begin{tabular}{|l|p{5cm}|p{2cm}|}
+	\hline 
+	Parameter & Description & Unit \\ 
+	\hline 
+	$V_{set}$ & Set voltage (number) & p.u. \\ 
+	\hline 
+	$P$ & Power (number) & MW \\ 
+	\hline
+	$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
+	\hline
+	$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
+	\hline
+\end{tabular} 
+
+When forming the 
 
 \section{Battery}
 
