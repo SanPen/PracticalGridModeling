@@ -1,6 +1,6 @@
 
 %\documentclass{tufte-book}
-\documentclass[a4paper,twoside]{tufte-book}
+\documentclass[a4paper,twoside,fleqn]{tufte-book}
 \setcounter{secnumdepth}{2}
 
 \usepackage[
@@ -334,6 +334,10 @@ Vectorized formulas also allow a much simpler to debug and maintain in the produ
 	\item $max(b) \rightarrow$ Maximum value of the vector $b$.
 	
 	\item $max(c, d) \rightarrow$ Pick the greater value between $c$ and $d$.
+	
+	\item $[1]$: Matrix of ones.
+
+	\item $[0]$: Matrix of zeros.
 \end{itemize}
 
 \end{multicols}
@@ -1401,9 +1405,30 @@ The main parameters of a voltage controlled generator are:\\
 
 \vspace{0.5cm}
 
-When forming the 
+%When forming the 
 
 \section{Battery}
+
+A battery shall be modelled as a voltage controlled generator.
+
+The main parameters of a voltage controlled generator are:\\
+\begin{tabular}{|l|p{5cm}|p{2cm}|}
+	\hline 
+	Parameter & Description & Unit \\ 
+	\hline 
+	$V_{set}$ & Set voltage (number) & p.u. \\ 
+	\hline 
+	$P$ & Power (number) & MW \\ 
+	\hline
+	$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
+	\hline
+	$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
+	\hline
+	$E_{max}$ & Energy storage capacity (number) & MWh \\ 
+	\hline
+\end{tabular} 
+
+\vspace{0.5cm}
 
 
 \section{Capacitor banks}
@@ -1770,7 +1795,7 @@ The algorithm is then:
 
 
 \newpage
-\subsection{Levenberg-Marquardt}
+\subsection{Levenberg-Marquardt} \label{LM-Method}
 
 The Levenbarg-Marquardt is a recursive and iterative technique that is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of a higher computational effort.
 
@@ -2195,7 +2220,7 @@ The Padè approximation is a rational approximation of a function. In our case t
 
 GridCal implements two algorithms that perform the Padè approximation; The Padè canonical algorithm, and Wynn's Padè approximation.
 
-\subsubsection{Padè approximation algorithm}
+\paragraph{Padè approximation algorithm}
 
 The canonical Padè algorithm for our problem is described by:
 
@@ -2245,7 +2270,7 @@ Once the coefficients are there, you would have defined completely the polynomia
 
 This process is done for every column of coefficients $\textbf{V}=\{V_0, V_1,V_2,V_3, ...,V_n\}$ of the structure depicted in the figure \ref{fig:CoefficientsStructure}. This means that we have to perform a Padè approximation for every node, using the one columns of the voltage coefficients per Padé approximation.
 
-\subsubsection{Wynn's Padè approximation algorithm}
+\paragraph{Wynn's Padè approximation algorithm}
 
 Wynn published a paper in 1969 where he proposed a simple calculation method to obtain the Padè approximation. This method is based on a table. Weniger in 1989 publishes his thesis where a faster version of Wynn's algorithm is provided in Fortran code. 
 
@@ -2267,7 +2292,7 @@ Other articles published on the subject feature PV formulations that work more o
 
 
 
-\subsubsection{Embedding}
+\paragraph{Embedding}
 
 The following embedding equations are proposed instead of the canonical HELM equations from section \ref{helm_fundamentals}.
 
@@ -2311,7 +2336,7 @@ V(\alpha)V^*(\alpha^*) = |V_0|^2 + (|V^{SP}|^2-|V_0|^2) \quad \forall \alpha>0
 
 This embedding translates into the following formulation:
 
-\subsubsection{Step 1}
+\paragraph{Step 1}
 
 The formulas are adapted to exemplify a 3-bus system where the bus1 is a slack, the bus 2 is PV and the bus 3 is PQ. This follows the example of the Appendix A of \cite{liu2017online}.
 
@@ -2368,7 +2393,7 @@ W_i[0] = \frac{1}{V_i[0]}  \quad \forall i \in N
 
 This step is entirely equivalent to find the no load solution using the Z-Matrix reduction.
 
-\subsubsection{Step 2}
+\paragraph{Step 2}
 
 Construct the system of equations to solve the coefficients of order greater than zero ($n>0$). Note that the matrix is the same as constructed for the previous step, but adding a column and a row for each PV node to account for the reactive power coefficients. In our 3-bus example, there is only one PV node, so we add only one column and one row.
 
@@ -2435,7 +2460,7 @@ W_i[n] = \frac{- \mathlarger{\sum_{m=0}^{n}W_i[m] \cdot V_i[n-m]} }{V_i[0]} \qua
 \end{equation}
 
 
-\subsubsection{Step 3}
+\paragraph{Step 3}
 
 Repeat step 2 until a sufficiently low error is achieved or a maximum number of iterations (coefficients).
 
@@ -2593,6 +2618,34 @@ For an overview of such methods see \cite{taylor2015convex}.
 %-------------------------------------------------------------------------------
 \chapter{Time series power flow}
 
+The time series power flow is nothing more than power flows executed sequentially for series of profiles of load and generation. The usage of this simulation is to inspect how does the voltage and loading behave given a profile of the load and generation of the grid.
+
+\begin{marginfigure}
+	\includegraphics[width=\linewidth]{img/Time_series.eps}
+	\caption{Example of voltage results for a time series simulation.}
+	\label{fig:time_series}
+\end{marginfigure}
+
+\paragraph{Algorithm}
+
+\begin{enumerate}
+	\item Compile the load and generation profiles
+	
+	\item initialize the control variables. $t=0$.
+	
+	\item for each profile step:
+	
+	\begin{itemize}
+		\item Pick grid load state at $t$, and for the injection vectors $S$ and $I$.
+		
+		\item Run a power flow simulation with those injection vectors and collect the voltage result $V$.
+		
+		\item Process the time dependent devices control. i.e Batteries state of charge.
+		
+	\end{itemize}
+
+	\item End.
+\end{enumerate}
 
 
 %-------------------------------------------------------------------------------
@@ -2600,12 +2653,132 @@ For an overview of such methods see \cite{taylor2015convex}.
 %-------------------------------------------------------------------------------
 \chapter{Stochastic power flow}
 
+The stochastic power flow is a simulation mode that runs power flows for several randomly generated states of the grid. Those states are defined by combinations of load and generation random samples and a fix connectivity state. The goal is to obtain the probability distribution of the voltages and the branch loading given the probability distribution of the load and the generation. 
+
+$$
+CDF_{voltage} = f(CDF_{power})
+$$
+
+Mathematically speaking, we want to obtain the cumulative frequency distribution (CDF) of the voltages, as a function of the CDF of the power injections. The transformation function chosen is the power flow.
+
+Varying the connectivity is definitely possible but it will interfere with the purpose of this simulation. If there is the need to vary the connectivity, then it is recommended to run a stochastic simulation for each connectivity state.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Cumulative Density Function (CDF)}
 
+Usually, one finds that tools model loads and generation with probability density functions (PDF) such as the normal or Weibull distributions. In the author's opinion there is a much easier and correct way: To use only data-based cumulative density functions (CDF). This allows you to build sampling artefacts from any data source real or theoretical.
 
+\paragraph{Building a CDF}
+
+Suppose that you have recorded load data from a smart meter or any other device. Suppose that there are a thousand values in the record.
+
+To build a CDF:
+
+\begin{itemize}
+	\item Sort the records by value, this is the $y$ value from the CDF. $data = sort(records)$
+	\item The associated probabilities are an array of equal length. These are given by the expression: $$p_i = \frac{i}{n-1} \quad \forall n > 1, i \in {0..n-1}$$
+\end{itemize}
+
+\paragraph{Simple example}
+
+If the records are:
+$$
+records = [0.2, 0.5, 0.8, 0.3, 0.1, 0.2, 0.3, 0.5, 0.7]
+$$
+
+The CDF is:
+
+$$
+CDF_{data} = [0.1, 0.2, 0.2, 0.3, 0.3, 0.5, 0.5, 0.7, 0.8]
+$$
+$$
+CDF_{probabilities} = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.875, 1.0]
+$$
+
+\paragraph{Sampling the CDF}
+
+Once constructed, we can draw infinite samples from the CDF in a very simple way.
+
+First we need to have an interpolation function (linear, quadratic, cubic, spline, ..., at your choice)
+
+Then, We need a uniformly distributed random number generator ($rand$ usually)
+
+With these, we get a new load value from the CDF, by interpolating with a randomly generated probability.
+
+$$
+p_{new} = rand(0, 1)
+$$
+
+$$
+value_{new} = interpolate(CDF_{probabilities}, CDF_{data}, p_{new})
+$$
+
+\begin{marginfigure}
+	\includegraphics[width=\linewidth]{img/Load_CDF.eps}
+	\caption{Example of cumulative density function of a load.}
+	\label{fig:load_CDF}
+\end{marginfigure}
+
+\begin{marginfigure}
+	\includegraphics[width=\linewidth]{img/Voltage_CDF.eps}
+	\caption{Example of cumulative density function of the voltage. This is the Result of a probabilistic power flow.}
+	\label{fig:Voltage_CDF}
+\end{marginfigure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Monte Carlo}
 
+The Monte Carlo simulation was invented by Stanislaw Ulam and John von Neumann to simulate the diffusion of uranium electrons while developing the nuclear bomb. This very simple algorithm has proven to be an incredibly powerful tool to estimate uncertain behaviours, and it is the de-facto algorithm to simulate stochastic power flows.
 
+The underlying idea is to draw $n$ samples and compute the average. When the average's standard deviation becomes sufficiently small, it indicates that enough samples have been drawn to characterize the system.
+
+In our case, we will draw load and generation samples, evaluate the voltage by running a power flow with those samples and calculate the  voltage mean and standard deviation. When the standard deviation becomes small enough (a tolerance value that we set) we stop sampling. See the figure \ref{fig:Voltage_convergence}.
+
+
+\begin{marginfigure}
+	\includegraphics[width=\linewidth]{img/Voltage_convergence.eps}
+	\caption{Example of voltage convergence. This is the Result of a probabilistic power flow.}
+	\label{fig:Voltage_convergence}
+\end{marginfigure}
+
+
+\paragraph{Algorithm}
+
+\begin{enumerate}
+	\item Construct the CDF of all the loads and generators from their profiles of data. For the loads we construct a DSF for the active power and another for the reactive power, for the generators, we only need the CDF for the active power.
+	
+	\item Initialize control variables: $iterations = 0$, $V_{summation} = 0$
+	
+	\item While the variance is less than a tolerance value:
+	
+	\begin{enumerate}
+		\item Construct the injection vectors $S$ and $I$, sampling from the CDF.
+		
+		\item Run a power flow with those arrays and get the voltages vector $V$.
+		
+		\item Increase the number of iterations: $iterations += 1$
+		
+		\item Compute the voltages summation: $V_{summation} += V$
+		
+		\item Compute the voltage average: $V_{mean} = V_{summation} / iterations$
+		
+		\item Compute the variance: $min((V - V_{mean})^2 / (iterations - 1))$
+		
+		\item Store all the values that you want to have at the end of the loop.
+		
+	\end{enumerate}
+
+	\item End.
+\end{enumerate}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Latin Hypercube}
 
 
@@ -2614,8 +2787,325 @@ For an overview of such methods see \cite{taylor2015convex}.
 %-------------------------------------------------------------------------------
 %	CHAPTER State estimation
 %-------------------------------------------------------------------------------
-\chapter{State estimation}
+\chapter{WLS State estimation}
 
+Weighted Least Squares State estimation is a method to correct field measurements with the mathematical grid equilibrium equations (See equation \ref{eq:power_flow}). In this chapter we are going to follow the implementation suggested in the book from Antonio G\'omez Exp\'osito and Ali Abur \cite{gomez2004power}.
+
+The estate estimation method is formulated with the following recursive linear system:
+
+$$
+\left[H^T \times W \times H + \delta \cdot diag(H^T \times W \times H)\right] \times \Delta x = \left[H^T \times W \times (z-h) \right]
+\label{eq:state_estimation_normal_method}
+$$
+
+Where:
+
+\begin{itemize}
+	\item $H$: Jacobian matrix for the estate estimation problem.
+	\item $W$: Weights diagonal matrix.
+	\item $\delta$: Step control value. It is non negative.
+	\item $x$: vector of solutions.
+	\item $z$: field measurements vector.
+	\item $h$: calculated magnitudes matching measurements structure.
+\end{itemize}
+
+The linear system presented in equation \ref{eq:state_estimation_normal_method} is solved using the Levenberg-Marquardt method (See \ref{LM-Method}) and alternatively using the Newton-Raphson method, but the later is less suitable.
+
+\paragraph{Weights matrix $W$}
+
+The weights matrix is a diagonal matrix of size equal to the number of measurements, where the diagonal values are the inverse of the variance ($\sigma^2$) of the measurements.
+
+
+\begin{equation}
+W_{i, i} = \frac{1}{\sigma_i^2} \quad \forall i \in {Measurements}
+\label{eq:SE_W}
+\end{equation}
+
+
+\paragraph{Jacobian matrix $H$}
+
+The Jacobian matrix for the state estimation method is found as follows:
+
+\begin{equation}
+H=
+\left[
+\begin{array}{cc}
+A1 &
+A2 \\
+B1 &
+B2 \\
+C1 &
+C2 \\
+D1 &
+D2 \\
+E1 &
+E2 \\
+F1 &
+F2 \\
+\end{array}
+\right]
+\label{SE_jacobian}
+\end{equation}
+
+Note that the Jacobian formulated here is composed of 12 real-values submatrices. As you might have noticed we try to avoid summation based formulations as much as possible, so to compute the submatrices we will need to compute the following complex derivatives, so let's introduce them first:
+
+\marginnote{The derivatives computation using matrix formulation has been introduced in \cite{zimmerman2010ac} which is a very recommendable reading.}
+
+\begin{equation}
+\frac{\partial S_{inj}}{\partial \theta} = j \cdot V_{diag} \times (I_{bus,diag}-Y_{bus} \times V_{diag}  )^* 
+\end{equation}
+
+
+\begin{equation}\frac{\partial S_{inj}}{\partial |V|}=j \cdot E_{diag} \times (I_{bus,diag} + Y_{bus} \times V_{diag}  )^* \end{equation}
+
+\begin{equation}\frac{\partial S_{flow}}{\partial \theta} = j \cdot (I_{f,diag}^* \times C_f \times V_{diag} - [C_f \times V]_{diag} \times Y_f^* \times V_{diag}^* ) 
+\end{equation}
+
+\begin{equation}\frac{\partial S_{flow}}{\partial |V|}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
+\end{equation}
+
+\begin{equation}\frac{\partial I_{mag}}{\partial \theta} = j \cdot Y_f \times V_{diag} 
+\end{equation}
+
+\begin{equation}\frac{\partial I_{mag}}{\partial |V|}=j \cdot Y_f \times E_{diag} 
+\end{equation}
+
+The matrices used for the derivatives computation and the calculated magnitudes vector ($h$) are:
+
+\begin{equation}E=\frac{V}{|V|}\end{equation}  
+
+\begin{equation}
+I_f=Y_f \times V 
+\label{eq:current_from}
+\end{equation}
+
+\begin{equation}
+I_{inj}=Y_{bus}  \times  V + I_{bus}
+\label{eq:current_inj}
+\end{equation}
+
+\begin{equation}
+S_{inj} = V  \times  I_{inj}^*
+\label{eq:power_injection}
+\end{equation}
+
+\begin{equation}
+S_f = V_{diag} \times I_{f}^*
+\label{eq:power_from}
+\end{equation}
+
+The submatrices $A1$, $A2$, $B1$...$F2$, to be used in the Jacobian $H$ are not the ones with all the entries, instead we have to use sub-matrices of the real or imaginary parts of the previously introduced derivative matrices where the rows to keep are the ones with the indices of the nodes or branches with measurements of the respective magnitudes and the columns to keep are the ones with the indices of the non slack nodes for $A1$, $B1$, $C1$, $D1$, $E1$ and $F1$ and all the columns for the others. Therefore the submatrices are:
+
+\begin{equation}
+A1 = Re\left(\frac{\partial S_{flow}}{\partial |V|}\right)_{[np_{flow}, pqpv]}
+\end{equation}
+\marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
+
+\begin{equation}
+A2 = Re\left(\frac{\partial S_{flow}}{\partial \theta}\right)_{[np_{flow}, :]}
+\end{equation}
+
+\begin{equation}
+B1 = Re\left(\frac{\partial S_{inj}}{\partial |V|}\right)_{[np_{inj}, pqpv]}
+\end{equation}
+
+\marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
+
+\begin{equation}
+B2 = Re\left(\frac{\partial S_{inj}}{\partial \theta}\right)_{[np_{inj}, :]}
+\end{equation}
+
+%%%%%%%%%%
+
+\begin{equation}
+C1 = Im\left(\frac{\partial S_{flow}}{\partial |V|}\right)_{[nq_{flow}, pqpv]}
+\end{equation}
+
+\marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
+
+\begin{equation}
+C2 = Im\left(\frac{\partial S_{flow}}{\partial \theta}\right)_{[nq_{flow}, :]}
+\end{equation}
+
+\begin{equation}
+D1 = Im\left(\frac{\partial S_{inj}}{\partial |V|}\right)_{[nq_{inj}, pqpv]}
+\end{equation}
+
+\marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
+
+\begin{equation}
+D2 = Im\left(\frac{\partial S_{inj}}{\partial \theta}\right)_{[nq_{inj}, :]}
+\end{equation}
+
+%%%%%%%%%%
+
+\begin{equation}
+E1 = abs\left(\frac{\partial I_{flow}}{\partial |V|}\right)_{[nI_{flow}, pqpv]}
+\end{equation}
+
+\marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
+
+\begin{equation}
+E2 = abs\left(\frac{\partial I_{flow}}{\partial \theta}\right)_{[nI_{flow}, :]}
+\end{equation}
+
+\begin{equation}
+F1 = \frac{\partial |V|}{\partial |V|}_{[nv, pqpv]} = diag([1])_{[nv, pqpv]}
+\end{equation}
+
+\marginnote{$nv$ is a vector of node indices where there are voltage module measurements.}
+
+\begin{equation}
+F2 = \frac{\partial |V|}{\partial \theta}_{[nv, :]}= [0]_{[nv, :]}
+\end{equation}
+
+\paragraph{Calculated measurements $h$}
+
+To compute the residual ($z-h$) we need to compute the vector $h$. As the Jacobian, this vector is composed of 6 subvectors matching the Jacobian structure.
+
+\begin{equation}
+h=
+\left[
+\begin{array}{cc}
+a3 \\
+b3 \\
+c3 \\
+d3 \\
+e3 \\
+f3
+\end{array}
+\right]
+\label{SE_measurements_vector}
+\end{equation}
+
+
+\begin{equation}
+a3 = Re\left(S_{flow}\right)_{[np_{flow}]}
+\end{equation}
+\marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
+
+\begin{equation}
+b3 = Re\left(S_{inj}\right)_{[np_{inj}]}
+\end{equation}
+
+\marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
+
+
+%%%%%%%%%%
+
+\begin{equation}
+c3 = Im\left(S_{flow}\right)_{[nq_{flow}]}
+\end{equation}
+
+\marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
+
+
+\begin{equation}
+d3 = Im\left(S_{inj}\right)_{[nq_{inj}]}
+\end{equation}
+
+\marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
+
+%%%%%%%%%%
+
+\begin{equation}
+e3 = abs\left(I_f\right)_{[nI_{flow}]}
+\end{equation}
+
+\marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
+
+\begin{equation}
+f3 = |V|_{[nv]}
+\end{equation}
+
+\marginnote{$nv$ is a vector of node indices where there are voltage module measurements. Note that $|V|$ is the module of the last iteration voltage solution.}
+
+
+\paragraph{The solution vector $\Delta x$}
+
+The linear system solution will produce a vector ($\Delta x$) at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta |V|$) for all the nodes including the slack.
+
+\begin{equation}
+\Delta x = [ \Delta \theta_{pqpv} \quad \Delta|V|_{all} ]
+\end{equation}
+
+In this fashion we can split the increments vector:
+
+\begin{equation}
+\Delta \theta_{pqpv} = \Delta x[:npqpv]]
+\end{equation}
+
+\marginnote{The angle increments go from the first until the index equal to the number of pq and pv nodes $npqpv$}, from there until the end we find the voltage module increments.
+
+\begin{equation}
+\Delta |V| = \Delta x[npqpv::]]
+\end{equation}
+
+To compose the voltage solution at the iteration $k+1$:
+
+\begin{equation}
+V^{(k+1} =  V^{(k} + \Delta |V| ^{-j \cdot \Delta \theta}
+\end{equation}
+
+
+\subsection{Augmented Hatchel matrix method}
+
+The augmented Hatchel matrix method, introduces two advantages: 
+\begin{itemize}
+	\item It allows virtual measurements with zero uncertainty (values coming from a power flow solution for instance)
+	\item The linear system has a better condition number, and therefore has better convergence properties.
+\end{itemize}
+
+The linear system to solve iteratively in te Hatchel method is:
+
+\begin{equation}
+\begin{bmatrix}
+\frac{R}{\alpha} & H & 0 \\
+H^T & 0 & C^T \\
+0 & C & 0 \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+\mu\\
+\Delta x\\
+\lambda
+\end{bmatrix}
+=
+\begin{bmatrix}
+z-h\\
+0\\
+-c(x)
+\end{bmatrix}
+\end{equation}
+
+Where:
+
+\begin{itemize}
+	\item $H$: Jacobian matrix for the estate estimation problem of the measurements with uncertainty. (See \ref{SE_jacobian})
+	\item $C$: Jacobian matrix for the estate estimation problem of the measurements without uncertainty. (See \ref{SE_jacobian})
+	\item $R$: Matrix of standard deviations. It is the inverse of the weights diagonal matrix.(See \ref{eq:SE_W})
+	\item $\alpha$: Value to condition the matrix. 
+	\item $x$: vector of solutions.
+	\item $\lambda$: Lagrange multipliers.
+	\item $\mu$: Lagrange multipliers.
+	\item $z$: field measurements vector.
+	\item $h$: calculated magnitudes matching measurements structure for the measurements with uncertainty. (See \ref{SE_measurements_vector})
+	\item $c(x)$: calculated magnitudes matching measurements structure for the measurements without uncertainty.
+\end{itemize}
+
+
+\paragraph{Conditioning value ($\alpha$)}
+
+\begin{equation}
+\alpha = \frac{1}{max(W_{i, i})}
+\end{equation}
+
+
+\paragraph{Matrix of standard deviations ($R$)}
+
+\begin{equation}
+R_{i, i} = \sigma_{i, i}^2
+\end{equation}
 
 
 %-------------------------------------------------------------------------------
