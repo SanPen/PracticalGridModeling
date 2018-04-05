@@ -327,9 +327,9 @@ Vectorized formulas also allow a much simpler to debug and maintain in the produ
 	
 	\item $diag(A) \rightarrow$ Extract the diagonal of the matrix $A$ as a vector. 
 	
-	\item $real(A) \rightarrow$ Extract the real part of $A$.
+	\item $Re(A) \rightarrow$ Extract the real part of $A$.
 	
-	\item $imag(A) \rightarrow$ Extract the imaginary part of $A$.
+	\item $Im(A) \rightarrow$ Extract the imaginary part of $A$.
 	
 	\item $max(b) \rightarrow$ Maximum value of the vector $b$.
 	
@@ -386,8 +386,6 @@ Further details about how to decouple the three-phase impedance matrices into th
 %	CHAPTER Magnitudes and units
 %-------------------------------------------------------------------------------
 \chapter{Magnitudes and units}
-
-
 
 As the electric energy is mostly distributed in alternating current, electrical magnitudes are waves that vary their polarity (positive and negative value) and amplitude in time. because of this, the electrical magnitudes are expressed by complex numbers to denote the position of the value in the two-dimensional plane amplitude-time. 
 
@@ -717,9 +715,9 @@ To the effect of most calculations run in operation of a electrical system, the 
 
 \section{$\Pi$ Model}
 
-\marginnote{In the case of lines, the series admittance $Y_{serie}$ is computed as the inverse of $Z_{ABC}$. From the line's calculation it is obtained the series impedance matrix $Z_{ABC}$ and the shunt admittance matrix $Y_{sh}$. }
+\marginnote{In the case of lines, the series admittance $\textbf{Y}_{serie}$ is computed as the inverse of $\textbf{Z}_{ABC}$. From the line's calculation it is obtained the series impedance matrix $\textbf{Z}_{ABC}$ and the shunt admittance matrix $\textbf{Y}_{sh}$. }
 
-The pi model is composed by a series admittance  $Y_{serie}$ and a shunt admittance $Y_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accommodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modelled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
+The pi model is composed by a series admittance  $\textbf{Y}_{serie}$ and a shunt admittance $\textbf{Y}_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accommodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modelled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
 
 
 \begin{center}
@@ -733,14 +731,14 @@ The pi model is composed by a series admittance  $Y_{serie}$ and a shunt admitta
 The generalized admittance matrix that corresponds to the $\Pi$ model is:
 \begin{equation}
 \left[\begin{array}{c}
-I_p \\
-I_s
+\textbf{I}_p \\
+\textbf{I}_s
 \end{array}\right] = \left[\begin{array}{cc}
-Y_{pp} & Y_{ps} \\
-Y_{sp} & Y_{ss}
+\textbf{Y}_{pp} & \textbf{Y}_{ps} \\
+\textbf{Y}_{sp} & \textbf{Y}_{ss}
 \end{array}\right] \times \left[\begin{array}{c}
-V_p \\
-V_s
+\textbf{V}_p \\
+\textbf{V}_s
 \end{array}\right]
 \label{pi_main_formula}
 \end{equation}
@@ -752,11 +750,11 @@ Where:
 \begin{tabular}{cccc}
 \toprule
 
-$Y_{pp}$ &  $Y_{ps}$ & $Y_{sp}$ & $Y_{ss}$\\
+$\textbf{Y}_{pp}$ &  $\textbf{Y}_{ps}$ & $\textbf{Y}_{sp}$ & $\textbf{Y}_{ss}$\\
 
 \midrule
 
-$\frac{Y_{series} + \frac{Y_{sh}}{2}}{\alpha^2}$ &  $\frac{-Y_{series}}{\alpha\beta}$ & $\frac{-Y_{series}}{\alpha\beta}$ & $\frac{Y_{series} + \frac{Y_{sh}}{2}}{\beta^2}$\\
+$\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\beta^2}$\\
 
 \bottomrule
 \end{tabular}
@@ -766,6 +764,67 @@ $\frac{Y_{series} + \frac{Y_{sh}}{2}}{\alpha^2}$ &  $\frac{-Y_{series}}{\alpha\b
 \end{table}
 
 The formula \ref{pi_main_formula} will be used to compute the network admittance matrices.
+
+
+\subsection{Positive sequence model}
+
+A positive sequence model of the $\Pi$ branch model is very useful. The formulation of the admittance matrix of the branch is close to the one presented but since it is not in three-phase, varies a bit.
+
+\begin{center}
+	\begin{figure*}[h]
+		\includegraphics[width=0.5\linewidth]{img/pi-trafo.eps}
+		\caption{General positive sequence branch model.}
+		\label{pi_model_ps}
+	\end{figure*}
+\end{center}
+
+\begin{itemize}
+	\item $z_{series}$: Magnetizing impedance or simply series impedance. It is given in p.u.
+	\item $y_{shunt}$: Leakage impedance or simply shunt impedance. It is given in p.u.
+	\item $tap\_module$: Module of the tap changer. It is a magnitude around 1.
+	\item $tap\_angle$: Angle of the tap changer. Angle in radians.\newline
+\end{itemize}
+
+
+%tap = self.tap_module * exp(-1j * self.angle)
+
+In order to apply the effect of a branch to the admittance matrices, first we compute the complex tap value.
+$$tap = tap\_module \cdot e^{-j \cdot tap\_angle}$$  
+
+Then we compose the equivalent series and shunt admittance values of the branch. Both values are complex.
+%Ys = 1 / self.z_series
+$$Y_s = \frac{1}{z_{series}}$$
+%Ysh = self.y_shunt / 2
+$$Y_{sh} = \frac{y_{shunt}}{2}$$
+
+\begin{itemize}
+	\item $z_{series}$: Series impedance of the branch composed by the line resistance and its inductance. $z_{series}=r + jl$
+	
+	\item $y_{shunt}$: Shunt admittance of the line composed by the conductance and the susceptance. $y_{shunt}=c+jb$\newline
+\end{itemize}
+
+
+
+The general branch model is represented by a $2 \times 2$ matrix.
+%\vspace{0.5cm}
+$$
+Y_{branch}=\left[ \begin{array}{ccc}
+Y_{ff} & Y_{ft} \\
+Y_{tf} & Y_{tt} \end{array} \right]
+$$
+%\vspace{0.5cm}
+In this matrix, the elements are the following:
+
+%Yff = Ytt / (tap * conj(tap))
+%Yft = - Ys / conj(tap)
+%Ytf = - Ys / tap
+%Ytt = Ys + Ysh
+
+$$Y_{ff} = \frac{Y_s + Y_{sh}}{tap \cdot conj(tap)}  $$
+$$Y_{ft} = - Y_s / conj(tap)$$
+$$Y_{tf} = - Y_s / tap$$
+$$Y_{tt} = Y_s + Y_{sh}$$
+
 
 
 \section{Line}
@@ -869,6 +928,8 @@ V_s
 \end{array}\right]
 $$
 
+
+
 \newpage
 \section{Transformer}
 
@@ -881,7 +942,6 @@ The most common transformer connections at the terminals are:
 \item Wye ($Y$)
 \item Grounded Wye (the neutral is grounded) ($Yg$)
 \end{itemize}
-
 
 
 
@@ -1308,7 +1368,7 @@ The admittance, power and current values at the bus are derived from the element
 
 \section{The substation}
 
-In reality a substation is a collection of real busbars (metal bars usually made of copper or aluminium) switchgear and shunt devices. The use of a substation is to change the connectivity topology of the grid.
+In reality a substation is a collection of real bus bars (metal bars usually made of copper or aluminium) switchgear and shunt devices. The use of a substation is to change the connectivity topology of the grid.
 
 For calculation, the substation connectivity is solved first, originating one or more calculation buses. Therefore, the substations are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation.
 
@@ -1457,7 +1517,7 @@ The main parameters of a voltage controlled generator are:\\
 %-------------------------------------------------------------------------------
 %	CHAPTER Power flow
 %-------------------------------------------------------------------------------
-\chapter{Power flow}
+\chapter{Power flow} \label{ch:power_flow}
 
 The power flow problem consists in finding the node voltages that correspond to the injected current and power values. The fundamental equation to be solved is:
 
@@ -1501,7 +1561,7 @@ In some nodes we know the active power injection (generation nodes), in some nod
 			
 			$PQ$ & Calc. &  Calc. & Set & Set\\
 			$PV$ & Set &  Calc. & Set & Calc.\\
-			$VD$ & Set &  Set & Calc. & Calc.\\
+			$VD$ (slack) & Set &  Set & Calc. & Calc.\\
 			
 			
 			\bottomrule
@@ -1512,7 +1572,6 @@ In some nodes we know the active power injection (generation nodes), in some nod
 \end{table}
 
 There must be at least one $VD$ or slack node in order to be able to compute the power flow problem. 
-
 
 
 
@@ -1552,7 +1611,6 @@ S_{red} = S[pqpv]
 I_{red} = I[pqpv]
 \end{equation}
 
-
 Once we have all the reduced magnitudes, it means that we have removed the slack (VD) nodes from the circuit, but we must keep their influence in the rest of the nodes in the form of current injections.
 
 First we copy $V_{red}$ into another variable $V_{prev}$.
@@ -1590,6 +1648,15 @@ error = ||V_{prev} - V_k ||_{\infty} = max(abs(V_{prev} - V_k ))
 \end{equation}
 
 The infinite norm of the voltage difference between the previous iteration and the current iteration is a poor convergence criteria, but it is usually the only working criteria in practice for this method.
+
+Now we need to correct the voltage for the PV nodes so that they control the voltage module.
+
+\begin{equation}
+V_{k}[pv_{red}] = V_k \cdot \frac{|V^{esp}[pv_{red}]|}{|V_{k}[pv_{red}]|}
+\label{eq:zm_pv_correction}
+\end{equation}
+
+\marginnote{Note that $pv_{red}$ is the vector of pv node indices in the reduced scheme. It is not equal to the $pv$ indices vector.}
 
 Next, we copy the voltage solution to the previous voltage solution vector:
 
@@ -1659,10 +1726,10 @@ Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and onl
 J=
 \left[
 \begin{array}{cc}
-real\left(\frac{\partial S}{\partial \delta}[pqpv, pqpv]\right) &
-real\left(\frac{\partial S}{\partial |V|}[pqpv, pq]\right) \\
-imag\left(\frac{\partial S}{\partial \delta}[pq, pqpv]\right) &
-imag\left(\frac{\partial S}{\partial |V|}[pq, pq]\right)
+Re\left(\frac{\partial S}{\partial \delta}[pqpv, pqpv]\right) &
+Re\left(\frac{\partial S}{\partial |V|}[pqpv, pq]\right) \\
+Im\left(\frac{\partial S}{\partial \delta}[pq, pqpv]\right) &
+Im\left(\frac{\partial S}{\partial |V|}[pq, pq]\right)
 \end{array}
 \right]
 \end{equation}
@@ -1703,12 +1770,12 @@ F =  \left[
 \end{equation}
 
 \begin{equation}
-\Delta Q = imag(\Delta S[pq]) 
+\Delta Q = Im(\Delta S[pq]) 
 \label{eq:nr_q_inc}
 \end{equation}
 
 \begin{equation}
-\Delta P = real(\Delta S[pqpv])
+\Delta P = Re(\Delta S[pqpv])
 \label{eq:nr_p_inc}
 \end{equation}
 
@@ -1986,22 +2053,22 @@ In order to compute the DC approximation we must perform a transformation. The s
 %normF = linalg.norm(F, Inf)
 
 \begin{equation}
-\textbf{P} = real(\textbf{S}_{red}) + (- imag(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) + real(\textbf{I}_{red})) \cdot |\textbf{V}_{red}|
+\textbf{P} = Re(\textbf{S}_{red}) + (- Im(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) + Re(\textbf{I}_{red})) \cdot |\textbf{V}_{red}|
 \label{dc_power_injections}
 \end{equation}
 
 The equation \ref{dc_power_injections} computes the DC power injections as the sum of the different factors mentioned:
 
 \begin{enumerate}
-	\item $real(\textbf{S}_{red})$: Real part of the reduced power injections.
-	\item $imag(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) \cdot |v_{red}|$: Currents that appear by removing the slack nodes while keeping their influence, multiplied by the voltage module to obtain power.
-	\item $real(\textbf{I}_{red}) \cdot |v_{red}|$: Real part of the grid reduced current injections, multiplied by the voltage module to obtain power.
+	\item $Re(\textbf{S}_{red})$: Real part of the reduced power injections.
+	\item $Im(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) \cdot |v_{red}|$: Currents that appear by removing the slack nodes while keeping their influence, multiplied by the voltage module to obtain power.
+	\item $Re(\textbf{I}_{red}) \cdot |v_{red}|$: Real part of the grid reduced current injections, multiplied by the voltage module to obtain power.
 \end{enumerate}
 
 Once the power injections are computed, the new voltage angles are obtained by:
 
 \begin{equation}
-\textbf{V}_{angles} = imag(\textbf{Y}_{red})^{-1} \times \textbf{P}
+\textbf{V}_{angles} = Im(\textbf{Y}_{red})^{-1} \times \textbf{P}
 \end{equation}
 
 The new voltage is then:
@@ -2009,12 +2076,14 @@ The new voltage is then:
 \textbf{V}_{red} = |\textbf{V}_{red}| \cdot e^{1j \cdot  \textbf{V}_{angles}}
 \end{equation}
 
-This solution does usually produces a large power mismatch. That is to be expected because the method is an oversimplification with no iterative convergence criteria, just a straight forward set of operations.
+This method usually produces a solution with a large power mismatch. That is to be expected because the method is an oversimplification with no iterative convergence criteria, just a straight forward set of operations.
 
 
 \section{Linear AC power flow}
 
-Following the formulation presented in \cite{rossoni2016linearized}, we obtain a way to solve circuits in one shot (without iterations) and quite positive results for a linear approximation.
+The AC linear approximation is a much more convenient linearisation of the power flow equation, because it provides the voltage module and angle. This procedure is great for real time applications such as large grids SCADA applications.
+
+Using the formulation presented in \cite{rossoni2016linearized}, we obtain a way to solve circuits in one shot (without iterations) with quite positive results for a linear approximation.
 
 \begin{equation}
 \begin{bmatrix}
@@ -2039,31 +2108,31 @@ Where:
 	\item $A_{12} = Re\left(Y_{bus}[pqpv, pq]\right)$
 	\item $A_{21} = -Im\left(Y_{series}[pq, pqpv]\right)$
 	\item $A_{22} = -Re\left(Y_{bus}[pq, pq]\right)$
-	\item $Rhs_1 = P[pqpv]$
-	\item $Rhs_2 = Q[pq]$\newline
+	\item $Rhs_1 = Re(S[pqpv])$
+	\item $Rhs_2 = Im(S[pq])$\newline
 \end{itemize}
 
-Here, $Y_{bus}$ is the normal circuit admittance matrix and $Y_{series}$ is the admittance matrix formed with only series elements of the $\pi$ model, this is neglecting all the shunt admittances.
+Here, $Y_{bus}$ is the normal circuit admittance matrix and $Y_{series}$ is the admittance matrix formed with only series elements of the $\pi$ model, this is, neglecting all the shunt admittances.
 
 Solving the vector $[\Delta \theta + 0, \Delta |V| + 1]$ we get $\theta$ for the pq and pv nodes and $|V|$ for the pq nodes.\newline
 
-For equivalence with the paper:\newline
+%For equivalence with the paper:\newline
+%
+%\begin{itemize}
+%	\item $-B' = -Im(Y_{series}[pqpv, pqpv])$
+%	\item $G = Re(Y_{bus}[pqpv, pq])$
+%	\item $-G' = -Im(Y_{series}[pq, pqpv])$
+%	\item $-B = -Re(Y_{bus}[pq, pq])$\newline
+%\end{itemize}
 
-\begin{itemize}
-	\item $-B' = -Im(Y_{series}[pqpv, pqpv])$
-	\item $G = Re(Y_{bus}[pqpv, pq])$
-	\item $-G' = -Im(Y_{series}[pq, pqpv])$
-	\item $-B = -Re(Y_{bus}[pq, pq])$\newline
-\end{itemize}
-
+The solution obtained has a lower mismatch than the DC approximation usually in the order of $0.1$ p.u. which is acceptable for a linear method. The error is lower because the voltage module is also computed.
 
 \section{Holomorphic embedding}
 
-First introduced by Antonio Trias in 2012 \cite{TriasHELM}, promises to be a non-divergent power flow method. Trias originally developed a version with no voltage controlled nodes (PV), in which the convergence properties are excellent (With this software try to solve any grid without PV nodes to check this affirmation). 
+First introduced by Antonio Trias in 2012 \cite{TriasHELM}, promises to be a non-divergent power flow method. Trias originally developed a version with no voltage controlled nodes (PV), in which the convergence properties are excellent. 
 
 The version programmed in the file \verb|HELM.py| has been adapted from the master thesis of Muthu Kumar Subramanian at the Arizona State University (ASU) \cite{subramanian2014application}. This version includes a formulation of the voltage controlled nodes. My experience indicates that the introduction of the PV control deteriorates the convergence properties of the holomorphic embedding method. However, in many cases, it is the best approximation to a solution. especially when Newton-Raphson does not provide one.
 
-The file \verb|HELM.py| contains a vectorized version of the algorithm. This means that the execution in python is much faster than a previous version that uses loops.
 
 \subsection{Concepts}
 
@@ -2071,9 +2140,9 @@ All the power flow algorithms until the HELM method was introduced were iterativ
 
 The fundamental idea of the recursive algorithms is that given a voltage initial point (1 p.u. at every node, usually) the algorithm explores the surroundings of the initial point until a suitable voltage solution is reached or no solution at all is found because the initial point is supposed to be "far" from the solution.
 
-On the HELM methods, we form a "curve" that departures from a known mathematically exact solution that is obtained from solving the grid with no power injections. This is possible because with no power injections, the grid equations become linear and straight forward to solve. The arriving point of the "curve" is the solution that we want to achieve. That "curve" is best approximated by a Padè approximation. To compute the Padè approximation we need to compute the coefficients of the unknown variables, in our case the voltages (and possibly the reactive powers at the PV nodes).
+On the HELM methods, we form a "curve" that departures from a known mathematically exact solution that is obtained from solving the grid with no power injections. This is possible because with no power injections, the grid equations become linear and straight forward to solve. The arriving point of the "curve" is the solution that we want to achieve. That "curve" is best approximated by a Pad\'e approximation. To compute the Pad\'e approximation we need to compute the coefficients of the unknown variables, in our case the voltages (and possibly the reactive powers at the PV nodes).
 
-The HELM formulation consists in the derivation of formulas that enable the calculation of the coefficients of the series that describes the "curve" from the mathematically know solution to the unknown solution. Once the coefficients are obtained, the Padè approximation computes the voltage solution at the "end of the curve", providing the desired voltage solution. The more coefficients we compute the more exact the solution is (this is true until the numerical precision limit is reached).\newline 
+The HELM formulation consists in the derivation of formulas that enable the calculation of the coefficients of the series that describes the "curve" from the mathematically know solution to the unknown solution. Once the coefficients are obtained, the Pad\'e approximation computes the voltage solution at the "end of the curve", providing the desired voltage solution. The more coefficients we compute the more exact the solution is (this is true until the numerical precision limit is reached).\newline 
 
 
 All this sounds very strange, but it works ;)\newline 
@@ -2119,7 +2188,7 @@ Wait, what?? did you just made this stuff up??, well so far my reasoning is:
 	
 	\item Regarding the $\alpha$ that multiplies $\textbf{S}$, the amount of power ($\alpha \textbf{S}$) is what I vary during the \textit{travel} from $\alpha=0$ to $\alpha=1$, so that is why $\textbf{S}$ has to be accompanied by the \textit{traveling} parameter $\alpha.$
 	
-	\item In my opinion the $\alpha$ $\textbf{Y}_{shunt}$ is to provoke the first voltage coefficients to be one.  $\textbf{Y}_{series} \times \textbf{V}[0] = 0$, makes $V[0]=1$. This is essential for later steps (is a condition to be able to use Padè). \newline
+	\item In my opinion the $\alpha$ $\textbf{Y}_{shunt}$ is to provoke the first voltage coefficients to be one.  $\textbf{Y}_{series} \times \textbf{V}[0] = 0$, makes $V[0]=1$. This is essential for later steps (is a condition to be able to use Pad\'e). \newline
 \end{itemize}
 
 The series are expressed as McLaurin equations:
@@ -2197,7 +2266,7 @@ Expanding the series an identifying terms of $\alpha$ we obtain the expression f
 \right.
 \end{equation}
 
-This is the HELM fundamental formula derivation for a grid with no voltage controlled nodes (no PV nodes). Once a sufficient number of coefficients are obtained, we still need to use the Padè approximation to get voltage values out of the series.
+This is the HELM fundamental formula derivation for a grid with no voltage controlled nodes (no PV nodes). Once a sufficient number of coefficients are obtained, we still need to use the Pad\'e approximation to get voltage values out of the series.
 
 
 In the previous formulas, the number of the bus has not been explicitly detailed. All the $\textbf{V}$ and the $\textbf{W}$ are matrices of dimension $n \times nbus$ (number of coefficients by number of buses in the grid) This structures are depicted in the figure \ref{fig:CoefficientsStructure}. For instance $\textbf{V}_n$ is the $n^{th}$ row of the coefficients structure $\textbf{V}$.
@@ -2210,19 +2279,17 @@ In the previous formulas, the number of the bus has not been explicitly detailed
 	\label{fig:CoefficientsStructure}
 \end{figure}
 
-\subsection{Padè approximation}
+\subsection{Pad\'e approximation}
 
-The equation \ref{eq:McLaurinV} provides us with an expression to obtain the voltage from the coefficients, knowing that for $\alpha=1$ we get the final voltage results. So, why do we need any further operation?, and what is this Padè thing?
+The equation \ref{eq:McLaurinV} provides us with an expression to obtain the voltage from the coefficients, knowing that for $\alpha=1$ we get the final voltage results. So, why do we need any further operation?, and what is this Pad\'e thing?
 
-Well, it is true that the equation \ref{eq:McLaurinV} provides an approximation of the voltage by means of a series (this is similar to a Taylor approximation), but in practice, the approximation might provide a wrong value for a given number of coefficients. The Padè approximation accelerates the convergence of any given series, so that you get a more accurate result with less coefficients. This means that for the same series of voltage coefficients, using the equation \ref{eq:McLaurinV} could give a completely wrong result, whereas by applying Padè to those coefficients one could obtain a fairly accurate result.
+Well, it is true that the equation \ref{eq:McLaurinV} provides an approximation of the voltage by means of a series (this is similar to a Taylor approximation), but in practice, the approximation might provide a wrong value for a given number of coefficients. The Pad\'e approximation accelerates the convergence of any given series, so that you get a more accurate result with less coefficients. This means that for the same series of voltage coefficients, using the equation \ref{eq:McLaurinV} could give a completely wrong result, whereas by applying Pad\'e to those coefficients one could obtain a fairly accurate result.
 
-The Padè approximation is a rational approximation of a function. In our case the function is $\textbf{V}(\alpha)$, represented by the coefficients structure $\textbf{V}$. The approximation is valid over a small domain of the function, in our case the domain is $\alpha=[0,1]$. The method requires the function to be continuous and differentiable for $\alpha=0$. Hence the Cauchy-Riemann condition. And yes, our function meets this condition, we tested it before.
+The Pad\'e approximation is a rational approximation of a function. In our case the function is $\textbf{V}(\alpha)$, represented by the coefficients structure $\textbf{V}$. The approximation is valid over a small domain of the function, in our case the domain is $\alpha=[0,1]$. The method requires the function to be continuous and differentiable for $\alpha=0$. Hence the Cauchy-Riemann condition. And yes, our function meets this condition, we tested it before.
 
-GridCal implements two algorithms that perform the Padè approximation; The Padè canonical algorithm, and Wynn's Padè approximation.
+\paragraph{Pad\'e approximation algorithm}
 
-\paragraph{Padè approximation algorithm}
-
-The canonical Padè algorithm for our problem is described by:
+The canonical Pad\'e algorithm for our problem is described by:
 
 \begin{equation}
 Voltage\_value\_approximation = \frac{P_N(\alpha)}{Q_M(\alpha)} \quad \forall \alpha \in [0,1]
@@ -2268,15 +2335,14 @@ q_MV_{N-M} + q_{M-1}V_{N-M+1} + ... + +V_N - p_N=0
 Once the coefficients are there, you would have defined completely the polynomials $P_N(\alpha)$ and $Q_M(\alpha)$, and it is only a matter of evaluating the equation \ref{eq:pade_apprx} for $\alpha=1$.\newline
 
 
-This process is done for every column of coefficients $\textbf{V}=\{V_0, V_1,V_2,V_3, ...,V_n\}$ of the structure depicted in the figure \ref{fig:CoefficientsStructure}. This means that we have to perform a Padè approximation for every node, using the one columns of the voltage coefficients per Padé approximation.
+This process is done for every column of coefficients $\textbf{V}=\{V_0, V_1,V_2,V_3, ...,V_n\}$ of the structure depicted in the figure \ref{fig:CoefficientsStructure}. This means that we have to perform a Pad\'e approximation for every node, using the one columns of the voltage coefficients per Pad\'e approximation.
 
-\paragraph{Wynn's Padè approximation algorithm}
+\paragraph{Wynn's Pad\'e approximation algorithm}
 
-Wynn published a paper in 1969 where he proposed a simple calculation method to obtain the Padè approximation. This method is based on a table. Weniger in 1989 publishes his thesis where a faster version of Wynn's algorithm is provided in Fortran code. 
+Wynn published a paper in 1969 where he proposed a simple calculation method to obtain the Pad\'e approximation. This method is based on a table. Weniger in 1989 publishes his thesis where a faster version of Wynn's algorithm is provided in Fortran code. 
 
-That very Fortran piece of code has been translated into Python and included in GridCal.
 
-One of the advantages of this method over the canonical Padè approximation implementation is that it can be used for every iteration. In the beginning I thought it would be faster but it turns out that it is not faster since the amount of computation increases with the number of coefficients, whereas with the canonical implementation the order of the matrices does not grow dramatically and it is executed the half of the times.
+One of the advantages of this method over the canonical Pad\'e approximation implementation is that it can be used for every iteration. In the beginning I thought it would be faster but it turns out that it is not faster since the amount of computation increases with the number of coefficients, whereas with the canonical implementation the order of the matrices does not grow dramatically and it is executed the half of the times.
 
 On top of that my experience shows that the canonical implementation provides a more consistent convergence.
 
@@ -2382,7 +2448,7 @@ Form the solution vector $\textbf{V}[n]$ you can compute the buses calculated po
 \end{equation}
 
 \begin{equation}
-\textbf{Q}_i[0] = imag(\textbf{S}_{i}) \quad \forall i \in PV
+\textbf{Q}_i[0] = Im(\textbf{S}_{i}) \quad \forall i \in PV
 \end{equation}
 
 The initial inverse voltage coefficients $\textbf{W}[0]$ are obtained by:
@@ -2477,7 +2543,7 @@ error = |mismatch|_\infty = max(abs(mismatch))
 
 
 
-\section{Post voltage solution: Compute the power flows}
+\section{Post voltage solution: Compute the power flows} \label{post_voltage_solution}
 
 Ironically, what is called the power flow problem does not compute the power flows in the branches of a grid. It computes the node voltages. In this section we explain how to compute the current and power that flows through the grid branches using a given voltage solution vector.
 
@@ -2565,12 +2631,14 @@ Generator limits must be within boundaries (include the slack generator as well)
 PG_i^{min} \leq PG_i \leq PG_i^{max}
 \end{equation}
 
-
+\marginnote{When traversing the matrix B, try to avoid two for loops, dealing with B as if it was dense because it is not. Ideally B should be in CSC format. Then traversing B in sparse mode is several orders of magnitude faster.}
 
 The voltages must satisfy the power balance in every PQ and PV node.
 \begin{equation}
 PG_i - PD_i=\sum_j^{PQPV} B_{ij} \cdot \theta_j  \quad  \forall i \in PQPV
 \end{equation}
+
+
 
 The slack voltage angles are set to zero.
 \begin{equation}
@@ -2664,9 +2732,9 @@ Mathematically speaking, we want to obtain the cumulative frequency distribution
 Varying the connectivity is definitely possible but it will interfere with the purpose of this simulation. If there is the need to vary the connectivity, then it is recommended to run a stochastic simulation for each connectivity state.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Cumulative Density Function (CDF)}
+\section{Cumulative Distribution Function (CDF)}
 
-Usually, one finds that tools model loads and generation with probability density functions (PDF) such as the normal or Weibull distributions. In the author's opinion there is a much easier and correct way: To use only data-based cumulative density functions (CDF). This allows you to build sampling artefacts from any data source real or theoretical.
+Usually, one finds that tools model loads and generation with probability distribution functions (PDF) such as the normal or Weibull distributions. In the author's opinion there is a much easier and correct way: To use only data-based cumulative distribution functions (CDF). This allows you to build sampling artefacts from any data source real or theoretical.
 
 \paragraph{Building a CDF}
 
@@ -2715,13 +2783,13 @@ $$
 
 \begin{marginfigure}
 	\includegraphics[width=\linewidth]{img/Load_CDF.eps}
-	\caption{Example of cumulative density function of a load.}
+	\caption{Example of cumulative distribution function of a load.}
 	\label{fig:load_CDF}
 \end{marginfigure}
 
 \begin{marginfigure}
 	\includegraphics[width=\linewidth]{img/Voltage_CDF.eps}
-	\caption{Example of cumulative density function of the voltage. This is the Result of a probabilistic power flow.}
+	\caption{Example of cumulative distribution function of the voltage. This is the Result of a probabilistic power flow.}
 	\label{fig:Voltage_CDF}
 \end{marginfigure}
 
@@ -2749,22 +2817,22 @@ In our case, we will draw load and generation samples, evaluate the voltage by r
 \begin{enumerate}
 	\item Construct the CDF of all the loads and generators from their profiles of data. For the loads we construct a DSF for the active power and another for the reactive power, for the generators, we only need the CDF for the active power.
 	
-	\item Initialize control variables: $iterations = 0$, $V_{summation} = 0$
+	\item Initialize control variables: $iterations = 0$, $\textbf{V}_{summation} = 0$
 	
 	\item While the variance is less than a tolerance value:
 	
 	\begin{enumerate}
 		\item Construct the injection vectors $S$ and $I$, sampling from the CDF.
 		
-		\item Run a power flow with those arrays and get the voltages vector $V$.
+		\item Run a power flow (see chapter \ref{ch:power_flow}) with those arrays and get the voltages vector $\textbf{V}$.
 		
 		\item Increase the number of iterations: $iterations += 1$
 		
-		\item Compute the voltages summation: $V_{summation} += V$
+		\item Compute the voltages summation: $\textbf{V}_{summation} += \textbf{V}$
 		
-		\item Compute the voltage average: $V_{mean} = V_{summation} / iterations$
+		\item Compute the voltage average: $\textbf{V}_{mean} = \textbf{V}_{summation} / iterations$
 		
-		\item Compute the variance: $min((V - V_{mean})^2 / (iterations - 1))$
+		\item Compute the variance: $min((\textbf{V} - \textbf{V}_{mean})^2 / (iterations - 1))$
 		
 		\item Store all the values that you want to have at the end of the loop.
 		
@@ -2806,7 +2874,7 @@ Where:
 	\item $\delta$: Step control value. It is non negative.
 	\item $x$: vector of solutions.
 	\item $z$: field measurements vector.
-	\item $h$: calculated magnitudes matching measurements structure.
+	\item $h$: calculated magnitudes matching the measurements structure.
 \end{itemize}
 
 The linear system presented in equation \ref{eq:state_estimation_normal_method} is solved using the Levenberg-Marquardt method (See \ref{LM-Method}) and alternatively using the Newton-Raphson method, but the later is less suitable.
@@ -2847,9 +2915,9 @@ F2 \\
 \label{SE_jacobian}
 \end{equation}
 
-Note that the Jacobian formulated here is composed of 12 real-values submatrices. As you might have noticed we try to avoid summation based formulations as much as possible, so to compute the submatrices we will need to compute the following complex derivatives, so let's introduce them first:
+Note that the Jacobian formulated here is composed of 12 real-valued submatrices. As you might have noticed we try to avoid summation based formulations as much as possible, so to compute the submatrices we will need to compute the following complex derivatives. Let's introduce them first:
 
-\marginnote{The derivatives computation using matrix formulation has been introduced in \cite{zimmerman2010ac} which is a very recommendable reading.}
+\marginnote{The derivatives computation using matrix formulation has been taken from \cite{zimmerman2010ac}.}
 
 \begin{equation}
 \frac{\partial S_{inj}}{\partial \theta} = j \cdot V_{diag} \times (I_{bus,diag}-Y_{bus} \times V_{diag}  )^* 
@@ -3026,27 +3094,29 @@ f3 = |V|_{[nv]}
 The linear system solution will produce a vector ($\Delta x$) at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta |V|$) for all the nodes including the slack.
 
 \begin{equation}
-\Delta x = [ \Delta \theta_{pqpv} \quad \Delta|V|_{all} ]
+\Delta \textbf{x} = [ \Delta \theta_{pqpv} \quad \Delta|\textbf{V}|_{all} ]
 \end{equation}
 
 In this fashion we can split the increments vector:
 
 \begin{equation}
-\Delta \theta_{pqpv} = \Delta x[:npqpv]]
+\Delta \theta_{pqpv} = \Delta \textbf{x}[:npqpv]]
 \end{equation}
 
 \marginnote{The angle increments go from the first until the index equal to the number of pq and pv nodes $npqpv$}, from there until the end we find the voltage module increments.
 
 \begin{equation}
-\Delta |V| = \Delta x[npqpv::]]
+\Delta |\textbf{V}| = \Delta \textbf{x}[npqpv::]]
 \end{equation}
 
 To compose the voltage solution at the iteration $k+1$:
 
 \begin{equation}
-V^{(k+1} =  V^{(k} + \Delta |V| ^{-j \cdot \Delta \theta}
+\textbf{V}^{(k+1} =  \textbf{V}^{(k} + \Delta |\textbf{V}| ^{-j \cdot \Delta \theta}
 \end{equation}
 
+The outcome of the method are the node voltages (vector $V$). From those one shall compose the branch power flows
+using the equations described in \ref{post_voltage_solution}.
 
 \subsection{Augmented Hatchel matrix method}
 
@@ -3089,8 +3159,8 @@ Where:
 	\item $\lambda$: Lagrange multipliers.
 	\item $\mu$: Lagrange multipliers.
 	\item $z$: field measurements vector.
-	\item $h$: calculated magnitudes matching measurements structure for the measurements with uncertainty. (See \ref{SE_measurements_vector})
-	\item $c(x)$: calculated magnitudes matching measurements structure for the measurements without uncertainty.
+	\item $h$: calculated magnitudes matching the measurements structure for the measurements with uncertainty. (See \ref{SE_measurements_vector})
+	\item $c(x)$: calculated magnitudes matching the measurements structure for the measurements without uncertainty.
 \end{itemize}
 
 
