@@ -1851,14 +1851,20 @@ $pq$ is a vector that contains the indices of the $PQ$  type indices in sequenti
 Newton-Raphson is a recursive, iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
 
 \begin{equation}
+\Delta S = S_{specified} - S_{calc} 
+\end{equation}
+
+Where:
+\begin{equation}
 s_{calc} = V \times (Y \times V - I_{bus})^*
 \label{eq:nr_Scalc}
 \end{equation}
 
-\begin{equation}
-\Delta S = S_{specified} - S_{calc} 
-\end{equation}
+The minimization of $\Delta S$ occurs via se recursive solution of the following linear system:
 
+\begin{equation}
+J \times \Delta x = F
+\end{equation}
 
 Since the mismatch ($\Delta S$) is a vector of complex values, we transform it into a vector ($F$) with the real part of $\Delta S$ for the PQ and PV bus indices and the imaginary part of $\Delta S$ for the PQ bus indices of the vector. Observe that the length of the vector is $2npq+npv$, matching the Jacobian dimensions.
 
