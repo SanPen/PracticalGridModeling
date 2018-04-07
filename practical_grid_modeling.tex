@@ -1508,15 +1508,119 @@ The main parameters of a voltage controlled generator are:\\
 
 \section{Calculation of the bus connected phases}
 
-
+\newpage
 \section{Calculation of the admittance matrices}  \label{Y_calculation}
+
+For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
+
+\begin{itemize}
+	
+	\item $n$: Number of buses.
+	
+	\item $m$: Number of branches.
+	
+	\item $Y_{bus}$ or simply $Y$: Complete admittance matrix.
+	
+	It is a sparse matrix of size $n \times n$
+	
+	\item $Y_{series}$: Admittance matrix of the series elements. It contains no value coming from shunt elements or the shunt parts of the branch model.
+	
+	It is a sparse matrix of size $n \times n$
+	
+	\item $Y_{shunt}$: Admittance vector of the shunt elements and the shunt parts of the branch model. 
+	
+	It is a vector of size $n$
+	
+	\item $Y_f$: Admittance matrix of the branches with their \textit{from} bus.
+	
+	It is a sparse matrix of size $m \times n$
+	
+	\item $Y_t$: Admittance matrix of the branches with their \textit{to} bus.
+	
+	It is a sparse matrix of size $m \times n$\newline
+\end{itemize}
+
+Where $n$ is the number of buses and $m$ is the number of branches.
+
+The relation between the admittance matrix and the series and shunt admittance matrices is the following:
+\begin{equation}
+Y_{bus} = Y_{series} + Y_{shunt}
+\end{equation}
+
+The algorithmic logic to build the matrices in pseudo code is the following:
+
+\begin{verbatim}
+n = number of buses in the circuit
+m = number of branches in the circuit
+
+// declare the matrices
+Y = complex_sparse(n, n)
+Yf = complex_sparse(m, n)
+Yt = complex_sparse(m, n)
+yshunt = complex_vector(n)
+yseries = complex_sparse(n, n)
+
+// set the buses admittances
+for i=0 to n:
+
+    // get all the bus-connected power, current andmittance and voltage
+    y, curr, s, v = buses[i].get_YISV()
+
+    Yshunt[i] = y
+end
+
+//set the branches admittances
+for i=0 to m:
+    // get the bus indices matching the busses of this branch
+    f = get_bus_index(branches[i].bus_from)
+    t = get_bus_index(branches[i].bus_to)
+    
+    // compose the basic elements (only for pisitive sequence)
+    z_series = complex(branches[i].R, branches[i].X)
+    y_shunt = complex(branches[i].G, branches[i].B)
+    tap = branches[i].tap_module * exp(-1j * branches[i].angle)
+    Ysh = y_shunt / 2
+    Ys = 1 / z_series
+
+    // compose the matrix sub elements
+    Ytt = Ys + Ysh
+    Yff = Ytt / (tap * conj(tap))
+    Yft = - Ys / conj(tap)
+    Ytf = - Ys / tap    
+    Yff_sh = Ysh
+    Ytt_sh = Yff_sh / (tap * conj(tap))
+    
+    // Full admittance matrix
+    Ybus[f, f] += Yff
+    Ybus[f, t] += Yft
+    Ybus[t, f] += Ytf
+    Ybus[t, t] += Ytt
+    
+    // Y-from and Y-to for the lines power flow computation
+    Yf[i, f] += Yff
+    Yf[i, t] += Yft
+    Yt[i, f] += Ytf
+    Yt[i, t] += Ytt
+    
+    // Y shunt
+    Yshunt[f] += Yff_sh
+    Yshunt[t] += Ytt_sh
+    
+    // Y series
+    Yseries[f, f] += Ys / (tap * conj(tap))
+    Yseries[f, t] += Yft
+    Yseries[t, f] += Ytf
+    Yseries[t, t] += Ys
+end
+
+\end{verbatim}
 
 
 \section{Calculation of the voltage, power and current vectors}
 
 
 %-------------------------------------------------------------------------------
-%	CHAPTER Power flow
+%    CHAPTER Power flow
 %-------------------------------------------------------------------------------
 \chapter{Power flow} \label{ch:power_flow}
 
@@ -2862,10 +2966,11 @@ Weighted Least Squares State estimation is a method to correct field measurement
 
 The estate estimation method is formulated with the following recursive linear system:
 
-$$
+\begin{equation}
 \left[H^T \times W \times H + \delta \cdot diag(H^T \times W \times H)\right] \times \Delta x = \left[H^T \times W \times (z-h) \right]
 \label{eq:state_estimation_normal_method}
-$$
+\end{equation}
+
 
 Where:
 
@@ -2873,7 +2978,7 @@ Where:
 	\item $H$: Jacobian matrix for the estate estimation problem.
 	\item $W$: Weights diagonal matrix.
 	\item $\delta$: Step control value. It is non negative.
-	\item $x$: vector of solutions.
+	\item $x$: vector of solutions (voltage modules and angles).
 	\item $z$: field measurements vector.
 	\item $h$: calculated magnitudes matching the measurements structure.
 \end{itemize}
@@ -2932,6 +3037,8 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 
 \begin{equation}\frac{\partial S_{flow}}{\partial |V|}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
 \end{equation}
+
+\marginnote{Note: All these derivatives are square matrices in complex numbers.}
 
 \begin{equation}\frac{\partial I_{mag}}{\partial \theta} = j \cdot Y_f \times V_{diag} 
 \end{equation}
