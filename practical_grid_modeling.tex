@@ -30,6 +30,12 @@
 \usepackage{lipsum}
 
 \usepackage{xcolor} % for colour
+
+\definecolor{verbatimcolor}{RGB}{33,120,103}
+\definecolor{maincolor}{RGB}{22,80,22}
+\definecolor{secondarycolor}{RGB}{22,80,22} %{95,211,141}
+\definecolor{tertiarycolor}{RGB}{22,80,22} %{135,222,170}
+
 \usepackage{amsmath}
 \usepackage{relsize}
 
@@ -162,24 +168,24 @@
 
 % chapter format
 \titleformat{\chapter}%
-{\huge\rmfamily\itshape\color{black}}% format applied to label+text
-{\llap{\colorbox{black}{\parbox{1.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
+{\huge\rmfamily\itshape\color{maincolor}}% format applied to label+text
+{\llap{\colorbox{maincolor}{\parbox{10.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
 {2pt}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
 
 % section format
 \titleformat{\section}%
-{\normalfont\Large\itshape\color{gray}}% format applied to label+text
-{\llap{\colorbox{gray}{\parbox{1.5cm}{\hfill\color{white}\thesection}}}}% label
+{\normalfont\Large\itshape\color{secondarycolor}}% format applied to label+text
+{\llap{\colorbox{secondarycolor}{\parbox{10.5cm}{\hfill\color{white}\thesection}}}}% label
 {1em}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
 
 % subsection format
 \titleformat{\subsection}%
-{\normalfont\large\itshape\color{gray}}% format applied to label+text
-{\llap{\colorbox{gray}{\parbox{1.5cm}{\hfill\color{white}\thesubsection}}}}% label
+{\normalfont\large\itshape\color{tertiarycolor}}% format applied to label+text
+{\llap{\colorbox{tertiarycolor}{\parbox{10.5cm}{\hfill\color{white}\thesubsection}}}}% label
 {1em}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
@@ -260,7 +266,11 @@
 
 
 % r.5 contents
-\tableofcontents
+{
+	\color{gray}
+	\tableofcontents
+}
+
 
 \listoffigures
 
@@ -1601,7 +1611,7 @@ All numerical methods of electrical calculation need the admittance matrix and a
 These vectors depend on the magnitudes of the elements connected to each bus (or node). Remember that we have decided that the loads, generators and others are stored in each bus element, this allows us to create a function at the bus object level that "compiles" its voltage, current and power and that these are compiled at the circuit level in the corresponding vectors.
 The algorithm is as follows:
 
-{\color{gray}
+{\color{verbatimcolor}
 	\begin{verbatim}
 	n = number of buses in the circuit
 	
@@ -1627,7 +1637,7 @@ The algorithm is as follows:
 
 The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
 
-{\color{gray}
+{\color{verbatimcolor}
 	\begin{verbatim}
 	i: bus index // external parameter
 	loads: list of loads within the bus object
@@ -1666,8 +1676,6 @@ The last code relies on a function implemented inside each bus object (\verb|get
 	
 	\end{verbatim}
 }
-
-
 
 
 
@@ -1711,7 +1719,7 @@ Y_{bus} = Y_{series} + Y_{shunt}
 
 \paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code is the following:
 
-{\color{gray}
+{\color{verbatimcolor}
 \begin{verbatim}
 n = number of buses in the circuit
 m = number of branches in the circuit
