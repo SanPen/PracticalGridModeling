@@ -1348,7 +1348,84 @@ Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
 \end{array} \right]
 \end{equation}
 
+%-------------------------------------------------------------------------------
+%	CHAPTER Example grid
+%-------------------------------------------------------------------------------
+\chapter{Example grid}
 
+After having introduced the basics, this chapter defines a simple grid for which all the calculations are illustrated. The grid used will be the IEEE 5 Bus standard grid, which is defined with the following data:
+
+\begin{table}[h!]
+	\color{gray}
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		name  & active & is\_slack & Vnom  & Vmin & Vmax \\ \hline
+		Bus 0 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 1 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 2 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 3 & True   & True      & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 4 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+	\end{tabular}
+\caption{Bus data}
+\label{tbl:IEEE5:bus_data}
+\end{table}
+
+
+\begin{table}[h!]
+	\color{gray}
+	\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+		\hline
+		name       & bus\_from & bus\_to & active    & rate  & R       & X      & G & B       \\ \hline
+		Branch 0-1 & Bus 0     & Bus 1   & True & 400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
+		Branch 0-3 & Bus 0     & Bus 3   & True & 224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
+		Branch 0-4 & Bus 0     & Bus 4   & True & 273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
+		Branch 1-2 & Bus 1     & Bus 2   & True & 128.3 & 0.00108 & 0.0108 & 0 & 0.01852 \\ \hline
+		Branch 2-3 & Bus 2     & Bus 3   & True & 34.6  & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+		Branch 3-4 & Bus 3     & Bus 4   & True & 240   & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+	\end{tabular}
+\caption{Branch data}
+\label{tbl:IEEE5:branch_data}
+\end{table}
+
+
+\begin{table}[h!]
+	\color{gray}
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		name & bus   & active    & Z  & I  & S         \\ \hline
+		Load 1 & Bus 1 & True & 0j & 0j & 300 + 98.61j   \\ \hline
+		Load 2 & Bus 2 & True & 0j & 0j & 300 + 98.61j   \\ \hline
+		Load 3 & Bus 3 & True & 0j & 0j & 99.99 + 99.99j \\ \hline
+	\end{tabular}
+\caption{Load data}
+\label{tbl:IEEE5:load_data}
+\end{table}
+
+
+\begin{table}[h!]
+	\color{gray}
+	\begin{tabular}{|l|l|l|l|l|l|l|l|}
+		\hline
+		name       & bus   & active    & P      & Vset & Snom & Qmin & Qmax  \\ \hline
+		Gen 0a & Bus 0 & True & 40     & 1    & 9999 & -30  & 30    \\ \hline
+		Gen 0b & Bus 0 & True & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
+		Gen 2 & Bus 2 & True & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
+		Gen 3 & Bus 3 & True & 0      & 1    & 9999 & 0    & 150   \\ \hline
+		Gen 4 & Bus 4 & True & 466.51 & 1    & 9999 & -450 & 450   \\ \hline
+	\end{tabular}
+\caption{Generator data}
+\label{tbl:IEEE5:gen_data}
+\end{table}
+
+This data will be used in the next chapters to compute examples of the magnitudes.
+
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/IEEE5.png}
+	\caption{IEEE 5 bus standard grid. Representation generated with GridCal.}
+	\label{fig:IEEE5}
+\end{figure}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER The bus and it's connected elements
@@ -1508,7 +1585,92 @@ The main parameters of a voltage controlled generator are:\\
 
 \section{Calculation of the bus connected phases}
 
-\newpage
+
+\section{Calculation of the voltage, power and current vectors}
+
+All numerical methods of electrical calculation need the admittance matrix and a series of vectors of compatible dimensions. These vectors are;
+
+\begin{itemize}
+	\item $S$: Power injections vector in p.u.
+	\item $V$: Vector of initial voltage values.
+	\item $I$:  Current injections vector.
+	\item $Y_{zip}$:  Shunt admittances vector. These are the admittances corresponding the ZIP model (YISV model in this document).
+\end{itemize}
+
+
+These vectors depend on the magnitudes of the elements connected to each bus (or node). Remember that we have decided that the loads, generators and others are stored in each bus element, this allows us to create a function at the bus object level that "compiles" its voltage, current and power and that these are compiled at the circuit level in the corresponding vectors.
+The algorithm is as follows:
+
+{\color{gray}
+	\begin{verbatim}
+	n = number of buses in the circuit
+	
+	Y_zip = complex_vector(n)
+	I = complex_vector(n)
+	S = complex_vector(n)
+	V = complex_vector(n)
+	types = vector(n)
+	
+	for i=0 to n:
+	    // assign the values to the vectors at the position i
+	    buses[i].get_YISV(i, Y, I, S, V, types) 
+	end
+	
+	// after this loop all the bus related vectors will be filled
+	// now, we need to divide some of them by the base power to 
+	// have them in per unit.
+	Y_zip /= Sbase
+	I /= Sbase
+	S /= Sbase
+	\end{verbatim}
+}
+
+The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
+
+{\color{gray}
+	\begin{verbatim}
+	i: bus index // external parameter
+	loads: list of loads within the bus object
+	generators: list of generators within the bus object
+	batteries: list of batteries within the bus object
+	
+	V[i]=1.0
+	
+	if bus_type is not VD:
+	    bus_type=PQ
+	end
+	
+	for k=0 to number_of_loads:
+	    S[i] -= loads[k].S
+	    I[i] -= loads[k].I
+	    Y_zip[i] += loads[k].Y
+	end
+	
+	for k=0 to number_of_generators:
+	    S[i] += generator[k].P + 0j
+	    V[i] *= generator[k].V_set
+	    if bus_type is not VD: 
+	        bus_type=PV
+	    end
+	end
+	
+	for k=0 to number_of_batteries:
+	    S[i] += batteries[k].P + 0j
+	    V[i] *= batteries[k].V_set
+	    if bus_type is not VD: 
+	        bus_type=PV
+	    end
+	end
+	
+	types[i] = bus_type
+	
+	\end{verbatim}
+}
+
+
+
+
+
 \section{Calculation of the admittance matrices}  \label{Y_calculation}
 
 For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
@@ -1547,8 +1709,9 @@ The relation between the admittance matrix and the series and shunt admittance m
 Y_{bus} = Y_{series} + Y_{shunt}
 \end{equation}
 
-The algorithmic logic to build the matrices in pseudo code is the following:
+\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code is the following:
 
+{\color{gray}
 \begin{verbatim}
 n = number of buses in the circuit
 m = number of branches in the circuit
@@ -1614,9 +1777,7 @@ for i=0 to m:
 end
 
 \end{verbatim}
-
-
-\section{Calculation of the voltage, power and current vectors}
+}
 
 
 %-------------------------------------------------------------------------------
