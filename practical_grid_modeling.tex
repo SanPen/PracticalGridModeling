@@ -185,6 +185,7 @@
 []% after the title body
 
 
+
 % Generates the index
 \usepackage{makeidx}
 \makeindex
@@ -197,41 +198,39 @@
 % Front matter
 \frontmatter
 
-% r.3 full title page
-\maketitle
-
-\doclicenseThis
-
 % r.1 blank page
 %\blankpage
 
 % v.2 epigraphs
-\newpage\thispagestyle{empty}
-\openepigraph{%
-The public is more familiar with bad design than good design.
-It is, in effect, conditioned to prefer bad design, 
-because that is what it lives with. 
-The new becomes threatening, the old reassuring.
-}{Paul Rand%, {\itshape Design, Form, and Chaos}
-}
-\vfill
-\openepigraph{%
-A designer knows that he has achieved perfection 
-not when there is nothing left to add, 
-but when there is nothing left to take away.
-}{Antoine de Saint-Exup\'{e}ry}
-\vfill
-\openepigraph{%
-\ldots the designer of a new system must not only be the implementor and the first 
-large-scale user; the designer should also write the first user manual\ldots 
-If I had not participated fully in all these activities, 
-literally hundreds of improvements would never have been made, 
-because I would never have thought of them or perceived 
-why they were important.
-}{Donald E. Knuth}
+%\newpage\thispagestyle{empty}
+%\openepigraph{%
+%The public is more familiar with bad design than good design.
+%It is, in effect, conditioned to prefer bad design, 
+%because that is what it lives with. 
+%The new becomes threatening, the old reassuring.
+%}{Paul Rand%, {\itshape Design, Form, and Chaos}
+%}
+%\vfill
+%\openepigraph{%
+%A designer knows that he has achieved perfection 
+%not when there is nothing left to add, 
+%but when there is nothing left to take away.
+%}{Antoine de Saint-Exup\'{e}ry}
+%\vfill
+%\openepigraph{%
+%\ldots the designer of a new system must not only be the implementor and the first 
+%large-scale user; the designer should also write the first user manual\ldots 
+%If I had not participated fully in all these activities, 
+%literally hundreds of improvements would never have been made, 
+%because I would never have thought of them or perceived 
+%why they were important.
+%}{Donald E. Knuth}
 
 
+% r.3 full title page
+\maketitle
 
+\doclicenseThis
 
 % v.4 copyright page
 \newpage
@@ -699,7 +698,7 @@ Z_{ABC_{approx}} = \left[ \begin{array}{ccc}
 \end{array} \right]
 $$
 
-We observe that the calculation outcome is a fair approximation of the original $Z_{ABC}$ and that the approximated matrix is symmetric, matching the balanced assumption, which the original impedance matrix did not fully comply with. Therefore, if the original $Z_{ABC}$ was reduced assuming a balanced impedance distribution when that was not the case, if we build the approximated matrix, we will never know if it represents the reality.
+We observe that the calculation outcome is a fair approximation of the original $Z_{ABC}$ and that the approximated matrix is symmetric, matching the balanced assumption, which the original impedance matrix did not fully comply with. Therefore, is the original $Z_{ABC}$ was reduced assuming a balanced impedance distribution when that was not the case, if we build the approximated matrix, we will never know if it represents the reality.
 
 
 
@@ -1592,6 +1591,86 @@ The main parameters of a voltage controlled generator are:\\
 All numerical methods of electrical calculation need the admittance matrix and a series of vectors of compatible dimensions. These vectors are;
 
 \begin{itemize}
+	\item $S$: Power injections vector in p.u.
+	\item $V$: Vector of initial voltage values.
+	\item $I$:  Current injections vector.
+	\item $Y_{zip}$:  Shunt admittances vector. These are the admittances corresponding the ZIP model (YISV model in this document).
+\end{itemize}
+
+
+These vectors depend on the magnitudes of the elements connected to each bus (or node). Remember that we have decided that the loads, generators and others are stored in each bus element, this allows us to create a function at the bus object level that "compiles" its voltage, current and power and that these are compiled at the circuit level in the corresponding vectors.
+The algorithm is as follows:
+
+{\color{gray}
+	\begin{verbatim}
+	n = number of buses in the circuit
+	
+	Y_zip = complex_vector(n)
+	I = complex_vector(n)
+	S = complex_vector(n)
+	V = complex_vector(n)
+	types = vector(n)
+	
+	for i=0 to n:
+	    // assign the values to the vectors at the position i
+	    buses[i].get_YISV(i, Y, I, S, V, types) 
+	end
+	
+	// after this loop all the bus related vectors will be filled
+	// now, we need to divide some of them by the base power to 
+	// have them in per unit.
+	Y_zip /= Sbase
+	I /= Sbase
+	S /= Sbase
+	\end{verbatim}
+}
+
+The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
+
+{\color{gray}
+	\begin{verbatim}
+	i: bus index // external parameter
+	loads: list of loads within the bus object
+	generators: list of generators within the bus object
+	batteries: list of batteries within the bus object
+	
+	V[i]=1.0
+	
+	if bus_type is not VD:
+	    bus_type=PQ
+	end
+	
+	for k=0 to number_of_loads:
+	    S[i] -= loads[k].S
+	    I[i] -= loads[k].I
+	    Y_zip[i] += loads[k].Y
+	end
+	
+	for k=0 to number_of_generators:
+	    S[i] += generator[k].P + 0j
+	    V[i] *= generator[k].V_set
+	    if bus_type is not VD: 
+	        bus_type=PV
+	    end
+	end
+	
+	for k=0 to number_of_batteries:
+	    S[i] += batteries[k].P + 0j
+	    V[i] *= batteries[k].V_set
+	    if bus_type is not VD: 
+	        bus_type=PV
+	    end
+	end
+	
+	types[i] = bus_type
+	
+	\end{verbatim}
+}
+
+
+
+
+
 \section{Calculation of the admittance matrices}  \label{Y_calculation}
 
 For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
