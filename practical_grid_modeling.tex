@@ -1,6 +1,9 @@
 
 %\documentclass{tufte-book}
-\documentclass[a4paper,twoside,fleqn]{tufte-book}
+%\documentclass[a4paper,twoside,fleqn]{tufte-book}
+%\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
+\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
+
 \setcounter{secnumdepth}{2}
 
 \usepackage[
@@ -9,7 +12,7 @@
     version={3.0},
 ]{doclicense}
 
-\hypersetup{colorlinks}% uncomment this line if you prefer colored hyperlinks (e.g., for onscreen viewing)
+%\hypersetup{colorlinks}% uncomment this line if you prefer colored hyperlinks (e.g., for onscreen viewing)
 
 %%
 % Book metadata
@@ -164,12 +167,22 @@
 \newcommand{\doccounter}[1]{\texttt{#1}\index{#1 counter@\texttt{#1} counter}}
 
 
+\usepackage{lipsum,mdframed}
+\definecolor{secnum}{RGB}{13,151,225}
+\definecolor{ptcbackground}{RGB}{212,237,252}
+\definecolor{ptctitle}{RGB}{0,177,235}
 
+% TOC
+\usepackage{titletoc}
+\usepackage{etoolbox}
+\setcounter{tocdepth}{1}
+\pretocmd{\tableofcontents}{\begin{mdframed}[backgroundcolor=white,  hidealllines=true]\let\cleardoublepage\relax}{}{}
+	\apptocmd{\tableofcontents}{\end{mdframed}}{}{}
 
 % chapter format
 \titleformat{\chapter}%
 {\huge\rmfamily\itshape\color{maincolor}}% format applied to label+text
-{\llap{\colorbox{maincolor}{\parbox{10.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
+{\llap{\colorbox{maincolor}{\parbox{1.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
 {2pt}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
@@ -177,7 +190,7 @@
 % section format
 \titleformat{\section}%
 {\normalfont\Large\itshape\color{secondarycolor}}% format applied to label+text
-{\llap{\colorbox{secondarycolor}{\parbox{10.5cm}{\hfill\color{white}\thesection}}}}% label
+{\llap{\colorbox{secondarycolor}{\parbox{1.5cm}{\hfill\color{white}\thesection}}}}% label
 {1em}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
@@ -185,7 +198,7 @@
 % subsection format
 \titleformat{\subsection}%
 {\normalfont\large\itshape\color{tertiarycolor}}% format applied to label+text
-{\llap{\colorbox{tertiarycolor}{\parbox{10.5cm}{\hfill\color{white}\thesubsection}}}}% label
+{\llap{\colorbox{tertiarycolor}{\parbox{1.5cm}{\hfill\color{white}\thesubsection}}}}% label
 {1em}% horizontal separation between label and title body
 {}% before the title body
 []% after the title body
@@ -202,7 +215,7 @@
 \begin{document}
 
 % Front matter
-\frontmatter
+%\frontmatter
 
 % r.1 blank page
 %\blankpage
@@ -266,11 +279,7 @@
 
 
 % r.5 contents
-{
-	\color{gray}
-	\tableofcontents
-}
-
+\tableofcontents
 
 \listoffigures
 
@@ -782,11 +791,11 @@ The formula \ref{pi_main_formula} will be used to compute the network admittance
 A positive sequence model of the $\Pi$ branch model is very useful. The formulation of the admittance matrix of the branch is close to the one presented but since it is not in three-phase, varies a bit.
 
 \begin{center}
-	\begin{figure*}[h]
-		\includegraphics[width=0.5\linewidth]{img/pi-trafo.eps}
+	\begin{figure}[h]
+		\includegraphics[width=0.7\linewidth]{img/pi-trafo.eps}
 		\caption{General positive sequence branch model.}
 		\label{pi_model_ps}
-	\end{figure*}
+	\end{figure}
 \end{center}
 
 \begin{itemize}
@@ -903,17 +912,22 @@ $$
 
 Now we need to find the branch model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
 
-$$
-Y_{pp} = Y_{ss} = Y_{series} + Y_{sh}/2 = \left[ \begin{array}{ccc}
-0.0112-j0.0232  & -0.0054+j0.008   & -0.0020+j0.0052 \\ -0.0054+j0.008  &  0.0125-j0.024 & -0.0033+j0.0063 \\ -0.0020+j0.0052 &  -0.0033+j0.0063 & 0.0100-j0.0224
-\end{array} \right]\quad  p.u.
-$$
+\begin{equation}
+	\begin{split}
+		Y_{pp} = Y_{ss} = Y_{series} + Y_{sh}/2 = \\
+		 \left[ \begin{array}{ccc}
+		0.0112-j0.0232  & -0.0054+j0.008   & -0.0020+j0.0052 \\ -0.0054+j0.008  &  0.0125-j0.024 & -0.0033+j0.0063 \\ -0.0020+j0.0052 &  -0.0033+j0.0063 & 0.0100-j0.0224
+		\end{array} \right]\quad  p.u.
+	\end{split}
+\end{equation}
 
-$$
-Y_{ps} = Y_{sp} = -Y_{series} = \left[ \begin{array}{ccc}
--0.0112+j0.0232  & 0.0054-j0.008   & 0.0020-j0.0052 \\  0.0054-j0.008  &  -0.0125+j0.024 & 0.0033-j0.0063 \\  0.0020-j0.0052 &  0.0033-j0.0063 & -0.0100+j0.0224
-\end{array} \right]\quad  p.u.
-$$
+\begin{equation}
+	\begin{split}
+		Y_{ps} = Y_{sp} = -Y_{series} = \\ \left[ \begin{array}{ccc}
+		-0.0112+j0.0232  & 0.0054-j0.008   & 0.0020-j0.0052 \\  0.0054-j0.008  &  -0.0125+j0.024 & 0.0033-j0.0063 \\  0.0020-j0.0052 &  0.0033-j0.0063 & -0.0100+j0.0224
+		\end{array} \right]\quad  p.u.
+	\end{split}
+\end{equation}
 
 If we convert the three-phase matrices into positive sequence values we obtain:
 
@@ -1339,23 +1353,25 @@ Y_{CC}
 \end{equation}
 
 \begin{equation}
-\left[ \begin{array}{c}
-Y_{sh, decoupled, A} \\
-Y_{sh, decoupled, B} \\
-Y_{sh, decoupled, C}
-\end{array} \right] = \left[ \begin{array}{c}
-Y_{sh,A} \\
-Y_{sh,B} \\
-Y_{sh,C}
-\end{array} \right] + \left[ \begin{array}{ccc}
-1 & -1 & 0 \\
-0 & 1 & -1 \\
--1 & 0 & 1
-\end{array} \right] \times \left[ \begin{array}{c}
-Y_{AB} + Y_{AC} + Y_{sh,AB} + Y_{sh,AC} \\
-Y_{BC} + Y_{BA} + Y_{sh,BC} + Y_{sh,BA}\\
-Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
-\end{array} \right]
+	\begin{split}
+		\left[ \begin{array}{c}
+		Y_{sh, decoupled, A} \\
+		Y_{sh, decoupled, B} \\
+		Y_{sh, decoupled, C}
+		\end{array} \right] =\\ \left[ \begin{array}{c}
+		Y_{sh,A} \\
+		Y_{sh,B} \\
+		Y_{sh,C}
+		\end{array} \right] + \left[ \begin{array}{ccc}
+		1 & -1 & 0 \\
+		0 & 1 & -1 \\
+		-1 & 0 & 1
+		\end{array} \right] \times \left[ \begin{array}{c}
+		Y_{AB} + Y_{AC} + Y_{sh,AB} + Y_{sh,AC} \\
+		Y_{BC} + Y_{BA} + Y_{sh,BC} + Y_{sh,BA}\\
+		Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
+		\end{array} \right]
+	\end{split}
 \end{equation}
 
 %-------------------------------------------------------------------------------
@@ -1651,9 +1667,9 @@ The last code relies on a function implemented inside each bus object (\verb|get
 	end
 	
 	for k=0 to number_of_loads:
-	    S[i] -= loads[k].S
+	    S[i] -= loads[k].S  // loads are a negative injection
 	    I[i] -= loads[k].I
-	    Y_zip[i] += loads[k].Y
+	    Y_zip[i] += loads[k].Y  // the impedance is positive always
 	end
 	
 	for k=0 to number_of_generators:
@@ -1678,7 +1694,7 @@ The last code relies on a function implemented inside each bus object (\verb|get
 }
 
 
-
+\newpage
 \section{Calculation of the admittance matrices}  \label{Y_calculation}
 
 For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
@@ -2359,7 +2375,7 @@ The new voltage is then:
 This method usually produces a solution with a large power mismatch. That is to be expected because the method is an oversimplification with no iterative convergence criteria, just a straight forward set of operations.
 
 
-\section{Linear AC power flow}
+\section{Linear AC power flow} \label{ACPF}
 
 The AC linear approximation is a much more convenient linearisation of the power flow equation, because it provides the voltage module and angle. This procedure is great for real time applications such as large grids SCADA applications.
 
@@ -2380,6 +2396,7 @@ A_{21} & A_{22} \\
 Rhs_1\\
 Rhs_2\\
 \end{bmatrix}
+\label{eq:AC_linear_power_flow}
 \end{equation}
 
 Where:
@@ -2887,7 +2904,7 @@ The variables are:
 The optimal power flow are a set of problems which implementation call for the usage of MIP solvers (Mixed-Integer Programming solvers). However that is not a hard requirement and other methods might be used such as genetic algorithms, convex solvers, etc.
 
 
-\subsection{DC optimal power flow}
+\section{DC optimal power flow}
 
 The power flow problem consists in finding the voltages of a circuit given the nodal power injections and the circuit admittances. The power flow equation in summation expression is:
 
@@ -2960,6 +2977,49 @@ PG_i - PD_i=\sum_j^{nodes} B_{ij} \cdot \theta_j  \quad  \forall i \in Slack
 
 There are plenty of other formulations that feature ramps, multiple periods and the modelling of other devices.
 For an overview of such methods see \cite{taylor2015convex}.
+
+\newpage
+\section{AC optimal power flow}
+
+This section introduces the use of the AC linear power flow (see \ref{ACPF}) as theoretical source to obtain an AC optimal power flow. In the power flow problem the power values are fixed whereas in the optimal power flow both generation and voltage are unknown.
+
+The linear program is:
+
+\begin{equation}
+min: \sum_i^{Generators} cost_i \cdot PG_i   \quad \forall i \in generators
+\end{equation}
+
+ST:
+
+\begin{equation}
+PG_i^{min} \leq PG_i \leq PG_i^{max}  \quad \forall i \in generators
+\end{equation}
+
+\begin{equation}
+\theta_i^{min} \leq \theta_i \leq \theta_i^{max}  \quad \forall i \in pvpq
+\end{equation}
+
+\begin{equation}
+|V|_i^{min} \leq |V|_i \leq |V|_i^{max}  \quad \forall i \in pq
+\end{equation}
+
+The equation \ref{eq:AC_linear_power_flow} can be transformed to the following equations:
+
+\begin{equation}
+-\sum_{k}^{pvpq}Bs_{k,i} \cdot \Delta\theta_i + \sum_{k}^{pq}G_{k,i} \cdot \Delta|V_i| = \sum_{g}^{generators_i} PG_{g} - \sum_{l}^{loads_i} PD_l \quad \forall i \in pvpq
+\end{equation}
+
+\begin{equation}
+-\sum_{k}^{pqpv}Gs_{k,i} \cdot \Delta\theta_i - \sum_{k}^{pq}B_{k,i} \cdot \Delta|V_i| = - \sum_{l}^{loads_i} QD_l \quad \forall i \in pq
+\end{equation}
+
+\begin{equation}
+\theta_i = \Delta \theta_i
+\end{equation}
+
+\begin{equation}
+|V_i| = |V_i|^{SP} + \Delta |V_i|
+\end{equation}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Time series power flow
