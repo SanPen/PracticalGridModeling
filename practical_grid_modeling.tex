@@ -34,10 +34,10 @@
 
 \usepackage{xcolor} % for colour
 
-\definecolor{verbatimcolor}{RGB}{33,120,103}
-\definecolor{maincolor}{RGB}{22,80,22}
-\definecolor{secondarycolor}{RGB}{22,80,22} %{95,211,141}
-\definecolor{tertiarycolor}{RGB}{22,80,22} %{135,222,170}
+\definecolor{verbatimcolor}{RGB}{55,113,200} %{33,120,103}
+\definecolor{maincolor}{RGB}{55,113,200} % {22,80,22}
+\definecolor{secondarycolor}{RGB}{55,113,200} %{95,211,141}
+\definecolor{tertiarycolor}{RGB}{55,113,200} %{135,222,170}
 
 \usepackage{amsmath}
 \usepackage{relsize}
@@ -166,7 +166,7 @@
 \newcommand{\docfilehook}[2]{\texttt{#1}\index{file hooks!#2}\index{#1@\texttt{#1}}}
 \newcommand{\doccounter}[1]{\texttt{#1}\index{#1 counter@\texttt{#1} counter}}
 
-
+\usepackage{tikz} % Required for drawing custom shapes
 \usepackage{lipsum,mdframed}
 \definecolor{secnum}{RGB}{13,151,225}
 \definecolor{ptcbackground}{RGB}{212,237,252}
@@ -203,6 +203,22 @@
 {}% before the title body
 []% after the title body
 
+% Define the maketitle
+%\newcommand{\maketitlepage}{%
+%	\cleardoublepage
+%	{%
+%		\sffamily
+%		\begin{fullwidth}%
+%			\fontsize{18}{20}\selectfont\par\noindent\textcolor{white}{\thanklessauthor}%
+%			\vspace{11.5pc}%
+%			\fontsize{36}{40}\selectfont\par\noindent\textcolor{white}{\thanklesstitle}%
+%			\vfill
+%			\fontsize{14}{16}\selectfont\par\noindent\thanklesspublisher%
+%		\end{fullwidth}%
+%	}%
+%	\thispagestyle{empty}%
+%	\clearpage
+%}
 
 
 % Generates the index
@@ -246,9 +262,25 @@
 %}{Donald E. Knuth}
 
 
-% r.3 full title page
-\maketitle
+% Custom title page
+\begingroup
+	
+%	\maketitle
+	
+	\begin{tikzpicture}[remember picture, overlay]
+	
+	\draw[fill=maincolor] (current page.north west) rectangle (current page.south east);
+		
+	\node[font=\normalfont\fontsize{50}{50}\sffamily\selectfont, color=white, anchor=west] at (0, -10) {Practical Grid};
+	\node[font=\normalfont\fontsize{50}{50}\sffamily\selectfont, color=white, anchor=west] at (0, -11.5) {Modelling};
+	
+	\node[font=\normalfont\fontsize{35}{35}\sffamily\selectfont \Huge, color=white, anchor=west] at (0, -1) {Santiago Pe\~nate Vera};
+	\end{tikzpicture}
 
+\endgroup
+
+% license page
+\newpage
 \doclicenseThis
 
 % v.4 copyright page
