@@ -4,6 +4,9 @@
 %\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
 \documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
 
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
 \setcounter{secnumdepth}{2}
 
 \usepackage[
@@ -181,7 +184,7 @@
 
 % chapter format
 \titleformat{\chapter}%
-{\huge\rmfamily\itshape\color{maincolor}}% format applied to label+text
+{\huge\sffamily\itshape\color{maincolor}}% format applied to label+text
 {\llap{\colorbox{maincolor}{\parbox{1.5cm}{\hfill\itshape\huge\color{white}\thechapter}}}}% label
 {2pt}% horizontal separation between label and title body
 {}% before the title body
