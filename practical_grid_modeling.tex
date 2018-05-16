@@ -4,6 +4,7 @@
 %\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
 \documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
 
+% set main font
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
@@ -36,6 +37,8 @@
 \usepackage{lipsum}
 
 \usepackage{xcolor} % for colour
+\usepackage{colortbl}
+%\usepackage{multirow}
 
 \definecolor{verbatimcolor}{RGB}{55,113,200} %{33,120,103}
 \definecolor{maincolor}{RGB}{55,113,200} % {22,80,22}
@@ -1290,127 +1293,127 @@ $$
 Since all the electrical models are in per-unit values, the voltage regulator is modelled in the exact same way as a transformer.
 
 
-\label{sec:decoupling_branch}
-\section{Decoupling the three-phase model. Delta branch to Y branch transformation}
-
-We have presented a three-phase branch model with 3x3 matrices. However we indicated at the beginning of this book that we would not perform the three-phase calculations using the coupled matrices (which would lead to larger linear systems to solve and the impossibility to solve multi-phase grids). This is why we are going to introduce a technique to decouple the phases while keeping the phase-phase influences (the non diagonal elements of the branch element matrix.)
-
-\begin{figure}
-	\includegraphics[width=\linewidth]{img/D-Y-Branch.eps}
-	\caption{Conversion from the Delta branch model to the Y branch model.}
-	\label{fig:DYBranch}
-\end{figure}
-
-The three-phase series admittance matrix can be immediately split into three single-phase systems each of them represented by one of the admittances of the diagonal of the three-phase matrix. However by doing this we would be neglecting the phase coupling that is present in the 3x3 matrix.
-$$
-Y_{series, \Delta} = \left[ \begin{array}{ccc}
-Y_{AA} & Y_{AB} & Y_{AC} \\
-Y_{BA} & Y_{BB} & Y_{BC} \\ 
-Y_{CA} & Y_{CB} & Y_{CC}
-\end{array} \right] \longrightarrow Y_{AA}, Y_{BB}, Y_{CC}, couplings?
-$$
-
-In order to take into account the phase couplings we need to perform the delta to star conversion of the magnitudes.
-
-\begin{equation}
-\left[ \begin{array}{c}
-Y_A' \\
-Y_B' \\
-Y_C'
-\end{array} \right] = \left[ \begin{array}{ccc}
-1 & -1 & 0 \\
-0 & 1 & -1 \\
--1 & 0 & 1
-\end{array} \right] \times \left[ \begin{array}{c}
-Y_{AB} + Y_{AC} \\
-Y_{BC} + Y_{BA}\\
-Y_{CA} + Y_{CB}
-\end{array} \right]
-\end{equation}
-
-$Y_A'$, $Y_B'$ and $Y_C'$ are the shunt magnitudes that appear by embedding the phase-phase coupling admittances by performing the delta-star transformation.
-
-Now we can perform the same operation on the shunt admittance matrix:
-
-$$
-Y_{shunt, \Delta} = \left[ \begin{array}{ccc}
-Y_{sh,AA} & Y_{sh,AB} & Y_{sh,AC} \\
-Y_{sh,BA} & Y_{sh,BB} & Y_{sh,BC} \\ 
-Y_{sh,CA} & Y_{sh,CB} & Y_{sh,CC}
-\end{array} \right] \longrightarrow Y_{sh,AA}, Y_{sh,BB}, Y_{sh,CC}, couplings?
-$$
-
-
-\begin{equation}
-\left[ \begin{array}{c}
-Y_{sh, A}' \\
-Y_{sh, B}' \\
-Y_{sh, C}'
-\end{array} \right] = \left[ \begin{array}{ccc}
-1 & -1 & 0 \\
-0 & 1 & -1 \\
--1 & 0 & 1
-\end{array} \right] \times \left[ \begin{array}{c}
-Y_{sh,AB} + Y_{sh,AC} \\
-Y_{sh,BC} + Y_{sh,BA}\\
-Y_{sh,CA} + Y_{sh,CB}
-\end{array} \right]
-\end{equation}
-
-Finally we can formulate the three single-phase systems:
-
-\begin{itemize}
-	\item System A
-	
-	$Y_{series} = Y_{AA} $\newline
-	$Y_{shunt} = Y_{sh, AA} + Y_{A}' + Y_{sh, A}'$
-	
-	\item System B
-	
-	$Y_{series} = Y_{BB} $\newline
-	$Y_{shunt} = Y_{sh, BB} + Y_{B}' + Y_{sh, B}'$
-	
-	\item System C
-	
-	$Y_{series} = Y_{CC} $\newline
-	$Y_{shunt} = Y_{sh, C} + Y_{C}' + Y_{sh, C}'$
-\end{itemize}
-
-In Matrix form:
-
-\begin{equation}
-\left[ \begin{array}{c}
-Y_{series,decoupled,A} \\
-Y_{series,decoupled,B} \\
-Y_{series,decoupled,C}
-\end{array} \right] = \left[ \begin{array}{c}
-Y_{AA} \\
-Y_{BB} \\
-Y_{CC}
-\end{array} \right]
-\end{equation}
-
-\begin{equation}
-	\begin{split}
-		\left[ \begin{array}{c}
-		Y_{sh, decoupled, A} \\
-		Y_{sh, decoupled, B} \\
-		Y_{sh, decoupled, C}
-		\end{array} \right] =\\ \left[ \begin{array}{c}
-		Y_{sh,A} \\
-		Y_{sh,B} \\
-		Y_{sh,C}
-		\end{array} \right] + \left[ \begin{array}{ccc}
-		1 & -1 & 0 \\
-		0 & 1 & -1 \\
-		-1 & 0 & 1
-		\end{array} \right] \times \left[ \begin{array}{c}
-		Y_{AB} + Y_{AC} + Y_{sh,AB} + Y_{sh,AC} \\
-		Y_{BC} + Y_{BA} + Y_{sh,BC} + Y_{sh,BA}\\
-		Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
-		\end{array} \right]
-	\end{split}
-\end{equation}
+%\label{sec:decoupling_branch}
+%\section{Decoupling the three-phase model. Delta branch to Y branch transformation}
+%
+%We have presented a three-phase branch model with 3x3 matrices. However we indicated at the beginning of this book that we would not perform the three-phase calculations using the coupled matrices (which would lead to larger linear systems to solve and the impossibility to solve multi-phase grids). This is why we are going to introduce a technique to decouple the phases while keeping the phase-phase influences (the non diagonal elements of the branch element matrix.)
+%
+%\begin{figure}
+%	\includegraphics[width=\linewidth]{img/D-Y-Branch.eps}
+%	\caption{Conversion from the Delta branch model to the Y branch model.}
+%	\label{fig:DYBranch}
+%\end{figure}
+%
+%The three-phase series admittance matrix can be immediately split into three single-phase systems each of them represented by one of the admittances of the diagonal of the three-phase matrix. However by doing this we would be neglecting the phase coupling that is present in the 3x3 matrix.
+%$$
+%Y_{series, \Delta} = \left[ \begin{array}{ccc}
+%Y_{AA} & Y_{AB} & Y_{AC} \\
+%Y_{BA} & Y_{BB} & Y_{BC} \\ 
+%Y_{CA} & Y_{CB} & Y_{CC}
+%\end{array} \right] \longrightarrow Y_{AA}, Y_{BB}, Y_{CC}, couplings?
+%$$
+%
+%In order to take into account the phase couplings we need to perform the delta to star conversion of the magnitudes.
+%
+%\begin{equation}
+%\left[ \begin{array}{c}
+%Y_A' \\
+%Y_B' \\
+%Y_C'
+%\end{array} \right] = \left[ \begin{array}{ccc}
+%1 & -1 & 0 \\
+%0 & 1 & -1 \\
+%-1 & 0 & 1
+%\end{array} \right] \times \left[ \begin{array}{c}
+%Y_{AB} + Y_{AC} \\
+%Y_{BC} + Y_{BA}\\
+%Y_{CA} + Y_{CB}
+%\end{array} \right]
+%\end{equation}
+%
+%$Y_A'$, $Y_B'$ and $Y_C'$ are the shunt magnitudes that appear by embedding the phase-phase coupling admittances by performing the delta-star transformation.
+%
+%Now we can perform the same operation on the shunt admittance matrix:
+%
+%$$
+%Y_{shunt, \Delta} = \left[ \begin{array}{ccc}
+%Y_{sh,AA} & Y_{sh,AB} & Y_{sh,AC} \\
+%Y_{sh,BA} & Y_{sh,BB} & Y_{sh,BC} \\ 
+%Y_{sh,CA} & Y_{sh,CB} & Y_{sh,CC}
+%\end{array} \right] \longrightarrow Y_{sh,AA}, Y_{sh,BB}, Y_{sh,CC}, couplings?
+%$$
+%
+%
+%\begin{equation}
+%\left[ \begin{array}{c}
+%Y_{sh, A}' \\
+%Y_{sh, B}' \\
+%Y_{sh, C}'
+%\end{array} \right] = \left[ \begin{array}{ccc}
+%1 & -1 & 0 \\
+%0 & 1 & -1 \\
+%-1 & 0 & 1
+%\end{array} \right] \times \left[ \begin{array}{c}
+%Y_{sh,AB} + Y_{sh,AC} \\
+%Y_{sh,BC} + Y_{sh,BA}\\
+%Y_{sh,CA} + Y_{sh,CB}
+%\end{array} \right]
+%\end{equation}
+%
+%Finally we can formulate the three single-phase systems:
+%
+%\begin{itemize}
+%	\item System A
+%	
+%	$Y_{series} = Y_{AA} $\newline
+%	$Y_{shunt} = Y_{sh, AA} + Y_{A}' + Y_{sh, A}'$
+%	
+%	\item System B
+%	
+%	$Y_{series} = Y_{BB} $\newline
+%	$Y_{shunt} = Y_{sh, BB} + Y_{B}' + Y_{sh, B}'$
+%	
+%	\item System C
+%	
+%	$Y_{series} = Y_{CC} $\newline
+%	$Y_{shunt} = Y_{sh, C} + Y_{C}' + Y_{sh, C}'$
+%\end{itemize}
+%
+%In Matrix form:
+%
+%\begin{equation}
+%\left[ \begin{array}{c}
+%Y_{series,decoupled,A} \\
+%Y_{series,decoupled,B} \\
+%Y_{series,decoupled,C}
+%\end{array} \right] = \left[ \begin{array}{c}
+%Y_{AA} \\
+%Y_{BB} \\
+%Y_{CC}
+%\end{array} \right]
+%\end{equation}
+%
+%\begin{equation}
+%	\begin{split}
+%		\left[ \begin{array}{c}
+%		Y_{sh, decoupled, A} \\
+%		Y_{sh, decoupled, B} \\
+%		Y_{sh, decoupled, C}
+%		\end{array} \right] =\\ \left[ \begin{array}{c}
+%		Y_{sh,A} \\
+%		Y_{sh,B} \\
+%		Y_{sh,C}
+%		\end{array} \right] + \left[ \begin{array}{ccc}
+%		1 & -1 & 0 \\
+%		0 & 1 & -1 \\
+%		-1 & 0 & 1
+%		\end{array} \right] \times \left[ \begin{array}{c}
+%		Y_{AB} + Y_{AC} + Y_{sh,AB} + Y_{sh,AC} \\
+%		Y_{BC} + Y_{BA} + Y_{sh,BC} + Y_{sh,BA}\\
+%		Y_{CA} + Y_{CB} + Y_{sh,CA} + Y_{sh,CB}
+%		\end{array} \right]
+%	\end{split}
+%\end{equation}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Example grid
@@ -1420,10 +1423,11 @@ Y_{CC}
 After having introduced the basics, this chapter defines a simple grid for which all the calculations are illustrated. The grid used will be the IEEE 5 Bus standard grid, which is defined with the following data:
 
 \begin{table}[h!]
-	\color{gray}
+	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|}
 		\hline
-		name  & active & is\_slack & Vnom  & Vmin & Vmax \\ \hline
+		\rowcolor{maincolor}
+		{\color{white}name}  & {\color{white}active} & {\color{white}is\_slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
 		Bus 0 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
 		Bus 1 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
 		Bus 2 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
@@ -1436,10 +1440,11 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{gray}
+	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 		\hline
-		name       & bus\_from & bus\_to & active    & rate  & R       & X      & G & B       \\ \hline
+		\rowcolor{maincolor}
+		{\color{white}name}       & {\color{white}bus\_from} & {\color{white}bus\_to} & {\color{white}active}    & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
 		Branch 0-1 & Bus 0     & Bus 1   & True & 400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
 		Branch 0-3 & Bus 0     & Bus 3   & True & 224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
 		Branch 0-4 & Bus 0     & Bus 4   & True & 273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
@@ -1453,10 +1458,11 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{gray}
+	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|}
 		\hline
-		name & bus   & active    & Z  & I  & S         \\ \hline
+		\rowcolor{maincolor}
+		{\color{white}name} & {\color{white}bus}   & {\color{white}active}    & {\color{white}Z}  & {\color{white}I}  & {\color{white}S}         \\ \hline
 		Load 1 & Bus 1 & True & 0j & 0j & 300 + 98.61j   \\ \hline
 		Load 2 & Bus 2 & True & 0j & 0j & 300 + 98.61j   \\ \hline
 		Load 3 & Bus 3 & True & 0j & 0j & 99.99 + 99.99j \\ \hline
@@ -1467,10 +1473,11 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{gray}
+	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|l|l|}
 		\hline
-		name       & bus   & active    & P      & Vset & Snom & Qmin & Qmax  \\ \hline
+		\rowcolor{maincolor}
+		{\color{white}name}       & {\color{white}bus}   & {\color{white}active}    & {\color{white}P}      & {\color{white}Vset} & {\color{white}Snom} & {\color{white}Qmin} & {\color{white}Qmax}  \\ \hline
 		Gen 0a & Bus 0 & True & 40     & 1    & 9999 & -30  & 30    \\ \hline
 		Gen 0b & Bus 0 & True & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
 		Gen 2 & Bus 2 & True & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
@@ -1484,12 +1491,53 @@ After having introduced the basics, this chapter defines a simple grid for which
 This data will be used in the next chapters to compute examples of the magnitudes.
 
 
+
+
+\newpage
+\section{Grid compilation results}
+
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.7\linewidth]{img/IEEE5.png}
 	\caption{IEEE 5 bus standard grid. Representation generated with GridCal.}
 	\label{fig:IEEE5}
 \end{figure}
+
+The calculated node results are:
+
+\begin{table}[h!]
+	\centering	
+	\color{maincolor}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		\rowcolor{maincolor}
+		{\color{white}Bus}   & {\color{white}Power (p.u.)}                 & {\color{white}Voltage (p.u.)} & {\color{white}Current (p.u.)} & {\color{white}Bus types} \\ \hline
+		Bus 0 & 2.1+0j                     & 1+0j         & 0j             & 2         \\ \hline
+		Bus 1 & -3-0.9861j                 & 1+0j         & 0j             & 1         \\ \hline
+		Bus 2 & 0.2349-0.9861j & 1+0j         & 0j             & 2         \\ \hline
+		Bus 3 & -0.9999-0.9999j            & 1+0j         & 0j             & 3         \\ \hline
+		Bus 4 & 4.6651+0j                  & 1+0j         & 0j             & 2         \\ \hline
+	\end{tabular}
+\caption{Node results}
+\label{my-label}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\color{maincolor}
+	\begin{tabular}{|l|l|l|l|l|l|}
+		\hline
+		\rowcolor{maincolor}
+		{\color{white}} & {\color{white}Bus 0} & {\color{white}Bus 1}  & {\color{white}Bus 2}  & {\color{white}Bus 3} & {\color{white}Bus 4}  \\ \hline
+		Bus 0 & 22.25-222.48j & -3.525+35.23j & 0j                                       & -3.26+32.57j & -15.47+154.70j \\ \hline
+		Bus 1 & -3.52+35.23j & 12.69-126.9j & -9.17+91.68j  & 0j                                       & 0j                                       \\ \hline
+		Bus 2 & 0j                                       & -9.17+91.68j  & 12.50-125.0j   & -3.33+33.34j & 0j                                       \\ \hline
+		Bus 3 & -3.26+32.57j & 0j                                       & -3.33+33.34j & 9.92-99.23j   & -3.33+33.34j \\ \hline
+		Bus 4 & -15.47+154.70j) & 0j                                       & 0j                                       & -3.34+33.34j & 18.80-188.02j \\ \hline
+	\end{tabular}
+\caption{Admittance matrix}
+\label{ex:Y}
+\end{table}
 
 %-------------------------------------------------------------------------------
 %	CHAPTER The bus and it's connected elements
@@ -1525,11 +1573,11 @@ In the example depicted in the figure \ref{substation_model} it is shown how a n
 In order to calculate this reduction, we need to introduce extra nodes in the substation model. These are topological nodes that will help us to perform the connectivity calculation. Then we represent the substation as a node-branch graph:
 
 \begin{center}
-\begin{figure}
-	\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
-	\caption{Substation example graph.}
-	\label{substation_graph}
-\end{figure}
+	\begin{figure}
+		\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
+		\caption{Substation example graph.}
+		\label{substation_graph}
+	\end{figure}
 \end{center}
 
 
@@ -1561,17 +1609,22 @@ The modelling of a load is done as a composition of fixed impedance, fixed curre
 \end{marginfigure}
 
 The main calculation parameters of a load are:\\
-\begin{tabular}{|l|p{3cm}|p{4cm}|}
-	\hline 
-	Parameter & Description & Unit \\ 
-	\hline 
-	Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
-	\hline 
-	I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
-	\hline 
-	S & Power (complex number) & MW, MVAr \\ 
-	\hline
-\end{tabular} 
+
+\begin{table}[h!]
+	\color{maincolor}
+	\begin{tabular}{|l|p{3cm}|p{4cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
+		\hline 
+		I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
+		\hline 
+		S & Power (complex number) & MW, MVAr \\ 
+		\hline
+	\end{tabular} 
+\end{table}
 
 \vspace{0.5cm}
 
@@ -1591,19 +1644,24 @@ $$
 A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
 
 The main parameters of a voltage controlled generator are:\\
-\begin{tabular}{|l|p{5cm}|p{2cm}|}
-	\hline 
-	Parameter & Description & Unit \\ 
-	\hline 
-	$V_{set}$ & Set voltage (number) & p.u. \\ 
-	\hline 
-	$P$ & Power (number) & MW \\ 
-	\hline
-	$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
-	\hline
-	$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
-	\hline
-\end{tabular} 
+
+\begin{table}[h!]
+	\color{maincolor}
+	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		$V_{set}$ & Set voltage (number) & p.u. \\ 
+		\hline 
+		$P$ & Power (number) & MW \\ 
+		\hline
+		$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
+		\hline
+		$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
+		\hline
+	\end{tabular} 
+\end{table}
 
 \vspace{0.5cm}
 
@@ -1614,27 +1672,43 @@ The main parameters of a voltage controlled generator are:\\
 A battery shall be modelled as a voltage controlled generator.
 
 The main parameters of a voltage controlled generator are:\\
-\begin{tabular}{|l|p{5cm}|p{2cm}|}
-	\hline 
-	Parameter & Description & Unit \\ 
-	\hline 
-	$V_{set}$ & Set voltage (number) & p.u. \\ 
-	\hline 
-	$P$ & Power (number) & MW \\ 
-	\hline
-	$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
-	\hline
-	$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
-	\hline
-	$E_{max}$ & Energy storage capacity (number) & MWh \\ 
-	\hline
-\end{tabular} 
+
+\begin{table}[h!]
+	\color{maincolor}
+	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		$V_{set}$ & Set voltage (number) & p.u. \\ 
+		\hline 
+		$P$ & Power (number) & MW \\ 
+		\hline
+		$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
+		\hline
+		$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
+		\hline
+		$E_{max}$ & Energy storage capacity (number) & MWh \\ 
+		\hline
+	\end{tabular} 
+\end{table}
 
 \vspace{0.5cm}
 
 
 \section{Capacitor banks}
 
+\begin{table}[h!]
+	\color{maincolor}
+	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		Q & Reactive Power rated at the bus nominal voltage (complex number) & MVAr \\ 
+		\hline
+	\end{tabular} 
+\end{table}
 
 
 
@@ -1646,19 +1720,155 @@ The main parameters of a voltage controlled generator are:\\
 
 \section{Islands detection}
 
+The admittance matrix of a circuit with islands is singular. Therefore, the circuit it cannot be solved. To overcome this issue, we have to divide the circuit into fully connected islands for calculation. The algorithm to achieve this is the Breadth First Search (BFS) algorithm.
 
-\section{Calculation of the bus connected phases}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.35\linewidth]{img/general_graph.eps}
+	\caption{Graph with two islands.}
+	\label{fig:general_graph}
+\end{figure}
+
+A c++ implementation of a Graph with functions to detect the islands (\verb|connectedComponents|) is as follows:
+
+{\color{verbatimcolor}
+	\begin{verbatim}
+	class Graph {
+	
+		/**
+		* @brief Number of vertices
+		*/
+		std::size_t V;
+			
+		/**
+		* @brief Array of lists containing adjacency (this is the graph)
+		*/
+		std::list<std::size_t> *adj;
+			
+		/**
+		* @brief A function used by DFS
+		* @param v index of the node
+		* @param visited array of visited nodes
+		* @param islands structure to map the islands
+		* @param island_idx index of the island
+		*/
+		void DFSUtil(std::size_t v, bool visited[], 
+					 std::vector<std::vector<std::size_t>> *islands, 
+					 std::size_t island_idx) {
+		
+		// Mark the current node as visited and prlong it
+		visited[v] = true;
+		
+		// add element to the island
+		islands->at(island_idx).push_back(v);
+		
+		// Recur for all the vertices adjacent to this vertex
+		std::list<std::size_t>::iterator i;
+		for(i = adj[v].begin(); i != adj[v].end(); ++i)
+			if(!visited[*i])
+				DFSUtil(*i, visited, islands, island_idx);
+		}
+			
+		public:	
+		
+		/**
+		* @brief Graph constructor
+		* @param V number of vertices
+		*/
+		Graph(std::size_t vertex_number){
+			V = vertex_number;
+			adj = new std::list<std::size_t>[vertex_number];
+		}
+		
+		/** 
+		* @brief Graph destructor
+		*/
+		~Graph() {
+			// free the memory
+			delete [] adj;
+		}
+		
+		
+		/**
+		* @brief add an undirected edge
+		* @param v node index "from"
+		* @param w node index "to"
+		*/
+		void add_edge(std::size_t v, std::size_t w){
+			adj[v].push_back(w);
+			adj[w].push_back(v);
+		}
+		
+		
+		/**
+		* @brief Method to get the islands of a graph
+		*/
+		std::vector<std::vector<std::size_t>> connectedComponents(){
+		
+			// storage structure for the islands
+			std::vector<std::vector<std::size_t>> islands;
+			
+			// set the island index
+			std::size_t island_idx = 0;
+			
+			// Mark all the vertices as not visited
+			bool *visited = new bool[V];
+			for(std::size_t v = 0; v < V; v++)
+			visited[v] = false;
+			
+			// go though all the vertices...
+			for (std::size_t v = 0; v < V; v++) {
+			
+			// if v has not been visited...
+			if (visited[v] == false) {
+			
+			// add new island, because the recursive process 
+			// has already visited all the island connected to v
+			if (island_idx >= islands.size())
+			islands.push_back(std::vector<std::size_t>());
+			
+			// store all reachable vertices from v recursivelly
+			DFSUtil(v, visited, &islands, island_idx);
+			
+			// increase the islands index
+			island_idx++;
+			}
+			
+			}
+			
+			// sort the islands to maintain raccord
+			for (std::size_t i=0; i < islands.size(); i++)
+			std::sort(islands[i].begin(), islands[i].end());
+			
+			return islands;
+		}
+		
+		};
+	
+	}
+	\end{verbatim}
+}
 
 
 \section{Calculation of the voltage, power and current vectors}
 
 All numerical methods of electrical calculation need the admittance matrix and a series of vectors of compatible dimensions. These vectors are;
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/CircuitEquation.eps}
+	\caption{Nodal circuit equation. The goal is to compile the properties of the different objects into the calculation matrices and vectors.}
+	\label{fig:CircuitEquation}
+\end{figure}
+
+
+
+
 \begin{itemize}
-	\item $S$: Power injections vector in p.u.
-	\item $V$: Vector of initial voltage values.
-	\item $I$:  Current injections vector.
-	\item $Y_{zip}$:  Shunt admittances vector. These are the admittances corresponding the ZIP model (YISV model in this document).
+	\item $S$: Nodal power injections vector in p.u.
+	\item $V$: Nodal voltages vector.
+	\item $I$:  Nodal current injections vector.
+	\item $Y_{zip}$:  Nodal shunt admittances vector. These are the admittances corresponding the ZIP model (YISV model in this document). These admittances are added to the diagonal of the admittance matrix ($Y_{bus}$).
 \end{itemize}
 
 
@@ -3565,7 +3775,10 @@ R_{i, i} = \sigma_{i, i}^2
 \chapter{Short-circuit}
 
 
-
+%-------------------------------------------------------------------------------
+%	CHAPTER Transient stability
+%-------------------------------------------------------------------------------
+\chapter{Transient stability}
 
 
 \backmatter
