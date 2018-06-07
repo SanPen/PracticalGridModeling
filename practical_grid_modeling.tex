@@ -35,7 +35,7 @@
 %%
 % Just some sample text
 \usepackage{lipsum}
-
+\usepackage{tabularx}
 \usepackage{xcolor} % for colour
 \usepackage{colortbl}
 %\usepackage{multirow}
@@ -410,15 +410,16 @@ So I really hope you enjoy this book and find it useful for your purpose.
 %-------------------------------------------------------------------------------
 \chapter{General network model}
 
-The electrical grid can be assimilated to a graph. A graph is a mathematical object composed of nodes and edges (or branches). From a calculation point of view, a node is the place where the voltage is calculated given power and current injections, and a branch is the place where the current and power that flows through it are computed given the nodes voltage.
+In this work, an unbalanced three-phase calculation engine is presented, being a reasonably general case. In the presented network model, the neutral wire and the earth "wire" are embedded into a three-phase equivalent using Kron's reduction. See \cite{dorfler2013kron} for a comprehensive explanation or simply \cite{kersting2012distribution} for practical application. Therefore the calculation will be performed for three phases (or two or one) at each calculation node.
 
-In the general network model, the neutral wire and the earth "wire" are embedded into the three-phase equivalent using Kron's reduction. See \cite{dorfler2013kron} for a comprehensive explanation or simply \cite{kersting2012distribution} for practical application.
+The electrical grid can be assimilated to a graph. A graph is a mathematical object composed of nodes and edges (or branches). From a calculation point of view, a node is the place where the voltage is calculated given power and current injections and a branch is the place where the current and power that flows through it are computed given the nodes voltage.
 
-A node has power injection or consumption devices attached to it. Examples are loads, generators, capacitor banks or any other device that injects or consumes power from the grid.
+A node (or Bus) has power injection or consumption devices attached to it. Examples are loads, generators, capacitor banks or any other device that injects or consumes power from the grid.
 
-A branch might have devices attached that modify the flow through the branch. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems). 
+A branch might have devices attached that modify the flow through it. Such devices are known as FACTS (Flexible Alternating Current Transmission Systems). 
 
-A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to perform calculations of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit: a graph that does not contain further islands inside. In practice, a grid is split in its islands, each island is computed separately and the results are merged back to provide a consistent analysis interface of the whole grid.
+A real life grid can be composed of several isolated groups of nodes (islands). It is impossible to perform calculations of several islands at once in the same numerical process. Hence, the maximal calculation object is the island circuit; A graph that does not contain further islands inside. In practice, a grid is split in it's islands. Each island is computed separately and the results are merged back to provide a consistent analysis interface of the whole grid.
+
 \begin{marginfigure}
   \includegraphics[width=\linewidth]{img/simple_two_island_graph.eps}
   \caption{Graph with 8 nodes and 7 branches. The graph contains two islands.}
@@ -427,21 +428,21 @@ A real life grid can be composed of several isolated groups of nodes (islands). 
 
 
 
-\section{n-phase modelling}
-
-The electrical grid calculations are mostly done in what is called \textit{positive sequence equivalent} (a single phase equivalent of a three-phase grid) In practice the positive sequence equivalent is applied to branches with one, two or three phases, this simplifies the modelling, but makes the realistic analysis of the grid much harder since the phases imbalance has been neglected.
-
-In this book, three-phase models will be presented, but the calculations will be done on phase-by-phase basis. This is possible using the models presented by Vieira, Freitas and Morelato \cite{vieira2004phase}. In their work, the authors pick the diagonal of the elements admittance matrices to form single-phase grids, that are simulated independently. The magnetic coupling effects are included in the single-phase admittance matrices as shunt elements. This allows a very flexible model of the grid while retaining the calculation accuracy of a full-blown n-phase admittance matrix.
-
-So, because of the latter, the models will be introduced in three-phases and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will solve one numerical problem per phase. To simulate n phases, we will perform n numerical simulations, merging the results back into n-phase structures.
-
-\begin{figure}
-  \includegraphics[width=\linewidth]{img/3p_to_1p.eps}
-  \caption{Two node system in 3 phases, split into three systems of two nodes each.}
-  \label{fig:3p_to_1p}
-\end{figure}
-
-Further details about how to decouple the three-phase impedance matrices into three single phase impedances are presented in the section \ref{sec:decoupling_branch}.
+%\section{n-phase modelling}
+%
+%The electrical grid calculations are mostly done in what is called \textit{positive sequence equivalent} (a single phase equivalent of a three-phase grid) In practice the positive sequence equivalent is applied to branches with one, two or three phases, this simplifies the modelling, but makes the realistic analysis of the grid much harder since the phases imbalance has been neglected.
+%
+%In this book, three-phase models will be presented, but the calculations will be done on phase-by-phase basis. This is possible using the models presented by Vieira, Freitas and Morelato \cite{vieira2004phase}. In their work, the authors pick the diagonal of the elements admittance matrices to form single-phase grids, that are simulated independently. The magnetic coupling effects are included in the single-phase admittance matrices as shunt elements. This allows a very flexible model of the grid while retaining the calculation accuracy of a full-blown n-phase admittance matrix.
+%
+%So, because of the latter, the models will be introduced in three-phases and whenever needed in positive sequence equivalents, but the numerical methods will consider only one phase at the time. In practice we will solve one numerical problem per phase. To simulate n phases, we will perform n numerical simulations, merging the results back into n-phase structures.
+%
+%\begin{figure}
+%  \includegraphics[width=\linewidth]{img/3p_to_1p.eps}
+%  \caption{Two node system in 3 phases, split into three systems of two nodes each.}
+%  \label{fig:3p_to_1p}
+%\end{figure}
+%
+%Further details about how to decouple the three-phase impedance matrices into three single phase impedances are presented in the section \ref{sec:decoupling_branch}.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Magnitudes and units
@@ -630,7 +631,7 @@ First, we must choose an arbitrary value of power base conversion. This value ca
 \begin{table}[h!]\index{typefaces!sizes}
 \begin{center}
 \footnotesize
-\begin{tabular}{lll}
+\begin{tabularx}{\textwidth}{lX}
 \toprule
 Magnitude &  Base\\
 \midrule
@@ -640,7 +641,7 @@ $I$ (Current) & $I_{Base} = S_{Base} / Vline_{Base} = S_{Base} / (V_{Base} \cdot
 $Z$ (Impedance) & $Z_{Base} = V_{Base}^2 / S_{Base}$ \\
 $Y$ (Admittance) & $Y_{Base} = 1 / Z_{Base}$ \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
   \caption{Electrical magnitudes and their per unit base.}
   \label{magnitudes_and_their_base}
@@ -808,7 +809,7 @@ Where:
 
 \begin{table}[h!]
 \begin{center}
-\begin{tabular}{cccc}
+\begin{tabularx}{\textwidth}{XXXX}
 \toprule
 
 $\textbf{Y}_{pp}$ &  $\textbf{Y}_{ps}$ & $\textbf{Y}_{sp}$ & $\textbf{Y}_{ss}$\\
@@ -818,7 +819,7 @@ $\textbf{Y}_{pp}$ &  $\textbf{Y}_{ps}$ & $\textbf{Y}_{sp}$ & $\textbf{Y}_{ss}$\\
 $\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\beta^2}$\\
 
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
   \caption{Equations of the generalized $\Pi$ model.}
   \label{pi_model_equations}
@@ -829,7 +830,7 @@ The formula \ref{pi_main_formula} will be used to compute the network admittance
 
 \subsection{Positive sequence model}
 
-A positive sequence model of the $\Pi$ branch model is very useful. The formulation of the admittance matrix of the branch is close to the one presented but since it is not in three-phase, varies a bit.
+ Since the positive sequence simulation is very popular, a positive sequence model of the $\Pi$ branch model is presented. The formulation of the admittance matrix of the branch is similar to the one presented for three phases, but each sub-matrix has only one element (one equivalent phase).
 
 \begin{center}
 	\begin{figure}[h]
@@ -849,8 +850,12 @@ A positive sequence model of the $\Pi$ branch model is very useful. The formulat
 
 %tap = self.tap_module * exp(-1j * self.angle)
 
+\marginnote{Note that the tap value in the positive sequence model is a complex value. This is because the phase shifting that occurs when using $\Delta-Y$ transformers is accounted as a phase angle. }
+
 In order to apply the effect of a branch to the admittance matrices, first we compute the complex tap value.
 $$tap = tap\_module \cdot e^{-j \cdot tap\_angle}$$  
+
+
 
 Then we compose the equivalent series and shunt admittance values of the branch. Both values are complex.
 %Ys = 1 / self.z_series
@@ -861,7 +866,7 @@ $$Y_{sh} = \frac{y_{shunt}}{2}$$
 \begin{itemize}
 	\item $z_{series}$: Series impedance of the branch composed by the line resistance and its inductance. $z_{series}=r + jl$
 	
-	\item $y_{shunt}$: Shunt admittance of the line composed by the conductance and the susceptance. $y_{shunt}=c+jb$\newline
+	\item $y_{shunt}$: Shunt admittance of the line composed by the conductance and the susceptance. $y_{shunt}=g+jb$\newline
 \end{itemize}
 
 
@@ -893,10 +898,10 @@ $$Y_{tt} = Y_s + Y_{sh}$$
 The line element, utilizes the branch model as it has been formulated, only that the use of the tap ratio relations $\alpha$ and $\beta$ is not necessary.
 
 
-\subsection{Overhead lines}
+%\subsection{Overhead lines}
 
 
-\subsection{Underground cables}
+%\subsection{Underground cables}
 
 
 \paragraph{Example}
@@ -999,7 +1004,7 @@ $$
 \newpage
 \section{Transformer}
 
-The transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
+The three phase transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
 
 The most common transformer connections at the terminals are:
 
@@ -1013,7 +1018,7 @@ The most common transformer connections at the terminals are:
 
 \begin{table}[h!]\index{typefaces!sizes}
 \begin{center}
-\begin{tabular}{ccccc}
+\begin{tabularx}{\textwidth}{XXXXX}
 \toprule
 Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
 \midrule
@@ -1025,7 +1030,7 @@ Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
  $\Delta$ & $\Delta$ 	& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$		& $-\frac{1}{\alpha\beta}Y_{II}$\\
  $\Delta$ & $Yg$ 		& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{I}$		& $\frac{1}{\alpha\beta}Y_{III}$\\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
   \caption{Three-phase transformer impedances of the branch model.}
   \label{transfoemer_impedances_table}
@@ -1423,11 +1428,11 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 After having introduced the basics, this chapter defines a simple grid for which all the calculations are illustrated. The grid used will be the IEEE 5 Bus standard grid, which is defined with the following data:
 
 \begin{table}[h!]
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name}  & {\color{white}active} & {\color{white}is\_slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
+		{\color{white}name}  & {\color{white}active} & {\color{white}is slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
 		Bus 0 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
 		Bus 1 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
 		Bus 2 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
@@ -1440,11 +1445,11 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name}       & {\color{white}bus\_from} & {\color{white}bus\_to} & {\color{white}active}    & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
+		{\color{white}name}       & {\color{white}bus from} & {\color{white}bus to} & {\color{white}active}    & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
 		Branch 0-1 & Bus 0     & Bus 1   & True & 400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
 		Branch 0-3 & Bus 0     & Bus 3   & True & 224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
 		Branch 0-4 & Bus 0     & Bus 4   & True & 273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
@@ -1458,7 +1463,7 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
@@ -1473,7 +1478,7 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 
 \begin{table}[h!]
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
@@ -1507,7 +1512,7 @@ The calculated node results are:
 
 \begin{table}[h!]
 	\centering	
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
@@ -1524,7 +1529,7 @@ The calculated node results are:
 
 \begin{table}[h!]
 	\centering
-	\color{maincolor}
+%	\color{maincolor}
 	\begin{tabular}{|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
@@ -1611,11 +1616,11 @@ The modelling of a load is done as a composition of fixed impedance, fixed curre
 The main calculation parameters of a load are:\\
 
 \begin{table}[h!]
-	\color{maincolor}
-	\begin{tabular}{|l|p{3cm}|p{4cm}|}
+%	\color{maincolor}
+	\begin{tabular}{|p{1cm}|p{3cm}|p{4cm}|}
 		\hline 
 		\rowcolor{maincolor}
-		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
 		\hline 
 		Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
 		\hline 
@@ -1646,11 +1651,11 @@ A voltage controlled generator is a generator that sets the voltage of the bus w
 The main parameters of a voltage controlled generator are:\\
 
 \begin{table}[h!]
-	\color{maincolor}
-	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+%	\color{maincolor}
+	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
 		\hline 
 		\rowcolor{maincolor}
-		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
 		\hline 
 		$V_{set}$ & Set voltage (number) & p.u. \\ 
 		\hline 
@@ -1674,11 +1679,11 @@ A battery shall be modelled as a voltage controlled generator.
 The main parameters of a voltage controlled generator are:\\
 
 \begin{table}[h!]
-	\color{maincolor}
-	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+%	\color{maincolor}
+	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
 		\hline 
 		\rowcolor{maincolor}
-		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
+		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
 		\hline 
 		$V_{set}$ & Set voltage (number) & p.u. \\ 
 		\hline 
@@ -1699,8 +1704,8 @@ The main parameters of a voltage controlled generator are:\\
 \section{Capacitor banks}
 
 \begin{table}[h!]
-	\color{maincolor}
-	\begin{tabular}{|l|p{5cm}|p{2cm}|}
+%	\color{maincolor}
+	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
