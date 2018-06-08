@@ -737,9 +737,20 @@ Z_0 - Z_1 & Z_0 - Z_1 & 2Z_1 + Z_0
 \end{array} \right]
 \end{equation}
 
-\paragraph{Example}
+If $Z_2$ would be significantly different from $Z_1$, the approximation is:
 
-We need to compute two values, before assembling the 3x3 matrix:
+\begin{equation}
+Z_{ABC_{approx}} = \left[ \begin{array}{ccc}
+Z_0+Z_1+Z_2  & Z_0 +a Z_1 +a^2 Z_2 & Z_0 +a^2 Z_1 +a Z_2 \\
+Z_0 +a^2 Z_1 +a Z_2 & Z_0+Z_1+Z_2 & Z_0 +a Z_1 +a^2 Z_2 \\ 
+Z_0 +a Z_1 +a^2 Z_2 & Z_0 +a^2 Z_1 +a Z_2 & Z_0+Z_1+Z_2
+\end{array} \right]
+\end{equation}
+
+Where the transformation eigenvector $a=e^{j2 \pi / 3}$ is used. This second approximation is used most in the transformation of the sequence impedances given for a synchronous machine to the $ABC$ impedances used for calculation.
+
+\paragraph{Example}
+Taking the calculated values from the previous section, we observe that $Z_2$ is close to $Z_1$ in the precision of interest, therefore we chose the first approximation. We need to compute two values before assembling the 3x3 matrix:
 
 $$
 \frac{1}{3}(2 \cdot Z_1 + Z_0) = \frac{1}{3} (2\cdot(0.3061 + j 0.6270) + (0.7735 + j 1.9373)) = 0.4619 + j1.0638
@@ -1603,17 +1614,17 @@ Removing the topological nodes, only two islands remain:
 
 Now we only need to check which non topological branches are in every island and associate them to the formed calculation node.
 
-\section{Load}
+\section{Static device}
 
-The modelling of a load is done as a composition of fixed impedance, fixed current and fixed power. This is known to match best the real behaviour of loads in electrical grids (Although in transmission they tend to be more fixed power-dominated). This is known as the ZIP model of a load. Here we are going to refer to it as ZIS, given that we actually specify the complex power ($S$) and not the real power ($P$).
+We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device) .Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
 
 \begin{marginfigure}
-	\includegraphics[width=0.49\linewidth]{img/ZIP_model.eps}
-	\caption{$ZIP$ Bus model.}
-	\label{zip_bus_model}
+	\includegraphics[width=0.99\linewidth]{img/ZIP_model.eps}
+	\caption{$ZIP$ / $YISV$ device model.}
+	\label{zip_model}
 \end{marginfigure}
 
-The main calculation parameters of a load are:\\
+The modelling of a static device (i.e. load) is done as a composition of fixed impedance, fixed current and fixed power. This is known to match best the real behaviour of loads in electrical grids (Although in transmission they tend to be more fixed power-dominated). This is known as the ZIP model of a load. Here we are going to refer to it as ZIS, given that we actually specify the complex power ($S$) and not the real power ($P$).
 
 \begin{table}[h!]
 %	\color{maincolor}
@@ -1622,6 +1633,14 @@ The main calculation parameters of a load are:\\
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
 		\hline 
+		name & Name of the device (string) & - \\ 
+		\hline 
+		number of phases & Number of phases of the device (integer) & - \\ 
+		\hline 
+		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
+		\hline 
+		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
+		\hline 
 		Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
 		\hline 
 		I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
@@ -1629,26 +1648,28 @@ The main calculation parameters of a load are:\\
 		S & Power (complex number) & MW, MVAr \\ 
 		\hline
 	\end{tabular} 
+	\caption{Main properties of the static device object. More properties my be added if needed.}
 \end{table}
 
 \vspace{0.5cm}
 
-The impedance $Z$ is converter to admittance with $Y=1/Z$.
+The impedance $Z$ is converted to admittance with $Y=1/Z$.
 
-When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$).
-
-Remember that the system power equilibrium equation is:
-
-$$
-S_{bus} = V_{bus} \cdot (I_{bus} + Y_{bus} \times V_{bus})^*
-$$
+When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
 
 
-\section{Voltage controlled generator}
+
+\section{Voltage controlled device}
 
 A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
 
 The main parameters of a voltage controlled generator are:\\
+
+\begin{marginfigure}
+	\includegraphics[width=0.4\linewidth]{img/PV_model.eps}
+	\caption{$PV$ device model.}
+	\label{pv_model}
+\end{marginfigure}
 
 \begin{table}[h!]
 %	\color{maincolor}
@@ -1656,6 +1677,14 @@ The main parameters of a voltage controlled generator are:\\
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		name & Name of the device (string) & - \\ 
+		\hline 
+		number of phases & Number of phases of the device (integer) & - \\ 
+		\hline 
+		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
+		\hline 
+		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
 		\hline 
 		$V_{set}$ & Set voltage (number) & p.u. \\ 
 		\hline 
@@ -1672,48 +1701,6 @@ The main parameters of a voltage controlled generator are:\\
 
 %When forming the 
 
-\section{Battery}
-
-A battery shall be modelled as a voltage controlled generator.
-
-The main parameters of a voltage controlled generator are:\\
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
-		\hline 
-		\rowcolor{maincolor}
-		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
-		\hline 
-		$V_{set}$ & Set voltage (number) & p.u. \\ 
-		\hline 
-		$P$ & Power (number) & MW \\ 
-		\hline
-		$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
-		\hline
-		$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
-		\hline
-		$E_{max}$ & Energy storage capacity (number) & MWh \\ 
-		\hline
-	\end{tabular} 
-\end{table}
-
-\vspace{0.5cm}
-
-
-\section{Capacitor banks}
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
-		\hline 
-		\rowcolor{maincolor}
-		{\color{white} Parameter} & {\color{white} Description} & {\color{white} Unit} \\ 
-		\hline 
-		Q & Reactive Power rated at the bus nominal voltage (complex number) & MVAr \\ 
-		\hline
-	\end{tabular} 
-\end{table}
 
 
 
@@ -1854,6 +1841,22 @@ A c++ implementation of a Graph with functions to detect the islands (\verb|conn
 	\end{verbatim}
 }
 
+
+
+\section{Phases reduction}
+
+In a three phase system, there may be branches that only transport one or two of the phases. Such systems are unbalanced by design and require a special treatment to prepare for the simulation. As irregular as these systems may be, they exist and a complete simulation engine should be prepared to simulate them too.
+
+To prepare the system for the simulation, we must identify the phases that arrive to each bus under the assumption that all the buses are \'a-priori able to transport three phases.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.99\linewidth]{img/phase_reduction.eps}
+	\caption{This picture shows a 7-node grid with unbalanced connections. The connectivity bus incidence matrix reduction is depicted as well in order to illustrate the phase reduction mechanism that allows the calculation of this circuit. Only the white cells remain after removing the dark cells that correspond to not connected phases.}
+	\label{fig:phase_reduction}
+\end{figure}
+
+The algorithms presented in the next sections are prepared to form the full three-phase matrices and vectors and take into account the formation of the mask vectors to be able to reduce the vectors and matrices later.
 
 \section{Calculation of the voltage, power and current vectors}
 
@@ -3147,6 +3150,68 @@ The variables are:
 	\item $\textbf{rate}$: Array of branch ratings in MVA.
 \end{itemize}
 
+\newpage
+\section{Reactive power control: The outer loop}
+
+The power flow result computes values of reactive power for the PV nodes. These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
+
+Many academic texts suggest that the PV-PQ switching has to be done within the iteration of the power flow solution. That is fundamentally wrong because it introduces discontinuities in the power flow numerical process that is assumed to be smooth. Hence if the PQ-PV switching is done inside the power flow numerical loop, it will be a miracle if the process converges.
+
+
+The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
+
+\begin{marginfigure}
+	\includegraphics[width=0.9\linewidth]{img/PQ_PV_switching.eps}
+	\caption{$PQ-PV$ switching algorithm.}
+	\label{pq_pv_switching}
+\end{marginfigure}
+
+
+\begin{enumerate}
+	\item Bus $i$ is a $PQ$ bus in the previous iteration and its
+	reactive power was fixed at its lower limit:
+	
+	\begin{itemize}
+		\item If the bus voltage magnitude $V_i \geq Vset_i$, then it remains a $PQ$ bus at current iteration and set $Q_i = Qmin_i$.
+		
+		\item If $V_i < Vset_i$ , then compare $Q_i$ with the upper and lower limits.
+		
+		\begin{itemize}
+			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus but set $Q_i = Qmax_i$.
+			
+			\item If $Q_i \leq Qmin_i$ , then it is still a $PQ$ bus and set $Q_i = Qmin_i$.
+			
+			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus, set $V_i = Vset_i$.
+		\end{itemize}
+	\end{itemize}
+	
+	
+	\item Bus $i$ is a $PQ$ bus in the previous iteration and its reactive power was fixed at its upper limit:
+	
+	\begin{itemize}
+		\item If its voltage magnitude $V_i \leq Vset_i$ , then the bus $i$ still a PQ bus and set $Q_i = Qmax_i$.
+	
+		\item If $V_i > Vset_i$ , then compare between $Q_i$ and its upper/lower limits:
+	
+		\begin{itemize}
+			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus and set $Q_i = Qmax_i$.
+			\item If $Q_i \leq Qmin_i$ , then it is still a $PQ$ bus but let $Q_i = Qmin_i$ in current iteration.
+			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus and set $V_i = Vset_i$
+		\end{itemize}
+	\end{itemize}
+	
+	\item Bus $i$ is a $PV$ bus in the previous iteration.
+	
+	Compare $Q_i$ with its upper and lower limits.
+	
+	\begin{itemize}
+		\item If $Q_i \geq Qmax_i$, then it is switched to $PQ$ and set $Q_i = Qmax_i$.
+		\item If $Qi \leq Qmin_i$, then it is switched to $PQ$ and set $Q_i = Qmin_i$.
+		\item If $Qmin_i < Q_i < Qmax_i$ , then it is still a $PV$ bus.
+	\end{itemize}
+\end{enumerate}
+
+Because of this switching logic, there shall be only one voltage controlled device per node. Otherwise it is quite hard to ensure that all the machines connected to a particular bus fulfil their reactive power limits.
 
 
 %-------------------------------------------------------------------------------
