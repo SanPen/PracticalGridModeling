@@ -1843,7 +1843,7 @@ A c++ implementation of a Graph with functions to detect the islands (\verb|conn
 
 
 
-\section{Phases reduction}
+\section{Phases reduction} \label{phase_reduction}
 
 In a three phase system, there may be branches that only transport one or two of the phases. Such systems are unbalanced by design and require a special treatment to prepare for the simulation. As irregular as these systems may be, they exist and a complete simulation engine should be prepared to simulate them too.
 
@@ -1977,9 +1977,15 @@ For the computations ahead we will need to have a number of admittance-based mat
 	
 	It is a sparse matrix of size $m \times n$
 	
+	\item $C_t$: Connectivity matrix of the branches with their \textit{to} bus.
+	
+	\item $C_f$: Connectivity matrix of the branches with their \textit{from} bus.
+	
+	It is a sparse matrix of size $m \times n$
+	
 	\item $Y_t$: Admittance matrix of the branches with their \textit{to} bus.
 	
-	It is a sparse matrix of size $m \times n$\newline
+    It is a sparse matrix of size $m \times n$\newline
 \end{itemize}
 
 Where $n$ is the number of buses and $m$ is the number of branches.
@@ -1989,7 +1995,7 @@ The relation between the admittance matrix and the series and shunt admittance m
 Y_{bus} = Y_{series} + Y_{shunt}
 \end{equation}
 
-\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code is the following:
+\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the positive sequence model is the following:
 
 {\color{verbatimcolor}
 \begin{verbatim}
@@ -2039,11 +2045,17 @@ for i=0 to m:
     Ybus[t, f] += Ytf
     Ybus[t, t] += Ytt
     
-    // Y-from and Y-to for the lines power flow computation
+    // Y-from and Y-to for the lines power flow computation (optional)
     Yf[i, f] += Yff
     Yf[i, t] += Yft
     Yt[i, f] += Ytf
     Yt[i, t] += Ytt
+        
+    // Connectivity matrices
+    Cf[i, f] = 1
+    Cf[i, t] = -1
+    Ct[i, f] = -1
+    Ct[i, t] = 1
     
     // Y shunt
     Yshunt[f] += Yff_sh
@@ -2059,6 +2071,56 @@ end
 \end{verbatim}
 }
 
+\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the three-phase model is the following:
+
+{\color{verbatimcolor}
+    \begin{verbatim}
+    For every branch:
+    
+    Get the branch submatrices Yff, Yft, Ytf and Ytt.
+    
+    a = 0
+    for i in phases_from:
+        b = 0
+        for j in phases_to:
+        
+	        # Admittance matrix
+	        Ybus[f * n_phase + i, f * n_phase + j] += Yff[a, b]
+	        Ybus[f * n_phase + i, t * n_phase + j] += Yft[a, b]
+	        Ybus[t * n_phase + i, f * n_phase + j] += Ytf[a, b]
+	        Ybus[t * n_phase + i, t * n_phase + j] += Ytt[a, b]
+	        
+	        # branch-bus admittance matrices (optional)
+	        Yf[k * n_phase + i, f * n_phase + j] += Yff[a, b]
+	        Yf[k * n_phase + i, t * n_phase + j] += Yft[a, b]
+	        Yt[k * n_phase + i, f * n_phase + j] += Ytf[a, b]
+	        Yt[k * n_phase + i, t * n_phase + j] += Ytt[a, b]
+	        
+	        # branch-bus connectivity matrices
+	        Cf[k * n_phase + i, f * n_phase + j] = 1
+	        Cf[k * n_phase + i, t * n_phase + j] = -1
+	        Ct[k * n_phase + i, f * n_phase + j] = -1
+	        Ct[k * n_phase + i, t * n_phase + j] = 1
+	        
+	        # masks
+	        mask_r[f * n_phase + i] = 1
+	        mask_r[t * n_phase + i] = 1
+	        
+	        mask_c[f * n_phase + j] = 1
+	        mask_c[t * n_phase + j] = 1
+	        
+	        mask_k[k * n_phase + i] = 1
+        
+	        b += 1
+	    end
+	    
+        a += 1
+    end
+    
+\end{verbatim}
+}
+
+This algorithm will produce the full three-phase matrices. These matrices need to be reduced as explained in the section \ref{phase_reduction}.
 
 %-------------------------------------------------------------------------------
 %    CHAPTER Power flow
@@ -3103,11 +3165,11 @@ Ironically, what is called the power flow problem does not compute the power flo
 First we compute the branches per unit currents:
 
 \begin{equation}
-{\textbf{I}_f = \textbf{Y}_f \times \textbf{V}}
+{\textbf{I}_f = (\textbf{C}_f \times \textbf{Y}_{bus}) \times \textbf{V}}
 \end{equation}
 
 \begin{equation}
-{\textbf{I}_t = \textbf{Y}_t \times \textbf{V}}
+{\textbf{I}_t = (\textbf{C}_t \times \textbf{Y}_{bus}) \times \textbf{V}}
 \end{equation}
 
 
@@ -3117,11 +3179,11 @@ These are matrix-vector multiplications. The result is the per unit currents flo
 Then we compute the power values:
 
 \begin{equation}
-{\textbf{S}_f = \textbf{V}_f \cdot \textbf{I}_f^*}
+{\textbf{S}_f = (\textbf{C}_f \times \textbf{V}) \cdot \textbf{I}_f^*}
 \end{equation}
 
 \begin{equation}
-{\textbf{S}_t = \textbf{V}_t \cdot \textbf{I}_t^*}
+{\textbf{S}_t = (\textbf{C}_t \times \textbf{V}) \cdot \textbf{I}_t^*}
 \end{equation}
 
 These are element-wise multiplications, resulting in the per unit power flowing through a branch seen from the \textit{from} bus or from the \textit{to} bus.
@@ -3140,13 +3202,14 @@ And also the branches loading in per unit as:
 The variables are:
 
 \begin{itemize}
-	\item $\textbf{Y}_f, \textbf{Y}_t$: \textit{From} and \textit{To} bus-branch admittance matrices, see section \ref{Y_calculation}.
+	\item $\textbf{Y}_{bus}$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
+	\item $\textbf{C}_f$: Connectivity matrix of the branches and the \textit{from} buses.
+	\item $\textbf{C}_t$:Connectivity matrix of the branches and the \textit{to} buses.
+	\item $\textbf{V}$: Array of bus voltages in p.u.
 	\item $\textbf{I}_f$: Array of currents at the \textit{from} buses in p.u.
 	\item $\textbf{I}_t$: Array of currents at the \textit{to} buses in p.u.
 	\item $\textbf{S}_f$: Array of powers at the \textit{from} buses in p.u.
-	\item $\textbf{S}_t$: Array of powers at the \textit{to} buses in p.u.
-	\item $\textbf{V}_f$: Array of voltages at the \textit{from} buses in p.u.
-	\item $\textbf{V}_t$: Array of voltages at the \textit{to} buses in p.u.
+	\item $\textbf{S}_t$: Array of powers at the \textit{to} buses in p.u.	
 	\item $\textbf{rate}$: Array of branch ratings in MVA.
 \end{itemize}
 
@@ -3505,7 +3568,7 @@ In our case, we will draw load and generation samples, evaluate the voltage by r
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Latin Hypercube}
+%\section{Latin Hypercube}
 
 
 
@@ -3604,12 +3667,12 @@ The matrices used for the derivatives computation and the calculated magnitudes 
 \begin{equation}E=\frac{V}{|V|}\end{equation}  
 
 \begin{equation}
-I_f=Y_f \times V 
+I_f = C_f \times Y_{bus} \times V = Y_f \times V 
 \label{eq:current_from}
 \end{equation}
 
 \begin{equation}
-I_{inj}=Y_{bus}  \times  V + I_{bus}
+I_{inj} = Y_{bus}  \times  V + I_{bus}
 \label{eq:current_inj}
 \end{equation}
 
