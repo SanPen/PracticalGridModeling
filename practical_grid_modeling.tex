@@ -1658,7 +1658,7 @@ The modelling of a static device (i.e. load) is done as a composition of fixed i
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{3cm}|p{4cm}|}
+	\begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|}
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
@@ -1687,6 +1687,15 @@ The impedance $Z$ is converted to admittance with $Y=1/Z$.
 
 When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
 
+\subsection{Shunt connected impedances/admittances}
+
+A three phase admittance device such as a ZIP load or a capacitor bank has to be integrated into the nodal equation (see figure \ref{fig:CircuitEquation})
+
+\begin{marginfigure}
+	\includegraphics[width=0.99\linewidth]{img/DeltaShuntDevice.eps}
+	\caption{Delta/Wye shunt model.}
+	\label{delta_shunt_model}
+\end{marginfigure}
 
 
 \section{Voltage controlled device}
@@ -1703,7 +1712,7 @@ The main parameters of a voltage controlled generator are:\\
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
+	\begin{tabular}{|p{2cm}|p{5cm}|p{2cm}|}
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
@@ -3935,13 +3944,13 @@ R_{i, i} = \sigma_{i, i}^2
 %-------------------------------------------------------------------------------
 %	CHAPTER Short-circuit
 %-------------------------------------------------------------------------------
-\chapter{Short-circuit}
+%\chapter{Short-circuit}
 
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Transient stability
 %-------------------------------------------------------------------------------
-\chapter{Transient stability}
+%\chapter{Transient stability}
 
 
 \backmatter
