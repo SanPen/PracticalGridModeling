@@ -339,11 +339,11 @@ The goal is to provide a reference document for researchers and computer enginee
 
 The book assumes that the reader has a basic understanding of matrices, vectors and complex numbers. The notation used in the book is intended to be clear and accessible as much as it is practically possible.
 
-Most of the formulas presented will imply vectorized operations such as matrix multiplications or element-wise multiplications. This notation makes it much easier to implement the numerical methods, and in case of scripting languages such as python, enables the use of fast linear algebra libraries. This is key in the implementation of electrical systems simulators, since most articles and books provide the formulas using summations, which implementation in languages other than c or Fortran would make the simulator prohibitively slow in comparison with the vectorized version.
+Most of the formulas presented will imply vectorized operations such as matrix multiplications or element-wise multiplications. This notation makes it much easier to implement the numerical methods, and in case of scripting languages such as python, enables the use of fast linear algebra libraries. This is key in the implementation of electrical systems simulators, since most articles and books provide the formulas using summations, which implementation in languages other than $C$ or $Fortran$ would make the simulator prohibitively slow in comparison with the vectorized version.
 
 Vectorized formulas allow a simpler debugging and maintenance in the produced software.
 
-So I really hope you enjoy this book and find it useful for your purpose.
+So I really hope you enjoy this book and that find it useful for your purpose.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER notation
@@ -3165,11 +3165,11 @@ Ironically, what is called the power flow problem does not compute the power flo
 First we compute the branches per unit currents:
 
 \begin{equation}
-{\textbf{I}_f = (\textbf{C}_f \times \textbf{Y}_{bus}) \times \textbf{V}}
+{{I}_f = ({C}_f \times {Y}_{bus}) \times {V}}
 \end{equation}
 
 \begin{equation}
-{\textbf{I}_t = (\textbf{C}_t \times \textbf{Y}_{bus}) \times \textbf{V}}
+{{I}_t = ({C}_t \times {Y}_{bus}) \times {V}}
 \end{equation}
 
 
@@ -3179,11 +3179,11 @@ These are matrix-vector multiplications. The result is the per unit currents flo
 Then we compute the power values:
 
 \begin{equation}
-{\textbf{S}_f = (\textbf{C}_f \times \textbf{V}) \cdot \textbf{I}_f^*}
+{{S}_f = ({C}_f \times {V}) \cdot {I}_f^*}
 \end{equation}
 
 \begin{equation}
-{\textbf{S}_t = (\textbf{C}_t \times \textbf{V}) \cdot \textbf{I}_t^*}
+{{S}_t = ({C}_t \times {V}) \cdot {I}_t^*}
 \end{equation}
 
 These are element-wise multiplications, resulting in the per unit power flowing through a branch seen from the \textit{from} bus or from the \textit{to} bus.
@@ -3191,32 +3191,43 @@ These are element-wise multiplications, resulting in the per unit power flowing 
 Now we can compute the losses in MVA as:
 
 \begin{equation}
-{\textbf{losses} = |\textbf{S}_f - \textbf{S}_t| \cdot Sbase}
+{{losses} = |{S}_f - {S}_t| \cdot Sbase}
 \end{equation}
 
 And also the branches loading in per unit as:
 \begin{equation}
-{\textbf{loading} = \frac{max(|\textbf{S}_f|, |\textbf{S}_t|) \cdot Sbase}{ \textbf{rate}}}
+{{loading} = \frac{max(|{S}_f|, |{S}_t|) \cdot Sbase}{ {rate}}}
+\end{equation}
+
+Finally we compute the power in all nodes:
+
+\begin{equation}
+{S}_{bus} = V \cdot (Y_{bus} \times V - I_{bus})^*
+\end{equation}
+The imaginary part of $S_{bus}$ at the PV nodes is he calculated reactive power.
+
+\begin{equation}
+{Q}_{pv} = Im(S_{bus, pv})
 \end{equation}
 
 The variables are:
 
 \begin{itemize}
-	\item $\textbf{Y}_{bus}$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
-	\item $\textbf{C}_f$: Connectivity matrix of the branches and the \textit{from} buses.
-	\item $\textbf{C}_t$:Connectivity matrix of the branches and the \textit{to} buses.
-	\item $\textbf{V}$: Array of bus voltages in p.u.
-	\item $\textbf{I}_f$: Array of currents at the \textit{from} buses in p.u.
-	\item $\textbf{I}_t$: Array of currents at the \textit{to} buses in p.u.
-	\item $\textbf{S}_f$: Array of powers at the \textit{from} buses in p.u.
-	\item $\textbf{S}_t$: Array of powers at the \textit{to} buses in p.u.	
-	\item $\textbf{rate}$: Array of branch ratings in MVA.
+	\item ${Y}_{bus}$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
+	\item ${C}_f$: Connectivity matrix of the branches and the \textit{from} buses.
+	\item ${C}_t$:Connectivity matrix of the branches and the \textit{to} buses.
+	\item ${V}$: Array of bus voltages in p.u.
+	\item ${I}_f$: Array of currents at the \textit{from} buses in p.u.
+	\item ${I}_t$: Array of currents at the \textit{to} buses in p.u.
+	\item ${S}_f$: Array of powers at the \textit{from} buses in p.u.
+	\item ${S}_t$: Array of powers at the \textit{to} buses in p.u.	
+	\item ${rate}$: Array of branch ratings in MVA.
 \end{itemize}
 
 \newpage
 \section{Reactive power control: The outer loop}
 
-The power flow result computes values of reactive power for the PV nodes. These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
+The power flow result seen in the previous section \ref{post_voltage_solution} computes values of reactive power for the PV nodes ($Q_{pv}$). These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
 
 Many academic texts suggest that the PV-PQ switching has to be done within the iteration of the power flow solution. That is fundamentally wrong because it introduces discontinuities in the power flow numerical process that is assumed to be smooth. Hence if the PQ-PV switching is done inside the power flow numerical loop, it will be a miracle if the process converges.
 
@@ -3235,16 +3246,16 @@ The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
 	reactive power was fixed at its lower limit:
 	
 	\begin{itemize}
-		\item If the bus voltage magnitude $V_i \geq Vset_i$, then it remains a $PQ$ bus at current iteration and set $Q_i = Qmin_i$.
+		\item If the bus voltage magnitude $|V_i| \geq Vset_i$, then it remains a $PQ$ bus at current iteration and set $Q_i = Qmin_i$.
 		
-		\item If $V_i < Vset_i$ , then compare $Q_i$ with the upper and lower limits.
+		\item If $|V_i| < Vset_i$ , then compare $Q_i$ with the upper and lower limits.
 		
 		\begin{itemize}
 			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus but set $Q_i = Qmax_i$.
 			
 			\item If $Q_i \leq Qmin_i$ , then it is still a $PQ$ bus and set $Q_i = Qmin_i$.
 			
-			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus, set $V_i = Vset_i$.
+			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus, set $V_i = Vset_i \cdot e^{-j \cdot angle(V_i)}$.
 		\end{itemize}
 	\end{itemize}
 	
@@ -3252,14 +3263,14 @@ The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
 	\item Bus $i$ is a $PQ$ bus in the previous iteration and its reactive power was fixed at its upper limit:
 	
 	\begin{itemize}
-		\item If its voltage magnitude $V_i \leq Vset_i$ , then the bus $i$ still a PQ bus and set $Q_i = Qmax_i$.
+		\item If its voltage magnitude $|V_i| \leq Vset_i$ , then the bus $i$ still a $PQ$ bus and set $Q_i = Qmax_i$.
 	
-		\item If $V_i > Vset_i$ , then compare between $Q_i$ and its upper/lower limits:
+		\item If $|V_i| > Vset_i$ , then compare between $Q_i$ and its upper/lower limits:
 	
 		\begin{itemize}
 			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus and set $Q_i = Qmax_i$.
 			\item If $Q_i \leq Qmin_i$ , then it is still a $PQ$ bus but let $Q_i = Qmin_i$ in current iteration.
-			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus and set $V_i = Vset_i$
+			\item If $Qmin_i < Q_i < Qmax_i$ , then it is switched to $PV$ bus and set $V_i = Vset_i \cdot e^{-j \cdot angle(V_i)}$
 		\end{itemize}
 	\end{itemize}
 	
@@ -3274,7 +3285,7 @@ The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
 	\end{itemize}
 \end{enumerate}
 
-Because of this switching logic, there shall be only one voltage controlled device per node. Otherwise it is quite hard to ensure that all the machines connected to a particular bus fulfil their reactive power limits.
+The switching logic is applied only to the buses that are $PV$ in the first place. There is need to apply this to all the nodes. Because of this switching logic, there shall be only one voltage controlled device per node. Otherwise it is quite hard to ensure that all the machines connected to a particular bus fulfil their reactive power limits.
 
 
 %-------------------------------------------------------------------------------
@@ -3645,8 +3656,11 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \frac{\partial S_{inj}}{\partial \theta} = j \cdot V_{diag} \times (I_{bus,diag}-Y_{bus} \times V_{diag}  )^* 
 \end{equation}
 
-
 \begin{equation}\frac{\partial S_{inj}}{\partial |V|}=j \cdot E_{diag} \times (I_{bus,diag} + Y_{bus} \times V_{diag}  )^* \end{equation}
+
+\marginnote{All these derivatives are square matrices in complex numbers.}
+	
+
 
 \begin{equation}\frac{\partial S_{flow}}{\partial \theta} = j \cdot (I_{f,diag}^* \times C_f \times V_{diag} - [C_f \times V]_{diag} \times Y_f^* \times V_{diag}^* ) 
 \end{equation}
@@ -3654,7 +3668,8 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \begin{equation}\frac{\partial S_{flow}}{\partial |V|}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
 \end{equation}
 
-\marginnote{Note: All these derivatives are square matrices in complex numbers.}
+
+\marginnote{The matrices with the subindex $diag$ are diagonal matrices constructed from the vector with the same name. For instance $V_{diag}$  is a diagonal matrix formed with the voltages vector $V$.}
 
 \begin{equation}\frac{\partial I_{mag}}{\partial \theta} = j \cdot Y_f \times V_{diag} 
 \end{equation}
@@ -3667,7 +3682,17 @@ The matrices used for the derivatives computation and the calculated magnitudes 
 \begin{equation}E=\frac{V}{|V|}\end{equation}  
 
 \begin{equation}
-I_f = C_f \times Y_{bus} \times V = Y_f \times V 
+V_f = C_f \times V
+\label{eq:voltage_from}
+\end{equation}
+
+\begin{equation}
+Y_f = C_f \times Y_{bus} 
+\label{eq:admittace_from}
+\end{equation}
+
+\begin{equation}
+I_f = Y_f \times V 
 \label{eq:current_from}
 \end{equation}
 
@@ -3677,12 +3702,12 @@ I_{inj} = Y_{bus}  \times  V + I_{bus}
 \end{equation}
 
 \begin{equation}
-S_{inj} = V  \times  I_{inj}^*
+S_{inj} = V  \cdot  I_{inj}^*
 \label{eq:power_injection}
 \end{equation}
 
 \begin{equation}
-S_f = V_{diag} \times I_{f}^*
+S_f = V_{f} \cdot I_{f}^*
 \label{eq:power_from}
 \end{equation}
 
@@ -3908,10 +3933,11 @@ R_{i, i} = \sigma_{i, i}^2
 \chapter{Short-circuit}
 
 
+
 %-------------------------------------------------------------------------------
 %	CHAPTER Transient stability
 %-------------------------------------------------------------------------------
-\chapter{Transient stability}
+%\chapter{Transient stability}
 
 
 \backmatter
