@@ -1646,7 +1646,7 @@ Now we only need to check which non topological branches are in every island and
 
 \section{Static device}
 
-We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device) .Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
+We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device). Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
 
 \begin{marginfigure}
 	\includegraphics[width=0.99\linewidth]{img/ZIP_model.eps}
@@ -1687,16 +1687,42 @@ The impedance $Z$ is converted to admittance with $Y=1/Z$.
 
 When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
 
-\subsection{Shunt connected impedances/admittances}
-
+%\paragraph{Shunt connected impedances/admittances}
 A three phase admittance device such as a ZIP load or a capacitor bank has to be integrated into the nodal equation (see figure \ref{fig:CircuitEquation})
+
+Consider the model from the figure \ref{delta_shunt_model}. The primitive admittance matrix is then:
+
+In the case of a device connected in $\Delta$, the primitive matrix is:
+\begin{equation}
+Y_{device} = \left[ \begin{array}{ccc}
+y_{aa} & y_{ab} &  y_{ac} \\
+y_{ab} & y_{bb} & y_{bc} \\  
+y_{ac} & y_{bc} & y_{cc}
+\end{array} \right] 
+\end{equation}
 
 \begin{marginfigure}
 	\includegraphics[width=0.99\linewidth]{img/DeltaShuntDevice.eps}
-	\caption{Delta/Wye shunt model.}
+	\caption{$\Delta$/Y shunt model.}
 	\label{delta_shunt_model}
 \end{marginfigure}
 
+Here, $y_{ab}$, $y_{bc}$ and $y_{ac}$ are given, and $y_{aa}$, $y_{bb}$ and $y_{cc}$ are computed as:
+
+$$y_{aa} = y_{ab} + y_{ac}$$
+$$y_{bb} = y_{ab} + y_{bc}$$
+$$y_{cc} = y_{ac} + y_{bc}$$
+
+In the case of a device connected in $Y$, the primitive matrix is:
+\begin{equation}
+Y_{device} = \left[ \begin{array}{ccc}
+y_{aa} & 0 &  0 \\
+0 & y_{bb} & 0 \\  
+0 & 0 & y_{cc}
+\end{array} \right] 
+\end{equation}
+
+The primitive matrices are added to the diagonal of the circuit admittance matrix $[Y_{bus}]$
 
 \section{Voltage controlled device}
 
@@ -2169,7 +2195,7 @@ This algorithm will produce the full three-phase matrices. These matrices need t
 The power flow problem consists in finding the node voltages that correspond to the injected current and power values. The fundamental equation to be solved is:
 
 \begin{equation}
-S = V \times (Y \times V - I)^*
+[S] = [V] \times \left([Y] \times [V] - [I] \right)^*
 \label{eq:power_flow}
 \end{equation}
 
@@ -2178,10 +2204,10 @@ S = V \times (Y \times V - I)^*
 Where:
 
 \begin{itemize}
-\item $S$: Vector of power injections.
-\item $I$: Vector of current injections.
-\item $V$: Vector of voltages.
-\item $Y$: Admittance matrix.
+\item $[S]$: Vector of power injections.
+\item $[I]$: Vector of current injections.
+\item $[V]$: Vector of voltages.
+\item $[Y]$: Admittance matrix.
 \end{itemize}
 
 
@@ -2234,64 +2260,68 @@ The Z-Matrix method requires the Kron reduction of the slack nodes of the circui
   \label{fig:reduction}
 \end{figure}
 
+Of course, not only the admittance matrix has to be reduced. The associated vectors need to be reduced as well by removing the slack related values. The slack related values of the voltage and the admittance matrix are kept for operation. 
+
 \begin{equation}
-Y_{red} = Y[pqpv, pqpv]
+[Y_{red}] = [Y]_{(pqpv, pqpv)}
 \end{equation}
 
 \begin{equation}
-Y_{slack} = Y[pqpv, vd]
+[Y_{slack}] = [Y]_{(pqpv, vd)}
 \end{equation}
 
 \begin{equation}
-V_{red} = V[pqpv]
+[V_{red}] = [V]_{(pqpv)}
 \end{equation}
 
 \begin{equation}
-V_{slack} = V[vd]
+[V_{slack}] = [V]_{vd}
 \end{equation}
 
 \begin{equation}
-S_{red} = S[pqpv]
+[S_{red}] = [S]_{(pqpv)}
 \end{equation}
 
 \begin{equation}
-I_{red} = I[pqpv]
+[I_{red}] = [I]_{(pqpv)}
 \end{equation}
 
-Once we have all the reduced magnitudes, it means that we have removed the slack (VD) nodes from the circuit, but we must keep their influence in the rest of the nodes in the form of current injections.
+Once we have all the reduced magnitudes, it means that we have \textit{removed} the slack ($VD$) nodes from the circuit. However we must keep the slack nodes influence in the rest of the nodes in the form of current injections ($[I_{slack}]$).
 
-First we copy $V_{red}$ into another variable $V_{prev}$.
+First we copy $[V_{red}]$ into another variable $[V_{prev}]$.
 
 \begin{equation}
-V_{prev} = V_{red}
+[V_{prev}] = [V_{red}]
 \end{equation}
 
 The current injections appearing by the removal of the slack nodes are:
 \begin{equation}
-I_{slack} = Y_{slack} \times V_{slack}
+[I_{slack}] = [Y_{slack}] \times [V_{slack}]
 \end{equation}
 
 The voltages that arise from the slack current injections are:
 \begin{equation}
-C_k = Y_{red} \times I_{slack}
+[C_k] = [Y_{red}] \times [I_{slack}]
 \end{equation}
 
 The total injected currents including the power injections are:
 \begin{equation}
-I_k = \frac{S_{red}}{V_{prev}} + I_{red}
+[I_k] = \frac{[S_{red}]}{[V_{prev}]} + [I_{red}]
 \label{eq:zm_ik}
 \end{equation}
 
 The next step is to compute the nodes voltage due to all the power and current injections:
 
 \begin{equation}
-V_k = Y_{red}^{-1} \times I_k - C_k
+[V_k] = [Y]_{red}^{-1} \times [I_k] - [C_k]
 \end{equation}
+
+\marginnote{Do not invert $[Y_{red}]$. Instead factorize it once, and use the factorization.}
 
 Now the error is the infinite norm of the voltage difference.
 
 \begin{equation}
-error = ||V_{prev} - V_k ||_{\infty} = max(abs(V_{prev} - V_k ))
+error = ||[V_{prev}] - [V_k] ||_{\infty} = max(abs([V_{prev}] - [V_k] ))
 \end{equation}
 
 The infinite norm of the voltage difference between the previous iteration and the current iteration is a poor convergence criteria, but it is usually the only working criteria in practice for this method.
@@ -2299,7 +2329,7 @@ The infinite norm of the voltage difference between the previous iteration and t
 Now we need to correct the voltage for the PV nodes so that they control the voltage module.
 
 \begin{equation}
-V_{k}[pv_{red}] = V_k \cdot \frac{|V^{esp}[pv_{red}]|}{|V_{k}[pv_{red}]|}
+[V_k]_{ (pv_{red})} = [V_k] \cdot \frac{|[V^{esp}]_{(pv_{red})}|}{|[V_k]_{(pv_{red})}|}
 \label{eq:zm_pv_correction}
 \end{equation}
 
@@ -2308,7 +2338,7 @@ V_{k}[pv_{red}] = V_k \cdot \frac{|V^{esp}[pv_{red}]|}{|V_{k}[pv_{red}]|}
 Next, we copy the voltage solution to the previous voltage solution vector:
 
 \begin{equation}
-V_{prev} = V_k
+[V_{prev}] = [V_k]
 \label{eq:zm_copy_sol}
 \end{equation}
 
@@ -2317,7 +2347,7 @@ Repeat equations \ref{eq:zm_ik} to \ref{eq:zm_copy_sol} until the error is less 
 Finally, since we have found the voltages for the PQ and PV nodes only, we should return a voltage vector with the voltages for all the nodes. Because of this, we copy the voltage solution for the reduced system into a copy of the original voltage vector.
 
 \begin{equation}
-V[pqpv] = V_k
+[V]_{(pqpv)} = [V_k]
 \end{equation}
 
 
