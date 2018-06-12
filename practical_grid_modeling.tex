@@ -1440,15 +1440,15 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|}
+	\begin{tabular}{|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name}  & {\color{white}active} & {\color{white}is slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
-		Bus 0 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 1 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 2 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 3 & True   & True      & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 4 & True   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		{\color{white}name}  & {\color{white}is slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
+		Bus 0   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 1   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 2   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 3   & True      & 230.0 & 0.9  & 1.1  \\ \hline
+		Bus 4   & False     & 230.0 & 0.9  & 1.1  \\ \hline
 	\end{tabular}
 \caption{Bus data}
 \label{tbl:IEEE5:bus_data}
@@ -1457,16 +1457,16 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+	\begin{tabular}{|l|l|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name}       & {\color{white}bus from} & {\color{white}bus to} & {\color{white}active}    & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
-		Branch 0-1 & Bus 0     & Bus 1   & True & 400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
-		Branch 0-3 & Bus 0     & Bus 3   & True & 224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
-		Branch 0-4 & Bus 0     & Bus 4   & True & 273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
-		Branch 1-2 & Bus 1     & Bus 2   & True & 128.3 & 0.00108 & 0.0108 & 0 & 0.01852 \\ \hline
-		Branch 2-3 & Bus 2     & Bus 3   & True & 34.6  & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
-		Branch 3-4 & Bus 3     & Bus 4   & True & 240   & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+		{\color{white}name}       & {\color{white}bus from} & {\color{white}bus to}  & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
+		Branch 0-1 & Bus 0     & Bus 1   &  400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
+		Branch 0-3 & Bus 0     & Bus 3   &  224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
+		Branch 0-4 & Bus 0     & Bus 4   &  273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
+		Branch 1-2 & Bus 1     & Bus 2   &  128.3 & 0.00108 & 0.0108 & 0 & 0.01852 \\ \hline
+		Branch 2-3 & Bus 2     & Bus 3   &  34.6  & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+		Branch 3-4 & Bus 3     & Bus 4   &  240   & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
 	\end{tabular}
 \caption{Branch data}
 \label{tbl:IEEE5:branch_data}
@@ -1475,13 +1475,13 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|}
+	\begin{tabular}{|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name} & {\color{white}bus}   & {\color{white}active}    & {\color{white}Z}  & {\color{white}I}  & {\color{white}S}         \\ \hline
-		Load 1 & Bus 1 & True & 0j & 0j & 300 + 98.61j   \\ \hline
-		Load 2 & Bus 2 & True & 0j & 0j & 300 + 98.61j   \\ \hline
-		Load 3 & Bus 3 & True & 0j & 0j & 99.99 + 99.99j \\ \hline
+		{\color{white}name} & {\color{white}bus}    & {\color{white}Z}  & {\color{white}I}  & {\color{white}S}         \\ \hline
+		Load 1 & Bus 1 &  0j & 0j & 300 + 98.61j   \\ \hline
+		Load 2 & Bus 2 &  0j & 0j & 300 + 98.61j   \\ \hline
+		Load 3 & Bus 3 &  0j & 0j & 99.99 + 99.99j \\ \hline
 	\end{tabular}
 \caption{Load data}
 \label{tbl:IEEE5:load_data}
@@ -1490,19 +1490,21 @@ After having introduced the basics, this chapter defines a simple grid for which
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|l|l|}
+	\begin{tabular}{|l|l|l|l|l|l|l|}
 		\hline
 		\rowcolor{maincolor}
-		{\color{white}name}       & {\color{white}bus}   & {\color{white}active}    & {\color{white}P}      & {\color{white}Vset} & {\color{white}Snom} & {\color{white}Qmin} & {\color{white}Qmax}  \\ \hline
-		Gen 0a & Bus 0 & True & 40     & 1    & 9999 & -30  & 30    \\ \hline
-		Gen 0b & Bus 0 & True & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
-		Gen 2 & Bus 2 & True & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
-		Gen 3 & Bus 3 & True & 0      & 1    & 9999 & 0    & 150   \\ \hline
-		Gen 4 & Bus 4 & True & 466.51 & 1    & 9999 & -450 & 450   \\ \hline
+		{\color{white}name}       & {\color{white}bus}      & {\color{white}P}      & {\color{white}Vset} & {\color{white}Snom} & {\color{white}Qmin} & {\color{white}Qmax}  \\ \hline
+		Gen 0a & Bus 0  & 40     & 1    & 9999 & -30  & 30    \\ \hline
+		Gen 0b & Bus 0  & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
+		Gen 2 & Bus 2  & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
+		Gen 3 & Bus 3  & 0      & 1    & 9999 & 0    & 150   \\ \hline
+		Gen 4 & Bus 4  & 466.51 & 1    & 9999 & -450 & 450   \\ \hline
 	\end{tabular}
 \caption{Generator data}
 \label{tbl:IEEE5:gen_data}
 \end{table}
+
+
 
 This data will be used in the next chapters to compute examples of the magnitudes.
 
@@ -1520,40 +1522,68 @@ This data will be used in the next chapters to compute examples of the magnitude
 \end{figure}
 
 The calculated node results are:
+%
+%\begin{table}[h!]
+%	\centering	
+%%	\color{maincolor}
+%	\begin{tabular}{|l|l|l|l|l|}
+%		\hline
+%		\rowcolor{maincolor}
+%		{\color{white}Bus}   & {\color{white}Power (p.u.)}                 & {\color{white}Voltage (p.u.)} & {\color{white}Current (p.u.)} & {\color{white}Bus types} \\ \hline
+%		Bus 0 & 2.1+0j                     & 1+0j         & 0j             & 2         \\ \hline
+%		Bus 1 & -3-0.9861j                 & 1+0j         & 0j             & 1         \\ \hline
+%		Bus 2 & 0.2349-0.9861j & 1+0j         & 0j             & 2         \\ \hline
+%		Bus 3 & -0.9999-0.9999j            & 1+0j         & 0j             & 3         \\ \hline
+%		Bus 4 & 4.6651+0j                  & 1+0j         & 0j             & 2         \\ \hline
+%	\end{tabular}
+%\caption{Node results}
+%\label{my-label}
+%\end{table}
 
-\begin{table}[h!]
-	\centering	
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}Bus}   & {\color{white}Power (p.u.)}                 & {\color{white}Voltage (p.u.)} & {\color{white}Current (p.u.)} & {\color{white}Bus types} \\ \hline
-		Bus 0 & 2.1+0j                     & 1+0j         & 0j             & 2         \\ \hline
-		Bus 1 & -3-0.9861j                 & 1+0j         & 0j             & 1         \\ \hline
-		Bus 2 & 0.2349-0.9861j & 1+0j         & 0j             & 2         \\ \hline
-		Bus 3 & -0.9999-0.9999j            & 1+0j         & 0j             & 3         \\ \hline
-		Bus 4 & 4.6651+0j                  & 1+0j         & 0j             & 2         \\ \hline
-	\end{tabular}
-\caption{Node results}
-\label{my-label}
-\end{table}
+$$
+S_{bus,1} = \left[ \begin{array}{ccccc}
+2.1+0j,  & -3-0.9861j,  & 0.2349-0.9861j, &  -0.9999-0.9999j,  & 4.6651+0j \\
+\end{array} \right] p.u.
+$$
 
-\begin{table}[h!]
-	\centering
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}} & {\color{white}Bus 0} & {\color{white}Bus 1}  & {\color{white}Bus 2}  & {\color{white}Bus 3} & {\color{white}Bus 4}  \\ \hline
-		Bus 0 & 22.25-222.48j & -3.525+35.23j & 0j                                       & -3.26+32.57j & -15.47+154.70j \\ \hline
-		Bus 1 & -3.52+35.23j & 12.69-126.9j & -9.17+91.68j  & 0j                                       & 0j                                       \\ \hline
-		Bus 2 & 0j                                       & -9.17+91.68j  & 12.50-125.0j   & -3.33+33.34j & 0j                                       \\ \hline
-		Bus 3 & -3.26+32.57j & 0j                                       & -3.33+33.34j & 9.92-99.23j   & -3.33+33.34j \\ \hline
-		Bus 4 & -15.47+154.70j) & 0j                                       & 0j                                       & -3.34+33.34j & 18.80-188.02j \\ \hline
-	\end{tabular}
-\caption{Admittance matrix}
-\label{ex:Y}
-\end{table}
+$$
+V_{bus,1} = \left[ \begin{array}{ccccc}
+1+0j, & 1+0j,  & 1+0j, & 1+0j,  & 1+0j \\
+\end{array} \right] p.u.
+$$
+
+$$
+Types = \left[ \begin{array}{ccccc}
+PV, & PQ,  & PV, & Slack,  & PV \\
+\end{array} \right] p.u.
+$$
+
+%\begin{table}[h!]
+%	\centering
+%%	\color{maincolor}
+%	\begin{tabular}{|l|l|l|l|l|l|}
+%		\hline
+%		\rowcolor{maincolor}
+%		{\color{white}} & {\color{white}Bus 0} & {\color{white}Bus 1}  & {\color{white}Bus 2}  & {\color{white}Bus 3} & {\color{white}Bus 4}  \\ \hline
+%		Bus 0 & 22.25-222.48j & -3.525+35.23j & 0j                                       & -3.26+32.57j & -15.47+154.70j \\ \hline
+%		Bus 1 & -3.52+35.23j & 12.69-126.9j & -9.17+91.68j  & 0j                                       & 0j                                       \\ \hline
+%		Bus 2 & 0j                                       & -9.17+91.68j  & 12.50-125.0j   & -3.33+33.34j & 0j                                       \\ \hline
+%		Bus 3 & -3.26+32.57j & 0j                                       & -3.33+33.34j & 9.92-99.23j   & -3.33+33.34j \\ \hline
+%		Bus 4 & -15.47+154.70j) & 0j                                       & 0j                                       & -3.34+33.34j & 18.80-188.02j \\ \hline
+%	\end{tabular}
+%\caption{Admittance matrix}
+%\label{ex:Y}
+%\end{table}
+
+$$
+Y_{bus,1} = \left[ \begin{array}{ccccc}
+22.25-222.48j & -3.525+35.23j & 0j            & -3.26+32.57j & -15.47+154.70j\\
+-3.52+35.23j  & 12.69-126.9j  & -9.17+91.68j  & 0j           & 0j \\ 
+0j            & -9.17+91.68j  & 12.50-125.0j  & -3.33+33.34j & 0j \\
+-3.26+32.57j  & 0j            & -3.33+33.34j  & 9.92-99.23j  & -3.33+33.34j \\
+-15.47+154.70j& 0j            & 0j            & -3.34+33.34j & 18.80-188.02j
+\end{array} \right] p.u.
+$$
 
 %-------------------------------------------------------------------------------
 %	CHAPTER The bus and it's connected elements
@@ -1628,7 +1658,7 @@ The modelling of a static device (i.e. load) is done as a composition of fixed i
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{3cm}|p{4cm}|}
+	\begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|}
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
@@ -1657,6 +1687,15 @@ The impedance $Z$ is converted to admittance with $Y=1/Z$.
 
 When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
 
+\subsection{Shunt connected impedances/admittances}
+
+A three phase admittance device such as a ZIP load or a capacitor bank has to be integrated into the nodal equation (see figure \ref{fig:CircuitEquation})
+
+\begin{marginfigure}
+	\includegraphics[width=0.99\linewidth]{img/DeltaShuntDevice.eps}
+	\caption{Delta/Wye shunt model.}
+	\label{delta_shunt_model}
+\end{marginfigure}
 
 
 \section{Voltage controlled device}
@@ -1673,7 +1712,7 @@ The main parameters of a voltage controlled generator are:\\
 
 \begin{table}[h!]
 %	\color{maincolor}
-	\begin{tabular}{|p{1cm}|p{5cm}|p{2cm}|}
+	\begin{tabular}{|p{2cm}|p{5cm}|p{2cm}|}
 		\hline 
 		\rowcolor{maincolor}
 		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
@@ -3930,7 +3969,7 @@ R_{i, i} = \sigma_{i, i}^2
 %-------------------------------------------------------------------------------
 %	CHAPTER Short-circuit
 %-------------------------------------------------------------------------------
-\chapter{Short-circuit}
+%\chapter{Short-circuit}
 
 
 
