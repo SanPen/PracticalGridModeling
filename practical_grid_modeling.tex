@@ -355,50 +355,52 @@ So I really hope you enjoy this book and that find it useful for your purpose.
 
 \begin{itemize}
 	
-	\item $A \times B \rightarrow$ Matrix-Matrix dot product.
+	\item $[A] \times [B] \rightarrow$ Matrix-Matrix dot product.
 	
-	\item $A \times b \rightarrow$ Matrix-Vector dot product.
+	\item $[A] \times [b] \rightarrow$ Matrix-Vector dot product.
 	
-	\item $a \times b^\top \rightarrow$ vector-vector dot product. The result is a number.
+	\item $[a] \times [b]^\top \rightarrow$ Vector-Vector dot product. The result is a number.
 	
-	\item $A \cdot B \rightarrow$ Matrix-Matrix element wise multiplication. A and B must have the same dimensions. The result is a matrix.
+	\item $[A] \cdot [B] \rightarrow$ Matrix-Matrix element wise multiplication. A and B must have the same dimensions. The result is a matrix.
 	
-	\item $a \cdot b \rightarrow$ vector-vector element wise multiplication. The result is a vector.
+	\item $[a] \cdot [b] \rightarrow$ vector-vector element wise multiplication. The result is a Vector.
 	
-	\item $A^{*}\rightarrow$ Element-wise conjugate of the numbers composing $A$.
+	\item $[A]^{*}\rightarrow$ Element-wise conjugate of the numbers composing $[A]$.
 	
-	\item $A^{-1}\rightarrow$ Matrix inverse.
+	\item $[A]^{-1}\rightarrow$ Matrix inverse.
 	
-	\item $A^{T}\rightarrow$ Transposed matrix or vector.
+	\item $[A]^{\top}\rightarrow$ Transposed Matrix or Vector.
 	
-	\item $A^{-1} \times b \rightarrow$ Solve the linear system where $A$ is the coefficients matrix and $b$ is the free terms vector. Never perform the inverse of $A$ and then multiply it by $b$. Instead use a linear system solver.
+	\item $[A]^{-1} \times [b] \rightarrow$ Solve the linear system where $[A]$ is the coefficients matrix and $[b]$ is the free terms vector. Never perform the inverse of $[A]$ and then multiply it by $[b]$. Instead use a linear system solver.
 	
-	\item $A[rows, :] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector $rows$.
-	
-	
-	\item $A[:, cols] \rightarrow$ From the matrix $A$, pick the columns which indices are contained in the vector  $cols$.
+	\item $[A]_{(rows, :)} \rightarrow$ From the matrix $[A]$, pick the rows which indices are contained in the vector $rows$.
 	
 	
-	\item $A[rows, cols] \rightarrow$ From the matrix $A$, pick the rows which indices are contained in the vector  $rows$ and the columns which indices are contained in the vector  $cols$.
+	\item $[A]_{(:, cols)} \rightarrow$ From the matrix $[A]$, pick the columns which indices are contained in the vector  $cols$.
 	
 	
-	\item $b[rows] \rightarrow$ From the vector $b$, pick the elements contained in the vector or list $rows$.
+	\item $[A]_{(rows, cols)} \rightarrow$ From the matrix $[A]$, pick the rows which indices are contained in the vector  $rows$ and the columns which indices are contained in the vector  $cols$.
 	
-	\item $diag(b) \rightarrow$ Convert the vector $b$ into a diagonal matrix. 
 	
-	\item $diag(A) \rightarrow$ Extract the diagonal of the matrix $A$ as a vector. 
+	\item $[b]_{(rows)} \rightarrow$ From the vector $[b]$, pick the elements contained in the vector or list $rows$.
 	
-	\item $Re(A) \rightarrow$ Extract the real part of $A$.
+	\item $diag([b]) \rightarrow$ Convert the vector $[b]$ into a diagonal matrix. 
 	
-	\item $Im(A) \rightarrow$ Extract the imaginary part of $A$.
+	\item $diag([A]) \rightarrow$ Extract the diagonal of the matrix $[A]$ as a vector. 
 	
-	\item $max(b) \rightarrow$ Maximum value of the vector $b$.
+	\item $Re\{ [A] \} \rightarrow$ Extract the real part of $[A]$.
+	
+	\item $Im \{ [A] \} \rightarrow$ Extract the imaginary part of $[A]$.
+	
+	\item $max([b]) \rightarrow$ Maximum value of the vector $[b]$.
 	
 	\item $max(c, d) \rightarrow$ Pick the greater value between $c$ and $d$.
 	
-	\item $[1]$: Matrix of ones.
+	\item $[1]  \rightarrow$ Matrix of ones.
 
-	\item $[0]$: Matrix of zeros.
+	\item $[0]  \rightarrow$ Matrix of zeros.
+	
+	\item $[Idn]  \rightarrow$ Identity matrix: Matrix of zeros with ones in the diagonal.
 \end{itemize}
 
 \end{multicols}
@@ -490,7 +492,7 @@ Admittance & $S$ (Siemens) &  $S$ (Siemens) or per-unit\\
 \end{marginfigure}
 
 
-The figure \ref{fig:vdelay} shows two voltage waves. The one represented with a dotted line is delayed an angle $\delta$ with respect to the reference voltage wave represented by the plain black line. Since both waves are periodical, both can be represented as "phasors" or vectors indicating the magnitude's value and angle in the complex rectangular plane as depicted in the figure \ref{fig:vphasors}. Figures \ref{fig:vdelay} and \ref{fig:vphasors} are equivalent representations.
+The figure \ref{fig:vdelay} shows two voltage waves. The one represented with a dotted line is delayed an angle $\theta$ with respect to the reference voltage wave represented by the plain black line. Since both waves are periodical, both can be represented as "phasors" or vectors indicating the magnitude's value and angle in the complex rectangular plane as depicted in the figure \ref{fig:vphasors}. Figures \ref{fig:vdelay} and \ref{fig:vphasors} are equivalent representations.
 
 
 \begin{table}[h]\index{typefaces!sizes}
@@ -504,7 +506,7 @@ $S$ (Power) & $P$ (Active power) & $Q$ (Reactive power) & $S=P +jQ$\\
 $V$ (Voltage) & $V_r$ (Real voltage) & $V_i$ (Imaginary voltage) & $V=V_r +jV_i$\\
 Expressed as  &  &  & \\
  & $V_m$ (Voltage module) &  & \\
- & $\delta$ (Voltage angle) &  & $V = V_m \cdot e^\delta$\\
+ & $\theta$ (Voltage angle) &  & $V = V_m \cdot e^\theta$\\
   &  &  & \\
 $I$ (Current) & $I_r$ (Real current) & $I_i$ (Imaginary current) & $I=I_r +jI_i$\\
 $Z$ (Impedance) & $R$ (Resistance) & $X$ (Inductance) & $Z=R +jX$\\
@@ -779,18 +781,19 @@ We observe that the calculation outcome is a fair approximation of the original 
 %-------------------------------------------------------------------------------
 %	CHAPTER The branch element
 %-------------------------------------------------------------------------------
+\chapter{Topology analysis and consolidation}
 
-\chapter{The branch element} 
+\section{The branch element} 
 \label{ch:branch}
 
 To the effect of most calculations run in operation of a electrical system, the lines, transformers, and any other element that connects two nodes are represented by the so-called $\Pi$ model.
 
 
-\section{$\Pi$ Model}
+\subsection{$\Pi$ Model}
 
-\marginnote{In the case of lines, the series admittance $\textbf{Y}_{serie}$ is computed as the inverse of $\textbf{Z}_{ABC}$. From the line's calculation it is obtained the series impedance matrix $\textbf{Z}_{ABC}$ and the shunt admittance matrix $\textbf{Y}_{sh}$. }
+\marginnote{In the case of lines, the series admittance ${Y}_{serie}$ is computed as the inverse of ${Z}_{ABC}$. From the line's calculation it is obtained the series impedance matrix ${Z}_{ABC}$ and the shunt admittance matrix ${Y}_{sh}$. }
 
-The pi model is composed by a series admittance  $\textbf{Y}_{serie}$ and a shunt admittance $\textbf{Y}_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accommodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modelled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
+The pi model is composed by a series admittance  ${Y}_{serie}$ and a shunt admittance ${Y}_{sh}$ divided in two. The shunt admittances are connected at the sending and receiving terminals (primary and secondary). To accommodate the possibility of regulating the voltage at the sending and/or receiving terminals, two per-unit transformers are included as well. The per unit transformers are modelled with the \textit{tap ratio} parameters $\alpha$ and $\beta$.
 
 
 \begin{center}
@@ -804,14 +807,14 @@ The pi model is composed by a series admittance  $\textbf{Y}_{serie}$ and a shun
 The generalized admittance matrix that corresponds to the $\Pi$ model is:
 \begin{equation}
 \left[\begin{array}{c}
-\textbf{I}_p \\
-\textbf{I}_s
+{I}_p \\
+{I}_s
 \end{array}\right] = \left[\begin{array}{cc}
-\textbf{Y}_{pp} & \textbf{Y}_{ps} \\
-\textbf{Y}_{sp} & \textbf{Y}_{ss}
+{Y}_{pp} & {Y}_{ps} \\
+{Y}_{sp} & {Y}_{ss}
 \end{array}\right] \times \left[\begin{array}{c}
-\textbf{V}_p \\
-\textbf{V}_s
+{V}_p \\
+{V}_s
 \end{array}\right]
 \label{pi_main_formula}
 \end{equation}
@@ -823,11 +826,11 @@ Where:
 \begin{tabularx}{\textwidth}{XXXX}
 \toprule
 
-$\textbf{Y}_{pp}$ &  $\textbf{Y}_{ps}$ & $\textbf{Y}_{sp}$ & $\textbf{Y}_{ss}$\\
+${Y}_{pp}$ &  ${Y}_{ps}$ & ${Y}_{sp}$ & ${Y}_{ss}$\\
 
 \midrule
 
-$\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{-\textbf{Y}_{series}}{\alpha\beta}$ & $\frac{\textbf{Y}_{series} + \frac{\textbf{Y}_{sh}}{2}}{\beta^2}$\\
+$\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\beta^2}$\\
 
 \bottomrule
 \end{tabularx}
@@ -904,7 +907,7 @@ $$Y_{tt} = Y_s + Y_{sh}$$
 
 
 
-\section{Line}
+\subsection{Line}
 
 The line element, utilizes the branch model as it has been formulated, only that the use of the tap ratio relations $\alpha$ and $\beta$ is not necessary.
 
@@ -1013,7 +1016,7 @@ $$
 
 
 \newpage
-\section{Transformer}
+\subsection{Transformer}
 
 The three phase transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
 
@@ -1304,7 +1307,7 @@ $$
 
 
 
-\section{Voltage regulator}
+\subsection{Voltage regulator}
 
 Since all the electrical models are in per-unit values, the voltage regulator is modelled in the exact same way as a transformer.
 
@@ -1431,164 +1434,11 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 %	\end{split}
 %\end{equation}
 
-%-------------------------------------------------------------------------------
-%	CHAPTER Example grid
-%-------------------------------------------------------------------------------
-\chapter{Example grid}
-
-After having introduced the basics, this chapter defines a simple grid for which all the calculations are illustrated. The grid used will be the IEEE 5 Bus standard grid, which is defined with the following data:
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}name}  & {\color{white}is slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
-		Bus 0   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 1   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 2   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 3   & True      & 230.0 & 0.9  & 1.1  \\ \hline
-		Bus 4   & False     & 230.0 & 0.9  & 1.1  \\ \hline
-	\end{tabular}
-\caption{Bus data}
-\label{tbl:IEEE5:bus_data}
-\end{table}
-
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}name}       & {\color{white}bus from} & {\color{white}bus to}  & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
-		Branch 0-1 & Bus 0     & Bus 1   &  400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
-		Branch 0-3 & Bus 0     & Bus 3   &  224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
-		Branch 0-4 & Bus 0     & Bus 4   &  273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
-		Branch 1-2 & Bus 1     & Bus 2   &  128.3 & 0.00108 & 0.0108 & 0 & 0.01852 \\ \hline
-		Branch 2-3 & Bus 2     & Bus 3   &  34.6  & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
-		Branch 3-4 & Bus 3     & Bus 4   &  240   & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
-	\end{tabular}
-\caption{Branch data}
-\label{tbl:IEEE5:branch_data}
-\end{table}
-
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}name} & {\color{white}bus}    & {\color{white}Z}  & {\color{white}I}  & {\color{white}S}         \\ \hline
-		Load 1 & Bus 1 &  0j & 0j & 300 + 98.61j   \\ \hline
-		Load 2 & Bus 2 &  0j & 0j & 300 + 98.61j   \\ \hline
-		Load 3 & Bus 3 &  0j & 0j & 99.99 + 99.99j \\ \hline
-	\end{tabular}
-\caption{Load data}
-\label{tbl:IEEE5:load_data}
-\end{table}
-
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|l|l|l|l|l|l|l|}
-		\hline
-		\rowcolor{maincolor}
-		{\color{white}name}       & {\color{white}bus}      & {\color{white}P}      & {\color{white}Vset} & {\color{white}Snom} & {\color{white}Qmin} & {\color{white}Qmax}  \\ \hline
-		Gen 0a & Bus 0  & 40     & 1    & 9999 & -30  & 30    \\ \hline
-		Gen 0b & Bus 0  & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
-		Gen 2 & Bus 2  & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
-		Gen 3 & Bus 3  & 0      & 1    & 9999 & 0    & 150   \\ \hline
-		Gen 4 & Bus 4  & 466.51 & 1    & 9999 & -450 & 450   \\ \hline
-	\end{tabular}
-\caption{Generator data}
-\label{tbl:IEEE5:gen_data}
-\end{table}
-
-
-
-This data will be used in the next chapters to compute examples of the magnitudes.
-
-
-
-
-\newpage
-\section{Grid compilation results}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.7\linewidth]{img/IEEE5.png}
-	\caption{IEEE 5 bus standard grid. Representation generated with GridCal.}
-	\label{fig:IEEE5}
-\end{figure}
-
-The calculated node results are:
-%
-%\begin{table}[h!]
-%	\centering	
-%%	\color{maincolor}
-%	\begin{tabular}{|l|l|l|l|l|}
-%		\hline
-%		\rowcolor{maincolor}
-%		{\color{white}Bus}   & {\color{white}Power (p.u.)}                 & {\color{white}Voltage (p.u.)} & {\color{white}Current (p.u.)} & {\color{white}Bus types} \\ \hline
-%		Bus 0 & 2.1+0j                     & 1+0j         & 0j             & 2         \\ \hline
-%		Bus 1 & -3-0.9861j                 & 1+0j         & 0j             & 1         \\ \hline
-%		Bus 2 & 0.2349-0.9861j & 1+0j         & 0j             & 2         \\ \hline
-%		Bus 3 & -0.9999-0.9999j            & 1+0j         & 0j             & 3         \\ \hline
-%		Bus 4 & 4.6651+0j                  & 1+0j         & 0j             & 2         \\ \hline
-%	\end{tabular}
-%\caption{Node results}
-%\label{my-label}
-%\end{table}
-
-$$
-S_{bus,1} = \left[ \begin{array}{ccccc}
-2.1+0j,  & -3-0.9861j,  & 0.2349-0.9861j, &  -0.9999-0.9999j,  & 4.6651+0j \\
-\end{array} \right] p.u.
-$$
-
-$$
-V_{bus,1} = \left[ \begin{array}{ccccc}
-1+0j, & 1+0j,  & 1+0j, & 1+0j,  & 1+0j \\
-\end{array} \right] p.u.
-$$
-
-$$
-Types = \left[ \begin{array}{ccccc}
-PV, & PQ,  & PV, & Slack,  & PV \\
-\end{array} \right] p.u.
-$$
-
-%\begin{table}[h!]
-%	\centering
-%%	\color{maincolor}
-%	\begin{tabular}{|l|l|l|l|l|l|}
-%		\hline
-%		\rowcolor{maincolor}
-%		{\color{white}} & {\color{white}Bus 0} & {\color{white}Bus 1}  & {\color{white}Bus 2}  & {\color{white}Bus 3} & {\color{white}Bus 4}  \\ \hline
-%		Bus 0 & 22.25-222.48j & -3.525+35.23j & 0j                                       & -3.26+32.57j & -15.47+154.70j \\ \hline
-%		Bus 1 & -3.52+35.23j & 12.69-126.9j & -9.17+91.68j  & 0j                                       & 0j                                       \\ \hline
-%		Bus 2 & 0j                                       & -9.17+91.68j  & 12.50-125.0j   & -3.33+33.34j & 0j                                       \\ \hline
-%		Bus 3 & -3.26+32.57j & 0j                                       & -3.33+33.34j & 9.92-99.23j   & -3.33+33.34j \\ \hline
-%		Bus 4 & -15.47+154.70j) & 0j                                       & 0j                                       & -3.34+33.34j & 18.80-188.02j \\ \hline
-%	\end{tabular}
-%\caption{Admittance matrix}
-%\label{ex:Y}
-%\end{table}
-
-$$
-Y_{bus,1} = \left[ \begin{array}{ccccc}
-22.25-222.48j & -3.525+35.23j & 0j            & -3.26+32.57j & -15.47+154.70j\\
--3.52+35.23j  & 12.69-126.9j  & -9.17+91.68j  & 0j           & 0j \\ 
-0j            & -9.17+91.68j  & 12.50-125.0j  & -3.33+33.34j & 0j \\
--3.26+32.57j  & 0j            & -3.33+33.34j  & 9.92-99.23j  & -3.33+33.34j \\
--15.47+154.70j& 0j            & 0j            & -3.34+33.34j & 18.80-188.02j
-\end{array} \right] p.u.
-$$
 
 %-------------------------------------------------------------------------------
 %	CHAPTER The bus and it's connected elements
 %-------------------------------------------------------------------------------
-\chapter{The bus and it's connected elements}
+\section{The bus and it's connected elements}
 
 The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), and a power ($S$), an admittance ($Y$) and a current ($I$) potentially connected.
 
@@ -1602,49 +1452,169 @@ The bus model is based upon the traditionally called \textit{ZIP} bus model to i
 The admittance, power and current values at the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
 
 
-\section{The substation}
-
+\subsection{The substation: Topology processing}
+\label{TopologyProcessing}
 In reality a substation is a collection of real bus bars (metal bars usually made of copper or aluminium) switchgear and shunt devices. The use of a substation is to change the connectivity topology of the grid.
 
-For calculation, the substation connectivity is solved first, originating one or more calculation buses. Therefore, the substations are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation.
+In Energy Management Systems Software (EMS) the topology is specified using the following devices:
 
 \begin{figure}
 	\includegraphics[width=0.99\linewidth]{img/Substation.eps}
-	\caption{Substation example. The substation becomes a calculation bus.}
+	\caption{Substation example with all the connectivity representation in the CIM / EMS representation. On the right side there is the reduction of the topology to a calculation model.}
 	\label{substation_model}
 \end{figure}
 
-In the example depicted in the figure \ref{substation_model} it is shown how a node system is reduced from three real buses to two calculation buses by eliminating the non connected elements and associating the connected ones. The buses1, 2 are connected because the switches between them are closed, hence the three buses become one. the bus 3 is isolated from the others, but still connected to a line. The lines 1b, 2 and 3 are also connected through closed switches, hence those remain connected to their respective buses. However the line 1a is connected through an open switch, therefore is left out for calculation purposes.
-
-In order to calculate this reduction, we need to introduce extra nodes in the substation model. These are topological nodes that will help us to perform the connectivity calculation. Then we represent the substation as a node-branch graph:
-
-\begin{center}
-	\begin{figure}
-		\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
-		\caption{Substation example graph.}
-		\label{substation_graph}
-	\end{figure}
-\end{center}
-
-
-Observe the islands formed:
-
 \begin{itemize}
-	\item Island 1: \textbf{Bus1}, \textbf{Bus2}, nL1b, nL2, nS12, nS13, nS21, nS31, nSL1b, nSL2, nground.
-	\item Island 2: \textbf{Bus3}, nL3, nSL3.
-	\item Island 3: nL1a, nSL1a.
+	\item Connectivity Node (CN): This is a physical joint of devices. It is usually assimilated to a bus bar.
+	\item Terminal (T): This element represents the terminal of a device. It can be regarded as a joining of two devices.
+	\item Switch (SW): A device to interrupt the flow of electric current. There may be many more variants of this device.
+	\item Branch (BR): Any element used to transport power.
+	\item Shunt (SH): Any device used to inject or subtract power (loads, generators, etc.)
 \end{itemize}
 
-Removing the topological nodes, only two islands remain:
+For calculation, the substation connectivity is solved first, originating one or more calculation buses. Therefore, the substations are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation. We shall start by forming the connectivity matrices of each type of device with the terminal devices. From those connectivity primitives, we are able to form any connectivity matrix in the circuit. The connectivity matrices of buses and branches is of special interest for calculation.
 
-\begin{itemize}
-	\item Island 1: \textbf{Bus1, Bus2}.  -> these two form a joint calculation node.
-	\item Island 2: \textbf{Bus3}.
-\end{itemize}
 
-Now we only need to check which non topological branches are in every island and associate them to the formed calculation node.
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
+		\toprule
+		{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
+		\midrule
+		CN1 &   0 &   1 &   0 &   1 &   0 &   0 &   1 &   0 &   0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+		CN2 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 \\
+		CN3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    1 &    0 &    0 \\
+		\bottomrule
+		\end{tabular}
+	}
+\caption{Connectivity matrix of the connectivity nodes (Buses) with the terminals: $CN\_T$}
+\end{table}
 
-\section{Static device}
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
+			\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
+			\midrule
+			BR1 &   1 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			BR2 &   0 &   0 &   1 &   0 &   0 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 \\
+			BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 \\
+			\bottomrule
+		\end{tabular}
+	}
+\caption{Connectivity matrix of the branch objects with the terminals: $BR\_T$}
+\end{table}
+
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
+			\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
+			\midrule
+			SW1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW2 &   0 &   0 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW3 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+			SW7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 \\
+			SW8 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 \\
+			\bottomrule
+		\end{tabular}
+	}
+\caption{Connectivity matrix of the switch objects with the terminals: $SW\_T$}
+\end{table}
+
+\begin{table}[ht]
+\begin{tabular}{lr}
+	\toprule
+	{} &  States \\
+	\midrule
+	SW1 &       0 \\
+	SW2 &       1 \\
+	SW3 &       1 \\
+	SW4 &       1 \\
+	SW5 &       1 \\
+	SW6 &       0 \\
+	SW7 &       1 \\
+	SW8 &       1 \\
+	\bottomrule
+\end{tabular}
+\caption{Switch states (0: open, 1: closed): $SW\_states$}
+\end{table}
+
+Modify the switches connectivity matrix with the switch states vector:
+\begin{equation}
+SW\_T\_state = SW\_T \cdot SW\_states
+\end{equation}
+
+Compute the connectivity matrix of the branches and the switches:
+\begin{equation}
+BR\_SW = BR\_T \times SW\_T\_state^\top
+\end{equation}
+
+Compute the connectivity matrix of the connectivity nodes (buses) and the switches:
+\begin{equation}
+CN\_SW = CN_T \times SW\_T\_state^\top
+\end{equation}
+
+Compute the connectivity matrix of the connectivity nodes (buses) and the Branches:
+\begin{equation}
+CN\_BR = CN\_SW \times BR\_SW^\top
+\end{equation}
+This connectivity matrix is used for calculation since in the numerical methods we only care about buses and branches.
+
+
+\begin{table}[ht]
+\begin{tabular}{lrrrr}
+	\toprule
+	{} &  BR1 &  BR2 &  BR3 &  BR4 \\
+	\midrule
+	CN1 &    0 &    1 &    0 &    0 \\
+	CN2 &    0 &    0 &    1 &    0 \\
+	CN3 &    0 &    0 &    0 &    1 \\
+	\bottomrule
+\end{tabular}
+\caption{Calculated connectivity matrix of the Connectivity nodes (Buses) and the branches: $CN\_BR$}
+\end{table}
+
+%In the example depicted in the figure \ref{substation_model} it is shown how a node system is reduced from three real buses to two calculation buses by eliminating the non connected elements and associating the connected ones. The buses1, 2 are connected because the switches between them are closed, hence the three buses become one. the bus 3 is isolated from the others, but still connected to a line. The lines 1b, 2 and 3 are also connected through closed switches, hence those remain connected to their respective buses. However the line 1a is connected through an open switch, therefore is left out for calculation purposes.
+%
+%In order to calculate this reduction, we need to introduce extra nodes in the substation model. These are topological nodes that will help us to perform the connectivity calculation. Then we represent the substation as a node-branch graph:
+
+%\begin{center}
+%	\begin{figure}
+%		\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
+%		\caption{Substation example graph.}
+%		\label{substation_graph}
+%	\end{figure}
+%\end{center}
+%
+%
+%Observe the islands formed:
+%
+%\begin{itemize}
+%	\item Island 1: {Bus1}, {Bus2}, nL1b, nL2, nS12, nS13, nS21, nS31, nSL1b, nSL2, nground.
+%	\item Island 2: {Bus3}, nL3, nSL3.
+%	\item Island 3: nL1a, nSL1a.
+%\end{itemize}
+
+%Removing the topological nodes, only two islands remain:
+%
+%\begin{itemize}
+%	\item Island 1: {Bus1, Bus2}.  -> these two form a joint calculation node.
+%	\item Island 2: {Bus3}.
+%\end{itemize}
+%
+%Now we only need to check which non topological branches are in every island and associate them to the formed calculation node.
+
+\subsection{Static device}
 
 We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device). Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
 
@@ -1724,7 +1694,7 @@ y_{aa} & 0 &  0 \\
 
 The primitive matrices are added to the diagonal of the circuit admittance matrix $[Y_{bus}]$
 
-\section{Voltage controlled device}
+\subsection{Voltage controlled device}
 
 A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
 
@@ -1772,8 +1742,6 @@ The main parameters of a voltage controlled generator are:\\
 %-------------------------------------------------------------------------------
 %	CHAPTER Topology analysis and consolidation
 %-------------------------------------------------------------------------------
-\chapter{Topology analysis and consolidation}
-
 
 \section{Islands detection}
 
@@ -1934,85 +1902,135 @@ All numerical methods of electrical calculation need the admittance matrix and a
 	\label{fig:CircuitEquation}
 \end{figure}
 
+First the devices connectivity matrices need to be built. Some matrices used here were introduced first in the section \ref{TopologyProcessing}.
 
+\marginnote{$[LD\_T]$: Connectivity matrix of the load devices with their terminals. $[CN\_T]$: Connectivity matrix of the connectivity nodes with their terminals.}
+\begin{equation}
+[LD\_CN] = [LD\_T] \times [CN\_T]^\top
+\end{equation}
 
 
 \begin{itemize}
-	\item $S$: Nodal power injections vector in p.u.
-	\item $V$: Nodal voltages vector.
-	\item $I$:  Nodal current injections vector.
-	\item $Y_{zip}$:  Nodal shunt admittances vector. These are the admittances corresponding the ZIP model (YISV model in this document). These admittances are added to the diagonal of the admittance matrix ($Y_{bus}$).
+	\item $[S_{bus}]$: Nodal power injections vector in p.u.
+	
+	\begin{equation}
+	[S_{demand}] = [LD\_CN]^\top \times [LD\_Power]
+	\end{equation}
+	
+	\marginnote{$[LD\_CN]$: Load-Bus connectivity matrix. $[LD\_Power]$: Vector of load values.}
+	
+	\begin{equation}
+	[S_{generation}] = [GEN\_CN]^\top \times [GEN\_Power]
+	\end{equation}
+	
+	\marginnote{$[GEN\_CN]$: Generator-Bus connectivity matrix. $[GEN\_Power]$: Vector of generation values.}
+	
+	\begin{equation}
+	[S_{bus}] = [S_{generation}] - [S_{demand}]
+	\end{equation}
+	
+	
+	\item $[V_{bus}]$: Nodal voltages vector. This vector shall be initialized to a vector $[V_{bus}] = [1] \cdot Vset$.
+	
+	\item $[I_{bus}]$:  Nodal current injections vector.
+	
+	\begin{equation}
+	[I_{bus}] = [LD\_CN]^\top \times [LD\_Current]
+	\end{equation}
+	
+	
+	
+	\item $[Y_{zip}]$:  Nodal shunt admittances vector. These are the admittances corresponding the ZIP model (\textit{YISV} model in this document). These admittances are added to the diagonal of the admittance matrix ($[Y_{bus}]$).
+	
+	\begin{equation}
+	[Y_{zip} ]= [LD\_CN]^\top \times [LD\_Admittance]
+	\end{equation}
 \end{itemize}
 
 
 These vectors depend on the magnitudes of the elements connected to each bus (or node). Remember that we have decided that the loads, generators and others are stored in each bus element, this allows us to create a function at the bus object level that "compiles" its voltage, current and power and that these are compiled at the circuit level in the corresponding vectors.
-The algorithm is as follows:
 
-{\color{verbatimcolor}
-	\begin{verbatim}
-	n = number of buses in the circuit
-	
-	Y_zip = complex_vector(n)
-	I = complex_vector(n)
-	S = complex_vector(n)
-	V = complex_vector(n)
-	types = vector(n)
-	
-	for i=0 to n:
-	    // assign the values to the vectors at the position i
-	    buses[i].get_YISV(i, Y, I, S, V, types) 
-	end
-	
-	// after this loop all the bus related vectors will be filled
-	// now, we need to divide some of them by the base power to 
-	// have them in per unit.
-	Y_zip /= Sbase
-	I /= Sbase
-	S /= Sbase
-	\end{verbatim}
-}
+%# form the power injections vector
+%PD = self.LD_CN.transpose() * self.LD_Power  # demand (complex)
+%PG = self.GEN_CN.transpose() * self.Gen_Power  # generation (real)
+%self.Sbus = (PG - PD) / self.Sbase
+%self.Ibus = np.zeros_like(self.Sbus)
 
-The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
 
-{\color{verbatimcolor}
-	\begin{verbatim}
-	i: bus index // external parameter
-	loads: list of loads within the bus object
-	generators: list of generators within the bus object
-	batteries: list of batteries within the bus object
-	
-	V[i]=1.0
-	
-	if bus_type is not VD:
-	    bus_type=PQ
-	end
-	
-	for k=0 to number_of_loads:
-	    S[i] -= loads[k].S  // loads are a negative injection
-	    I[i] -= loads[k].I
-	    Y_zip[i] += loads[k].Y  // the impedance is positive always
-	end
-	
-	for k=0 to number_of_generators:
-	    S[i] += generator[k].P + 0j
-	    V[i] *= generator[k].V_set
-	    if bus_type is not VD: 
-	        bus_type=PV
-	    end
-	end
-	
-	for k=0 to number_of_batteries:
-	    S[i] += batteries[k].P + 0j
-	    V[i] *= batteries[k].V_set
-	    if bus_type is not VD: 
-	        bus_type=PV
-	    end
-	end
-	
-	types[i] = bus_type
-	
-	\end{verbatim}
-}
+%# Voltage vector
+%# self.Vbus = self.GEN_CN.transpose() * self.Gen_voltage
+%self.Vbus = np.ones_like(self.Sbus)
+
+%# form the shunt vector
+%self.Ysh = self.SH_CN.transpose() * self.SH_Power
+
+%The algorithm is as follows:
+%
+%{\color{verbatimcolor}
+%	\begin{verbatim}
+%	n = number of buses in the circuit
+%	
+%	Y_zip = complex_vector(n)
+%	I = complex_vector(n)
+%	S = complex_vector(n)
+%	V = complex_vector(n)
+%	types = vector(n)
+%	
+%	for i=0 to n:
+%	    // assign the values to the vectors at the position i
+%	    buses[i].get_YISV(i, Y, I, S, V, types) 
+%	end
+%	
+%	// after this loop all the bus related vectors will be filled
+%	// now, we need to divide some of them by the base power to 
+%	// have them in per unit.
+%	Y_zip /= Sbase
+%	I /= Sbase
+%	S /= Sbase
+%	\end{verbatim}
+%}
+%
+%The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
+%
+%{\color{verbatimcolor}
+%	\begin{verbatim}
+%	i: bus index // external parameter
+%	loads: list of loads within the bus object
+%	generators: list of generators within the bus object
+%	batteries: list of batteries within the bus object
+%	
+%	V[i]=1.0
+%	
+%	if bus_type is not VD:
+%	    bus_type=PQ
+%	end
+%	
+%	for k=0 to number_of_loads:
+%	    S[i] -= loads[k].S  // loads are a negative injection
+%	    I[i] -= loads[k].I
+%	    Y_zip[i] += loads[k].Y  // the impedance is positive always
+%	end
+%	
+%	for k=0 to number_of_generators:
+%	    S[i] += generator[k].P + 0j
+%	    V[i] *= generator[k].V_set
+%	    if bus_type is not VD: 
+%	        bus_type=PV
+%	    end
+%	end
+%	
+%	for k=0 to number_of_batteries:
+%	    S[i] += batteries[k].P + 0j
+%	    V[i] *= batteries[k].V_set
+%	    if bus_type is not VD: 
+%	        bus_type=PV
+%	    end
+%	end
+%	
+%	types[i] = bus_type
+%	
+%	\end{verbatim}
+%}
 
 
 \newpage
@@ -2060,132 +2078,132 @@ The relation between the admittance matrix and the series and shunt admittance m
 Y_{bus} = Y_{series} + Y_{shunt}
 \end{equation}
 
-\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the positive sequence model is the following:
-
-{\color{verbatimcolor}
-\begin{verbatim}
-n = number of buses in the circuit
-m = number of branches in the circuit
-
-// declare the matrices
-Y = complex_sparse(n, n)
-Yf = complex_sparse(m, n)
-Yt = complex_sparse(m, n)
-yshunt = complex_vector(n)
-yseries = complex_sparse(n, n)
-
-// set the buses admittances
-for i=0 to n:
-
-    // get all the bus-connected power, current andmittance and voltage
-    y, curr, s, v = buses[i].get_YISV()
-
-    Yshunt[i] = y
-end
-
-//set the branches admittances
-for i=0 to m:
-    // get the bus indices matching the busses of this branch
-    f = get_bus_index(branches[i].bus_from)
-    t = get_bus_index(branches[i].bus_to)
-    
-    // compose the basic elements (only for pisitive sequence)
-    z_series = complex(branches[i].R, branches[i].X)
-    y_shunt = complex(branches[i].G, branches[i].B)
-    tap = branches[i].tap_module * exp(-1j * branches[i].angle)
-    Ysh = y_shunt / 2
-    Ys = 1 / z_series
-
-    // compose the matrix sub elements
-    Ytt = Ys + Ysh
-    Yff = Ytt / (tap * conj(tap))
-    Yft = - Ys / conj(tap)
-    Ytf = - Ys / tap    
-    Yff_sh = Ysh
-    Ytt_sh = Yff_sh / (tap * conj(tap))
-    
-    // Full admittance matrix
-    Ybus[f, f] += Yff
-    Ybus[f, t] += Yft
-    Ybus[t, f] += Ytf
-    Ybus[t, t] += Ytt
-    
-    // Y-from and Y-to for the lines power flow computation (optional)
-    Yf[i, f] += Yff
-    Yf[i, t] += Yft
-    Yt[i, f] += Ytf
-    Yt[i, t] += Ytt
-        
-    // Connectivity matrices
-    Cf[i, f] = 1
-    Cf[i, t] = -1
-    Ct[i, f] = -1
-    Ct[i, t] = 1
-    
-    // Y shunt
-    Yshunt[f] += Yff_sh
-    Yshunt[t] += Ytt_sh
-    
-    // Y series
-    Yseries[f, f] += Ys / (tap * conj(tap))
-    Yseries[f, t] += Yft
-    Yseries[t, f] += Ytf
-    Yseries[t, t] += Ys
-end
-
-\end{verbatim}
-}
-
-\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the three-phase model is the following:
-
-{\color{verbatimcolor}
-    \begin{verbatim}
-    For every branch:
-    
-    Get the branch submatrices Yff, Yft, Ytf and Ytt.
-    
-    a = 0
-    for i in phases_from:
-        b = 0
-        for j in phases_to:
-        
-	        # Admittance matrix
-	        Ybus[f * n_phase + i, f * n_phase + j] += Yff[a, b]
-	        Ybus[f * n_phase + i, t * n_phase + j] += Yft[a, b]
-	        Ybus[t * n_phase + i, f * n_phase + j] += Ytf[a, b]
-	        Ybus[t * n_phase + i, t * n_phase + j] += Ytt[a, b]
-	        
-	        # branch-bus admittance matrices (optional)
-	        Yf[k * n_phase + i, f * n_phase + j] += Yff[a, b]
-	        Yf[k * n_phase + i, t * n_phase + j] += Yft[a, b]
-	        Yt[k * n_phase + i, f * n_phase + j] += Ytf[a, b]
-	        Yt[k * n_phase + i, t * n_phase + j] += Ytt[a, b]
-	        
-	        # branch-bus connectivity matrices
-	        Cf[k * n_phase + i, f * n_phase + j] = 1
-	        Cf[k * n_phase + i, t * n_phase + j] = -1
-	        Ct[k * n_phase + i, f * n_phase + j] = -1
-	        Ct[k * n_phase + i, t * n_phase + j] = 1
-	        
-	        # masks
-	        mask_r[f * n_phase + i] = 1
-	        mask_r[t * n_phase + i] = 1
-	        
-	        mask_c[f * n_phase + j] = 1
-	        mask_c[t * n_phase + j] = 1
-	        
-	        mask_k[k * n_phase + i] = 1
-        
-	        b += 1
-	    end
-	    
-        a += 1
-    end
-    
-\end{verbatim}
-}
-
-This algorithm will produce the full three-phase matrices. These matrices need to be reduced as explained in the section \ref{phase_reduction}.
+%\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the positive sequence model is the following:
+%
+%{\color{verbatimcolor}
+%\begin{verbatim}
+%n = number of buses in the circuit
+%m = number of branches in the circuit
+%
+%// declare the matrices
+%Y = complex_sparse(n, n)
+%Yf = complex_sparse(m, n)
+%Yt = complex_sparse(m, n)
+%yshunt = complex_vector(n)
+%yseries = complex_sparse(n, n)
+%
+%// set the buses admittances
+%for i=0 to n:
+%
+%    // get all the bus-connected power, current andmittance and voltage
+%    y, curr, s, v = buses[i].get_YISV()
+%
+%    Yshunt[i] = y
+%end
+%
+%//set the branches admittances
+%for i=0 to m:
+%    // get the bus indices matching the busses of this branch
+%    f = get_bus_index(branches[i].bus_from)
+%    t = get_bus_index(branches[i].bus_to)
+%    
+%    // compose the basic elements (only for pisitive sequence)
+%    z_series = complex(branches[i].R, branches[i].X)
+%    y_shunt = complex(branches[i].G, branches[i].B)
+%    tap = branches[i].tap_module * exp(-1j * branches[i].angle)
+%    Ysh = y_shunt / 2
+%    Ys = 1 / z_series
+%
+%    // compose the matrix sub elements
+%    Ytt = Ys + Ysh
+%    Yff = Ytt / (tap * conj(tap))
+%    Yft = - Ys / conj(tap)
+%    Ytf = - Ys / tap    
+%    Yff_sh = Ysh
+%    Ytt_sh = Yff_sh / (tap * conj(tap))
+%    
+%    // Full admittance matrix
+%    Ybus[f, f] += Yff
+%    Ybus[f, t] += Yft
+%    Ybus[t, f] += Ytf
+%    Ybus[t, t] += Ytt
+%    
+%    // Y-from and Y-to for the lines power flow computation (optional)
+%    Yf[i, f] += Yff
+%    Yf[i, t] += Yft
+%    Yt[i, f] += Ytf
+%    Yt[i, t] += Ytt
+%        
+%    // Connectivity matrices
+%    Cf[i, f] = 1
+%    Cf[i, t] = -1
+%    Ct[i, f] = -1
+%    Ct[i, t] = 1
+%    
+%    // Y shunt
+%    Yshunt[f] += Yff_sh
+%    Yshunt[t] += Ytt_sh
+%    
+%    // Y series
+%    Yseries[f, f] += Ys / (tap * conj(tap))
+%    Yseries[f, t] += Yft
+%    Yseries[t, f] += Ytf
+%    Yseries[t, t] += Ys
+%end
+%
+%\end{verbatim}
+%}
+%
+%\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the three-phase model is the following:
+%
+%{\color{verbatimcolor}
+%    \begin{verbatim}
+%    For every branch:
+%    
+%    Get the branch submatrices Yff, Yft, Ytf and Ytt.
+%    
+%    a = 0
+%    for i in phases_from:
+%        b = 0
+%        for j in phases_to:
+%        
+%	        # Admittance matrix
+%	        Ybus[f * n_phase + i, f * n_phase + j] += Yff[a, b]
+%	        Ybus[f * n_phase + i, t * n_phase + j] += Yft[a, b]
+%	        Ybus[t * n_phase + i, f * n_phase + j] += Ytf[a, b]
+%	        Ybus[t * n_phase + i, t * n_phase + j] += Ytt[a, b]
+%	        
+%	        # branch-bus admittance matrices (optional)
+%	        Yf[k * n_phase + i, f * n_phase + j] += Yff[a, b]
+%	        Yf[k * n_phase + i, t * n_phase + j] += Yft[a, b]
+%	        Yt[k * n_phase + i, f * n_phase + j] += Ytf[a, b]
+%	        Yt[k * n_phase + i, t * n_phase + j] += Ytt[a, b]
+%	        
+%	        # branch-bus connectivity matrices
+%	        Cf[k * n_phase + i, f * n_phase + j] = 1
+%	        Cf[k * n_phase + i, t * n_phase + j] = -1
+%	        Ct[k * n_phase + i, f * n_phase + j] = -1
+%	        Ct[k * n_phase + i, t * n_phase + j] = 1
+%	        
+%	        # masks
+%	        mask_r[f * n_phase + i] = 1
+%	        mask_r[t * n_phase + i] = 1
+%	        
+%	        mask_c[f * n_phase + j] = 1
+%	        mask_c[t * n_phase + j] = 1
+%	        
+%	        mask_k[k * n_phase + i] = 1
+%        
+%	        b += 1
+%	    end
+%	    
+%        a += 1
+%    end
+%    
+%\end{verbatim}
+%}
+%
+%This algorithm will produce the full three-phase matrices. These matrices need to be reduced as explained in the section \ref{phase_reduction}.
 
 %-------------------------------------------------------------------------------
 %    CHAPTER Power flow
@@ -2215,8 +2233,8 @@ Where:
 
 At each node, we can consider the following magnitudes to exist:
 \begin{itemize}
-	\item $|V|$: Voltage module.
-	\item $\delta$: Voltage angle.
+	\item $Vm$: Voltage module.
+	\item $\theta$: Voltage angle.
 	\item $P$: Active power injection/consumption.
 	\item $Q$: Reactive power injection/consumption.
 \end{itemize}
@@ -2228,7 +2246,7 @@ In some nodes we know the active power injection (generation nodes), in some nod
 		\begin{tabular}{ccccc}
 			\toprule
 			
-			Bus type & $|V|$ &  $\delta$ & $P$ & $Q$\\
+			Bus type & $Vm$ &  $\theta$ & $P$ & $Q$\\
 			
 			\midrule
 			
@@ -2313,7 +2331,7 @@ The total injected currents including the power injections are:
 The next step is to compute the nodes voltage due to all the power and current injections:
 
 \begin{equation}
-[V_k] = [Y]_{red}^{-1} \times [I_k] - [C_k]
+[V_k] = [Y_{red}]^{-1} \times [I_k] - [C_k]
 \end{equation}
 
 \marginnote{Do not invert $[Y_{red}]$. Instead factorize it once, and use the factorization.}
@@ -2363,59 +2381,64 @@ The derivative based methods are more accurate than the derivative free methods.
 \end{figure}
 \end{center}
 
-The Jacobian linear system ($J \times \Delta x = F$), allows the computation of the voltage increment ($\Delta x$) to apply to the voltage solution ($V$) in order to achieve a voltage that solves the power flow equation \ref{eq:power_flow}. This process is iterative and recursive, hence to have a initial voltage solution in the vicinity of the final solution is crucial. Otherwise the method will converge to a non physical solution. A common good-enough voltage initial solution is to set all the voltages according to the slack voltage value.
+The Jacobian linear system ($[J] \times [\Delta x] = [F]$), allows the computation of the voltage increment $[\Delta x]$ to apply to the voltage solution $[V]$ in order to achieve a voltage that solves the power flow equation \ref{eq:power_flow}. This process is iterative and recursive, hence to have a initial voltage solution in the vicinity of the final solution is crucial. Otherwise the method will converge to a non physical solution. A common good-enough voltage initial solution is to set all the voltages according to the slack voltage value.
 
 
 \subsection{Building the Jacobian matrix} \label{Jacobian_chapter}
 
-The Jacobian matrix ($J$) is the derivative of the fundamental power flow equation \ref{eq:power_flow}, with respect to the voltage magnitudes to be solved $|V|$ and $\delta$. It is one of the most expensive parts of the derivative based power flow methods.
+The Jacobian matrix $[J]$ is the derivative of the fundamental power flow equation \ref{eq:power_flow}, with respect to the voltage magnitudes to be solved $[Vm]$ and $[\theta]$. It is one of the most expensive parts of the derivative based power flow methods.
 
 In most literature, the reader will find the Jacobian presented with non matrix formulas which are hard to understand in their relation to the Jacobian matrix formation. Ray D. Zimmerman came up with a fantastic way of building the Jacobian matrix \cite{zimmerman2010ac} by using lineal algebra operations over the complex matrices and vectors that represent the circuit. The formulation presents a huge advantage: No use of cosine and sine operations for the derivatives computation. The calculation of trigonometric functions is a recursive operation and should be avoided whenever possible in high performance computing. The formulation is presented as follows.
 
 First we compute the total current injection. It is a sparse diagonal matrix, so do not use a dense matrix format.
 \begin{equation}
-I_{diag} = diag(Y \times V - I)
+[I_{diag}] = diag([Y] \times [V] - [I])
 \end{equation}
 
-Then we convert the buses voltage solution $V$ into a square diagonal matrix. Use a sparse format for this.
+Then we convert the buses voltage solution $[V]$ into a square diagonal matrix. Use a sparse format for this.
 \begin{equation}
-V_{diag} = diag(V)
+[V_{diag}] = diag([V])
 \end{equation}
 
-Compute the buses voltage normalized solution $V$ into a square diagonal matrix. This is acomplished by dividing each complex voltage by its absolute value. Use a sparse format for this.
+Compute the buses voltage normalized solution $[V]$ into a square diagonal matrix. This is acomplished by dividing each complex voltage by its absolute value. Use a sparse format for this.
 \begin{equation}
-E_{diag} = diag(V / |V|)
+[E_{diag}] = diag\left(\frac{[V]}{[Vm]}\right)
 \end{equation}
 
-Now, Compute the derivative of the power injections $S$ with respect to the voltage module $|V|$:
+\marginnote{Remember that $Vm = abs(V)$.}
+
+Now, Compute the complex matrix derivative of the power injections $[S]$ with respect to the voltage module $[Vm]$:
 \begin{equation}
-\frac{\partial S}{\partial |V|} = V_{diag} \times (Y \times E_{diag})^* + I_{diag}^* \times  E_{diag}
+\left[\frac{\partial S}{\partial Vm}\right] = [V_{diag}] \times \left([Y] \times [E_{diag}] \right)^* + [I_{diag}]^* \times  [E_{diag}]
 \end{equation}
     
-Compute the derivative of the power injections $S$ with respect to the voltage angle $\delta$:
+Compute the complex matrix derivative of the power injections $[S]$ with respect to the voltage angle $[\theta]$:
 \begin{equation}
-\frac{\partial S}{\partial \delta} = 1j \cdot V_{diag} \times (I_{diag} - Y \times V_{diag})^*
+\left[\frac{\partial S}{\partial \theta}\right] = 1j \cdot [V_{diag}] \times  \left([I_{diag}] - [Y] \times [V_{diag}] \right)^*
 \end{equation}
 
 Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and only contains real values. If the circuit contains $npq$ buses of type $PQ$ and $npv$ buses of type $PV$, the Jacobian matrix is a square matrix with $2 npq + npv$ rows and the same number of columns. See the figure \ref{fig:jacobian_based}.
+
+\marginnote{
+	$pqpv$ is a vector that contains the indices of the $PQ$ and $PV$ type indices in sequential order.
+	
+	$pq$ is a vector that contains the indices of the $PQ$  type indices in sequential order.
+}
 
 \begin{equation}
 J=
 \left[
 \begin{array}{cc}
-Re\left(\frac{\partial S}{\partial \delta}[pqpv, pqpv]\right) &
-Re\left(\frac{\partial S}{\partial |V|}[pqpv, pq]\right) \\
-Im\left(\frac{\partial S}{\partial \delta}[pq, pqpv]\right) &
-Im\left(\frac{\partial S}{\partial |V|}[pq, pq]\right)
+Re\left(\left[\frac{\partial S}{\partial \theta}\right]\right)_{(pqpv, pqpv)} &
+Re\left(\left[\frac{\partial S}{\partial Vm}\right]\right)_{(pqpv, pq)} \\
+Im\left(\left[\frac{\partial S}{\partial \theta}\right]\right)_{(pq, pqpv)} &
+Im\left(\left[\frac{\partial S}{\partial Vm}\right]\right)_{(pq,pq)}
 \end{array}
 \right]
 \end{equation}
 
-Observe that the Jacobian matrix is composed of four subsets of the previously computed derivatives $\frac{\partial S}{\partial \delta}$ and $\frac{\partial S}{\partial |V|}$, where combinations of the $PQ$ and $PV$ node indices are selected.
+Observe that the Jacobian matrix is composed of four subsets of the previously computed derivatives $\left[\frac{\partial S}{\partial \theta}\right]$ and $\left[\frac{\partial S}{\partial Vm}\right]$, where combinations of the $PQ$ and $PV$ node indices are selected.
 
-$pqpv$ is a vector that contains the indices of the $PQ$ and $PV$ type indices in sequential order.
-
-$pq$ is a vector that contains the indices of the $PQ$  type indices in sequential order.
 
 \newpage
 \subsection{Newton-Raphson}
@@ -2423,22 +2446,22 @@ $pq$ is a vector that contains the indices of the $PQ$  type indices in sequenti
 Newton-Raphson is a recursive, iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
 
 \begin{equation}
-\Delta S = S_{specified} - S_{calc} 
+[\Delta S] = [S_{specified}] - [S_{calc} ]
 \end{equation}
 
 Where:
 \begin{equation}
-s_{calc} = V \times (Y \times V - I_{bus})^*
+[S_{calc}] = [V] \cdot ([Y] \times [V] - [I_{bus}])^*
 \label{eq:nr_Scalc}
 \end{equation}
 
-The minimization of $\Delta S$ occurs via se recursive solution of the following linear system:
+The minimization of $[\Delta S]$ occurs via se recursive solution of the following linear system:
 
 \begin{equation}
-J \times \Delta x = F
+[J] \times [\Delta x] = [F]
 \end{equation}
 
-Since the mismatch ($\Delta S$) is a vector of complex values, we transform it into a vector ($F$) with the real part of $\Delta S$ for the PQ and PV bus indices and the imaginary part of $\Delta S$ for the PQ bus indices of the vector. Observe that the length of the vector is $2npq+npv$, matching the Jacobian dimensions.
+Since the mismatch ($[\Delta S]$) is a vector of complex values, we transform it into a vector ($[F]$) with the real part of $[\Delta S]$ for the PQ and PV bus indices and the imaginary part of $[\Delta S]$ for the PQ bus indices of the vector. Observe that the length of the vector is $2npq+npv$, matching the Jacobian dimensions.
 
 
 
@@ -2453,12 +2476,12 @@ F =  \left[
 \end{equation}
 
 \begin{equation}
-\Delta Q = Im(\Delta S[pq]) 
+\Delta Q = Im \{ [\Delta S]_{(pq)} \}
 \label{eq:nr_q_inc}
 \end{equation}
 
 \begin{equation}
-\Delta P = Re(\Delta S[pqpv])
+\Delta P = Re \{ [\Delta S]_{(pvpq)}  \} 
 \label{eq:nr_p_inc}
 \end{equation}
 
@@ -2471,43 +2494,44 @@ error = ||F||_{\infty} = max(abs(F))
 
 If the error is higher than the tolerance, we need to solve the voltages increment ($\Delta x$), for which we must compute the Jacobian first. Some simplifications of the method only compute the Jacobian one time, but for better accuracy, the Jacobian needs to be calculated on every iteration.
 
-\marginnote{Do not invert $J$, instead use a linear system solver, to solve the linear system $J \times \Delta x  = F$.}
+\marginnote{Do not invert $[J]$, instead use a linear system solver, to solve the linear system $J \times \Delta x  = F$.}
 
 \begin{equation}
-\Delta x = J^{-1} \times F
+[\Delta x] = [J^{-1}] \times [F]
 \label{eq:nr_solve}
 \end{equation}
 
-Notice that $\Delta x$ is a vector with the voltage angles ($\delta$) for the PQ and PV nodes followed by the voltage modules ($|V|$) for the PQ nodes. This matches the way we built the Jacobian ($J$) and the mismatch ($F$). Now we must assign those polar voltage angle and module increments to the rectangular voltage vector that we use to compute the Jacobian and the mismatch.
+Notice that $[\Delta x]$ is a vector with the voltage angles $[\theta]$ for the PQ and PV nodes followed by the voltage modules $[Vm]$ for the PQ nodes. This matches the way we built the Jacobian $[J]$ and the mismatch $[F]$. Now we must assign those polar voltage angle and module increments to the rectangular voltage vector that we use to compute the Jacobian and the mismatch.
 
-To accomplish this, we declare two polar voltage increment vectors $\Delta |V|$ and $\Delta \delta$, initialize them to zero, and we fill the corresponding values with the following:
+To accomplish this, we declare two polar voltage increment vectors $[\Delta Vm]$ and $[\Delta \theta]$, initialize them to zero, and we fill the corresponding values with the following:
 
 \marginnote{Here we use the auxiliary vectors $pqpv$ and $pq$ which contain the indices of the pq and pv type buses, and the pq type buses respectively. $npqpv$ and $npq$ are the sizes of those two vectors.}
+
 \begin{equation}
-\Delta \delta[pqpv[i]] = \Delta x[i]  \quad \forall i \in {0..npqpv}
+[\Delta \theta]_{(pqpv_i)} = [\Delta x]_i  \quad \forall i \in {0..npqpv-1}
 \label{eq:nr_dd1}
 \end{equation}
 
 \begin{equation}
-\Delta  |V|[pq[i]] = \Delta x[i+npqpv]  \quad \forall i \in {0..npq}
+\Delta  [Vm]_{(pq_i)} = [\Delta x]_{(i+npqpv)}  \quad \forall i \in {0..npq-1}
 \end{equation}
 
-Then we need to add those values to the voltage module and angle vectors $|V|$ and $\delta$:
-
-\marginnote{Here we introduce the notion of the $k_{th}$ iteration wich represents the current iteration and the $k_{th}+1$ represents the next iteration.}
+Then we need to add those values to the voltage module and angle vectors $[Vm]$ and $[\theta]$:
 
 \begin{equation}
-|V|^{(k+1} = |V|^{(k} + \Delta |V|^{(k}
+[Vm]^{(k+1} = [Vm]^{(k} + [\Delta Vm]^{(k}
 \end{equation}
 
+\marginnote{Here we introduce the notion of the $k_{th}$ iteration which represents the current iteration and the $k_{th}+1$ represents the next iteration.}
+
 \begin{equation}
-\delta^{(k+1} = \delta^{(k} + \Delta \delta^{(k}
+[\theta]^{(k+1} = [\theta]^{(k} + [\Delta \theta]^{(k}
 \end{equation}
 
-At last, we convert the polar vectors  $|V|$ and $\delta$ into a single complex voltage vector $V$.
+At last, we convert the polar vectors  $[Vm]$ and $[\theta]$ into a single complex voltage vector $[V]$.
 
 \begin{equation}
-V^{(k+1} = |V|^{(k+1} \cdot \left( cos(\delta^{(k+1}) + 1j \cdot sin(\delta^{(k+1})\right)
+[V]^{(k+1} = [Vm]^{(k+1} \cdot \left( cos([\theta]^{(k+1}) + 1j \cdot sin([\theta]^{(k+1})\right)
 \label{eq:nr_voltage_conversion}
 \end{equation}
 
@@ -2519,7 +2543,7 @@ The algorithm is then:
 
 \item Start.
 
-\item Compute the mismatch function ($F$) using the initial voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+\item Compute the power mismatch vector $[F]$ using the initial voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
 
 \item Compute the error. Equation \ref{eq:nr_error}.
 
@@ -2530,9 +2554,9 @@ The algorithm is then:
 	
 	\item Solve the linear system. Equation \ref{eq:nr_solve}.
 	
-	\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+	\item Assign $[\Delta x]$ to $[V]$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
 	
-	\item Compute the mismatch function ($F$) using the latest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	\item Compute the power mismatch vector $[F]$ using the latest voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
 	
 	\item Compute the error. Equation \ref{eq:nr_error}.
 	
@@ -2550,7 +2574,7 @@ The algorithm is then:
 The Levenbarg-Marquardt is a recursive and iterative technique that is usually not related to power flow, but rather to non-linear least squares problems. Nevertheless, it solves the exact same problem as Newton-Raphson, but in a much more robust manner. It is advised when Newton-Raphson does not converge, because it exhibits excellent convergence properties at the cost of a higher computational effort.
 
 
-At each iteration we need to assemble the system matrix $A$ as follows:
+At each iteration we need to assemble the system matrix $[A]$ as follows:
 %    // system matrix
 %    H1 = H.t();
 %
@@ -2566,41 +2590,42 @@ At each iteration we need to assemble the system matrix $A$ as follows:
 
 
 \begin{equation}
-A = J^\top \times J + \lambda \cdot I
+[A] = [J]^\top \times [J] + \lambda \cdot [Idn]
 \label{eq:lm_A}
 \end{equation}
+
+\marginnote{$[Idn]$ is the identity matrix of compatible size. $\lambda$ is a number. $[J]$ is the Jacobian matrix.}
 
 Where $\lambda$ is computed only in the first iteration as:
 
 \begin{equation}
-\lambda = 0.001 \cdot max(diag(J \times J^\top))
+\lambda = 0.001 \cdot max(diag([J] \times [J]^\top))
 \end{equation}
 
 The right hand side of the linear system to obtain the voltage increments is:
 
-\marginnote{$F$ is provided in the equation \ref{eq:nr_mismatch}.}
+\marginnote{$F$ is provided by the equation \ref{eq:nr_mismatch}.}
 
 \begin{equation}
-rhs = J^\top \times F
+[rhs] = [J]^\top \times [F]
 \label{eq:lm_rhs}
 \end{equation}
 
 
-Solve the voltage increments vector $\Delta x$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method. See figure \ref{fig:jacobian_based}.
+Solve the voltage increments vector $[\Delta x]$. As in Newton-Raphson, this vector has $2npq+npv$ elements and the structure is the same as the one explained in the Newton-Raphson method. See figure \ref{fig:jacobian_based}.
 
-\marginnote{Do not invert $A$, instead use a linear system solver, to solve the linear system $A \times \Delta x  = rhs$.}
+\marginnote{Do not invert $[A]$, instead use a linear system solver, to solve the linear system $[A] \times [\Delta x]  = [rhs]$.}
 
 \begin{equation}
-\Delta x = A^{-1} \times rhs
+[\Delta x] = [A]^{-1} \times [rhs]
 \label{eq:lm_solve}
 \end{equation}
-
 
 
 Compute the objective function to minimize $f$. It is a value.
 
 \begin{equation}
-f = \frac{1}{2} \cdot (F \times F^\top)
+f = \frac{1}{2} \cdot \left([F] \times [F]^\top \right)
 \label{eq:lm_f}
 \end{equation}
 
@@ -2609,7 +2634,7 @@ Calculate the decision function $\rho$. It is a value.
 \marginnote{$f^{(k-1}$ is the value of $f$ in the previous iteration. $f^{(k}$ is the value of $f$ computed in the current iteration. The value of  $f^{(k-1}$  in the first iteration should be a very large number  i.e. $1 \times 10^9$.}
 
 \begin{equation}
-\rho = \frac{f^{(k-1}-f^{(k}}{\frac{1}{2} \cdot (\Delta x \times (\lambda \cdot \Delta x + rhs)^\top)}
+\rho = \frac{f^{(k-1}-f^{(k}}{\frac{1}{2} \cdot \left([\Delta x] \times (\lambda \cdot [\Delta x] + [rhs])^\top \right)}
 \label{eq:lm_rho}
 \end{equation}
 
@@ -2619,7 +2644,7 @@ If $\rho$ is greater than zero, we mark a flag to update the Jacobian in the nex
 
 
 \begin{equation}
-\lambda = \lambda \cdot max(\frac{1}{3}, 1-(2\cdot \rho -1)^3)
+\lambda = \lambda \cdot max \left( \frac{1}{3}, 1-(2\cdot \rho -1)^3 \right)
 \label{eq:lm_update_l}
 \end{equation}
 
@@ -2635,27 +2660,27 @@ The complete algorithm is:
 
 \item Start.
 
-\item Compute the mismatch function ($F$) using the initial voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+\item Compute the mismatch power vector $[F]$ using the initial voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
 
 \item Compute the error. Equation \ref{eq:nr_error}.
 
 \item While $error > tolerance$ or $iterations < max\_iterations$:
 
 	\begin{enumerate}
-	\item If the computation of the Jacobian is enabled, compute the Jacobian and the system matrix $A$ using equation \ref{eq:lm_A}.
+	\item If the computation of the Jacobian is enabled, compute the Jacobian and the system matrix $[A]$ using equation \ref{eq:lm_A}.
 	
 	\item Compute the linear system right hand side using equation \ref{eq:lm_rhs}.
 	
-	\item Solve the linear system to obtain $\Delta x$. Equation \ref{eq:lm_solve}.
+	\item Solve the linear system to obtain $[\Delta x]$. Equation \ref{eq:lm_solve}.
 	
-	\item Compute the objective function $f$ using equation \ref{eq:lm_f}.
+	\item Compute the objective function value $f$ using equation \ref{eq:lm_f}.
 	
 	\item Compute the decision value $\rho$ using equation \ref{eq:lm_rho}.
 	
 	\item If $\rho > 0$:
 	
 		\begin{enumerate}
-		\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+		\item Assign $[\Delta x]$ to $[V]$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
 		
 		\item Update $\lambda$ using equation \ref{eq:lm_update_l}.
 		
@@ -2667,7 +2692,7 @@ The complete algorithm is:
 	\item If $\rho \leq 0$:
 	
 		\begin{enumerate}
-		\item Assign $\Delta x$ to $V$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+		\item Assign $[\Delta x]$ to $[V]$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
 		
 		\item Update $\lambda = \nu \cdot \lambda$.
 		
@@ -2676,7 +2701,7 @@ The complete algorithm is:
 		\item Set the Jacobian update flag to false.
 		\end{enumerate}
 	
-	\item Compute the mismatch function ($F$) using the latest voltage solution ($V$). Equation \ref{eq:nr_mismatch}.
+	\item Compute the mismatch function $[F]$ using the latest voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
 	
 	\item Compute the error. Equation \ref{eq:nr_error}.
 	
@@ -2689,9 +2714,9 @@ The complete algorithm is:
 \section{Linear DC power flow}
 The so called direct current power flow (or just DC power flow) is a convenient oversimplification of the power flow procedure.
 
-It assumes that in any branch the reactive part of the impedance is much larger than the resistive part, hence the resistive part is neglected, and that all the voltages modules are the nominal per unit values. This is, $|v|=1$ for load nodes and $|v|=v_{set}$ for the generator nodes, where $v_{set}$ is the generator set point value.
+It assumes that in any branch the reactive part of the impedance is much larger than the resistive part, hence the resistive part is neglected, and that all the voltages modules are the nominal per unit values. This is, $[Vm]=[1]$ for load nodes and $[Vm]=[V_{set}]$ for the generator nodes, where $[V_{set}]$ is the generator set point value.
 
-In order to compute the DC approximation we must perform a transformation. The slack nodes are removed from the grid, and their influence is maintained by introducing equivalent currents in all the nodes. The equivalent admittance matrix ($\textbf{Y}_{red}$) is obtained by removing the rows and columns corresponding to the slack nodes. Likewise the removed elements conform the ($\textbf{Y}_{slack}$) matrix.
+In order to compute the DC approximation we must perform a transformation. The slack nodes are removed from the grid, and their influence is maintained by introducing equivalent currents in all the nodes. The equivalent admittance matrix $[{Y}_{red}]$ is obtained by removing the rows and columns corresponding to the slack nodes. Likewise the removed elements conform the $[{Y}_{slack}]$ matrix.
 
 \begin{figure}[h!]
 	\centering
@@ -2736,27 +2761,38 @@ In order to compute the DC approximation we must perform a transformation. The s
 %normF = linalg.norm(F, Inf)
 
 \begin{equation}
-\textbf{P} = Re(\textbf{S}_{red}) + (- Im(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) + Re(\textbf{I}_{red})) \cdot |\textbf{V}_{red}|
+[P_{red}] = \left[P^{specified}_{red}\right] + \left(- [{B}_{slack}] \times [{\theta}_{slack}] + Re \{ [I_{red}] \}  \right) \cdot [|{V}_{red}|]
 \label{dc_power_injections}
 \end{equation}
+
+\marginnote{
+Where:
+$$\left[P^{specified}_{red}\right] = Re\left\{\left[S^{specified}_{red}\right]\right\} $$
+$$[{B}_{slack}] = Im \{ [{Y}_{slack}] \}  $$
+$$[{\theta}_{slack}] = angle([V_{slack}]) $$
+}
 
 The equation \ref{dc_power_injections} computes the DC power injections as the sum of the different factors mentioned:
 
 \begin{enumerate}
-	\item $Re(\textbf{S}_{red})$: Real part of the reduced power injections.
-	\item $Im(\textbf{Y}_{slack}) \cdot angle(\textbf{V}_{slack}) \cdot |v_{red}|$: Currents that appear by removing the slack nodes while keeping their influence, multiplied by the voltage module to obtain power.
-	\item $Re(\textbf{I}_{red}) \cdot |v_{red}|$: Real part of the grid reduced current injections, multiplied by the voltage module to obtain power.
+	\item $[P^{specified}_{red}]$: Real part of the reduced power injections.
+	\item $[{B}_{slack}] \times [{\theta}_{slack}] \cdot [Vm_{red}]$: Currents that appear by removing the slack nodes while keeping their influence, multiplied by the voltage module to obtain power.
+	\item $Re \{ [I_{red}] \}  \cdot [Vm_{red}]$: Real part of the grid reduced current injections, multiplied by the voltage module to obtain power.
 \end{enumerate}
 
 Once the power injections are computed, the new voltage angles are obtained by:
 
 \begin{equation}
-\textbf{V}_{angles} = Im(\textbf{Y}_{red})^{-1} \times \textbf{P}
+[\theta_{red}] = [B_{red}]^{-1} \times [P_{red}]
 \end{equation}
 
+\marginnote{
+Where:
+$$[B_{red}] = Im \{ [Y_{red}] \} $$
+}
 The new voltage is then:
 \begin{equation}
-\textbf{V}_{red} = |\textbf{V}_{red}| \cdot e^{1j \cdot  \textbf{V}_{angles}}
+[{V}_{red}] = [{Vm}_{red}] \cdot e^{1j \cdot  [\theta_{red}]}
 \end{equation}
 
 This method usually produces a solution with a large power mismatch. That is to be expected because the method is an oversimplification with no iterative convergence criteria, just a straight forward set of operations.
@@ -2776,7 +2812,7 @@ A_{21} & A_{22} \\
 \times
 \begin{bmatrix}
 \Delta \theta\\
-\Delta |V|\\
+\Delta Vm\\
 \end{bmatrix}
 =
 \begin{bmatrix}
@@ -2788,17 +2824,17 @@ Rhs_2\\
 
 Where:
 \begin{itemize}
-	\item $A_{11} = -Im\left(Y_{series}[pqpv, pqpv]\right)$
-	\item $A_{12} = Re\left(Y_{bus}[pqpv, pq]\right)$
-	\item $A_{21} = -Im\left(Y_{series}[pq, pqpv]\right)$
-	\item $A_{22} = -Re\left(Y_{bus}[pq, pq]\right)$
-	\item $Rhs_1 = Re(S[pqpv])$
-	\item $Rhs_2 = Im(S[pq])$\newline
+	\item $A_{11} = -Im \{ [Y_{series}]_{(pqpv, pqpv)} \}$
+	\item $A_{12} = Re \{ [Y_{bus}]_{(pqpv, pq)} \}$
+	\item $A_{21} = -Im \{ [Y_{series}]_{(pq, pqpv)} \}$
+	\item $A_{22} = -Re \{ [Y_{bus}]_{(pq, pq)} \}$
+	\item $Rhs_1 = Re \{ [S]_{(pqpv)} \} $
+	\item $Rhs_2 = Im \{ [S]_{(pq)} \} $\newline
 \end{itemize}
 
-Here, $Y_{bus}$ is the normal circuit admittance matrix and $Y_{series}$ is the admittance matrix formed with only series elements of the $\pi$ model, this is, neglecting all the shunt admittances.
+Here, $[Y_{bus}]$ is the normal circuit admittance matrix and $[Y_{series}]$ is the admittance matrix formed with only series elements of the $\pi$ model, this is, neglecting all the shunt admittances.
 
-Solving the vector $[\Delta \theta + 0, \Delta |V| + 1]$ we get $\theta$ for the pq and pv nodes and $|V|$ for the pq nodes.\newline
+Solving the vector $[\Delta \theta + 0, \Delta Vm + 1]$ we get $\theta$ for the pq and pv nodes and $Vm$ for the pq nodes.\newline
 
 %For equivalence with the paper:\newline
 %
@@ -2838,14 +2874,14 @@ If you want to get familiar with this concept, you should read about the homotop
 
 The fundamental equation that defines the power flow problem is:
 \begin{equation}
-\textbf{S} = \textbf{V} \times (\textbf{Y} \times \textbf{V})^*
+{S} = {V} \times ({Y} \times {V})^*
 \end{equation}
 
 Most usefully represented like this:
 
 
 \begin{equation}
-{\textbf{Y} \times \textbf{V}} = \left(\frac{\textbf{S}}{\textbf{V}}\right)^* 
+{{Y} \times {V}} = \left(\frac{{S}}{{V}}\right)^* 
 \label{base_eq}
 \end{equation}
 
@@ -2855,24 +2891,24 @@ The holomorphic embedding is to insert a "travelling" parameter $\alpha$, such t
 For $\alpha=0$ we say that $S=0$, in this way the equation \ref{base_eq} becomes linear, and its solution is mathematically exact. But for that to be useful in our case we need to split the admittance matrix $Y$ into $Y_{series}$ and $Y_{shunt}$. $Y_{shunt}$ is a diagonal matrix, so it can be expressed as a vector instead (no need for matrix-vector product).
 
 \begin{equation}
-\textbf{Y}_{series} \times \textbf{V} = \left(\frac{\textbf{S}}{\textbf{V}}\right)^* - \textbf{Y}_{shunt} \textbf{V}
+{Y}_{series} \times {V} = \left(\frac{{S}}{{V}}\right)^* - {Y}_{shunt} {V}
 \label{base_eq_alpha_0}
 \end{equation}
 
 This is what will allow us to find the zero "state" in the holomorphic series calculation. For $\alpha=1$ we say that $S=S$, so we don't know the voltage solution, however we can determine a path to get there:
 
 \begin{equation}
-{\textbf{Y }\times \textbf{V}( \alpha )} = \left(\frac{ \alpha\textbf{S}}{\textbf{V}( \alpha )}\right)^* - \alpha \textbf{Y}_{shunt} \times \textbf{V}( \alpha ) = \frac{ \alpha\textbf{S}^*}{\textbf{V}( \alpha )^*} - \alpha \textbf{Y}_{shunt} \textbf{V}( \alpha )
+{    {Y }\times     {V}( \alpha )} = \left(\frac{ \alpha    {S}}{{V}( \alpha )}\right)^* - \alpha {Y}_{shunt} \times {V}( \alpha ) = \frac{ \alpha{S}^*}{{V}( \alpha )^*} - \alpha {Y}_{shunt} {V}( \alpha )
 \label{base_eq_embedded}
 \end{equation}
 
 Wait, what?? did you just made this stuff up??, well so far my reasoning is:
 \begin{itemize}
-	\item The voltage $\textbf{V}$ is what I have to convert into a series, and the series depend of $\alpha$, so it makes sense to say that $\textbf{V}$, as it is dependent of $\alpha$, becomes $\textbf{V}(\alpha)$.
+	\item The voltage ${V}$ is what I have to convert into a series, and the series depend of $\alpha$, so it makes sense to say that ${V}$, as it is dependent of $\alpha$, becomes ${V}(\alpha)$.
 	
-	\item Regarding the $\alpha$ that multiplies $\textbf{S}$, the amount of power ($\alpha \textbf{S}$) is what I vary during the \textit{travel} from $\alpha=0$ to $\alpha=1$, so that is why $\textbf{S}$ has to be accompanied by the \textit{traveling} parameter $\alpha.$
+	\item Regarding the $\alpha$ that multiplies ${S}$, the amount of power ($\alpha {S}$) is what I vary during the \textit{travel} from $\alpha=0$ to $\alpha=1$, so that is why ${S}$ has to be accompanied by the \textit{traveling} parameter $\alpha.$
 	
-	\item In my opinion the $\alpha$ $\textbf{Y}_{shunt}$ is to provoke the first voltage coefficients to be one.  $\textbf{Y}_{series} \times \textbf{V}[0] = 0$, makes $V[0]=1$. This is essential for later steps (is a condition to be able to use Pad\'e). \newline
+	\item In my opinion the $\alpha$ ${Y}_{shunt}$ is to provoke the first voltage coefficients to be one.  ${Y}_{series} \times {V}[0] = 0$, makes $V[0]=1$. This is essential for later steps (is a condition to be able to use Pad\'e). \newline
 \end{itemize}
 
 The series are expressed as McLaurin equations:
@@ -2884,41 +2920,41 @@ V(\alpha) = \sum_{n}^{\infty} V_n \alpha ^n
 
 \subsection{Holomorphicity check}
 	
-	There's still something to do. The magnitude $\left(\textbf{V}( \alpha )\right)^*$ has to be converted into $\left(\textbf{V}( \alpha^* )\right)^*$. This is done in order to make the function be holomorphic. The holomorphicity condition is tested by the Cauchy-Riemann condition, this is $\partial \textbf{V} / \partial \alpha^* = 0$, let's check that:
+	There's still something to do. The magnitude $\left({V}( \alpha )\right)^*$ has to be converted into $\left({V}( \alpha^* )\right)^*$. This is done in order to make the function be holomorphic. The holomorphicity condition is tested by the Cauchy-Riemann condition, this is $\partial {V} / \partial \alpha^* = 0$, let's check that:
 	
 	\begin{equation}
-	\partial \left(\textbf{V}( \alpha )^*\right) / \partial \alpha^*  = \partial \left(\sum_{n}^{\infty} V_n^* (\alpha ^n)^*\right) / \partial \alpha^*  = \sum_{n}^{\infty} \alpha ^n V_n^* (\alpha ^{n-1})^*
+	\partial \left({V}( \alpha )^*\right) / \partial \alpha^*  = \partial \left(\sum_{n}^{\infty} V_n^* (\alpha ^n)^*\right) / \partial \alpha^*  = \sum_{n}^{\infty} \alpha ^n V_n^* (\alpha ^{n-1})^*
 	\end{equation} 
 	Which is not zero, obviously. Now with the proposed change:
 	
 	\begin{equation}
-	\partial \left( \textbf{V}( \alpha^* )\right)^* / \partial \alpha^*  = \partial \left(\sum_{n}^{\infty} \textbf{V}_n^* \alpha ^n \right) / \partial \alpha^*  = 0
+	\partial \left( {V}( \alpha^* )\right)^* / \partial \alpha^*  = \partial \left(\sum_{n}^{\infty} {V}_n^* \alpha ^n \right) / \partial \alpha^*  = 0
 	\end{equation} 
 	
 	Yay!, now we're mathematically happy, since this stuff has no effect in practice because our $\alpha$ is not going to be a complex parameter, but for sake of being correct the equation is now:
 	
 	\begin{equation}
-	{\textbf{Y}_{series}\times \textbf{V}( \alpha )} = \frac{ \alpha\textbf{S}^*}{\textbf{V}^*( \alpha^* )} - \alpha \textbf{Y}_{shunt} \textbf{V}( \alpha )
+	{{Y}_{series}\times {V}( \alpha )} = \frac{ \alpha{S}^*}{{V}^*( \alpha^* )} - \alpha {Y}_{shunt} {V}( \alpha )
 	\label{base_eq_embedded2}
 	\end{equation}
 	
 
 
 
-The fact that $\textbf{V}^*( \alpha^* )$ is dividing is problematic. We need to express it as its inverse so it multiplies instead of divide.
+The fact that ${V}^*( \alpha^* )$ is dividing is problematic. We need to express it as its inverse so it multiplies instead of divide.
 
 \begin{equation} 
-\frac{1}{\textbf{V}( \alpha)} = \textbf{W}( \alpha ) \longrightarrow \textbf{W}( \alpha ) \textbf{V}( \alpha) = 1 \longrightarrow \sum_{n=0}^{\infty}{\textbf{W}_n \alpha^n}  \sum_{n=0}^{\infty}{\textbf{V}_n \alpha^n} = 1
+\frac{1}{{V}( \alpha)} = {W}( \alpha ) \longrightarrow {W}( \alpha ) {V}( \alpha) = 1 \longrightarrow \sum_{n=0}^{\infty}{{W}_n \alpha^n}  \sum_{n=0}^{\infty}{{V}_n \alpha^n} = 1
 \end{equation}
 
 Expanding the series and identifying terms of $\alpha$ we obtain the expression to compute the inverse voltage series coefficients:
 
 \begin{equation}
-\textbf{W}_n =
+{W}_n =
 \left\{
 \begin{array}{ll}
-\mathlarger{\frac{1}{\textbf{V}_0}}, \quad n=0\\
-\mathlarger{-\frac{\mathlarger{\sum_{k=0}^{n}\textbf{W}_k \textbf{V}_{n-k}}}{\textbf{V}_0}}, \quad n>0
+\mathlarger{\frac{1}{{V}_0}}, \quad n=0\\
+\mathlarger{-\frac{\mathlarger{\sum_{k=0}^{n}{W}_k {V}_{n-k}}}{{V}_0}}, \quad n>0
 \end{array}
 \right.
 \end{equation}
@@ -2927,25 +2963,25 @@ Expanding the series and identifying terms of $\alpha$ we obtain the expression 
 Now, the equation \ref{base_eq_embedded2} is:
 
 \begin{equation}
-{\textbf{Y}_{series}\times \textbf{V}( \alpha )} = \alpha\textbf{S}^* \cdot \textbf{W}( \alpha)^*  - \alpha \textbf{Y}_{shunt} \textbf{V}( \alpha )
+{{Y}_{series}\times {V}( \alpha )} = \alpha{S}^* \cdot {W}( \alpha)^*  - \alpha {Y}_{shunt} {V}( \alpha )
 \label{base_eq_embedded3}
 \end{equation}
 
 Substituting the series by their McLaurin expressions:
 
 \begin{equation}
-{\textbf{Y}_{series}\times \sum_{n=0}^{\infty}{\textbf{V}_n \alpha^n}} = \alpha\textbf{S}^* \left(\sum_{n=0}^{\infty}{\textbf{W}_n \alpha^n}\right)^*  - \alpha \textbf{Y}_{shunt} \sum_{n=0}^{\infty}{\textbf{V}_n \alpha^n}
+{{Y}_{series}\times \sum_{n=0}^{\infty}{{V}_n \alpha^n}} = \alpha{S}^* \left(\sum_{n=0}^{\infty}{{W}_n \alpha^n}\right)^*  - \alpha {Y}_{shunt} \sum_{n=0}^{\infty}{{V}_n \alpha^n}
 \label{base_eq_embedded4}
 \end{equation}
 
 Expanding the series an identifying terms of $\alpha$ we obtain the expression for the voltage coefficients:
 
 \begin{equation}
-\textbf{V}_n =
+{V}_n =
 \left\{
 \begin{array}{ll}
 \mathlarger{0}, \quad n=0\\
-\mathlarger{\textbf{S}^* \textbf{W}^*_{n-1} - Y_{shunt} \textbf{V}_{n-1} }, \quad n>0
+\mathlarger{{S}^* {W}^*_{n-1} - Y_{shunt} {V}_{n-1} }, \quad n>0
 \end{array}
 \right.
 \end{equation}
@@ -2953,7 +2989,7 @@ Expanding the series an identifying terms of $\alpha$ we obtain the expression f
 This is the HELM fundamental formula derivation for a grid with no voltage controlled nodes (no PV nodes). Once a sufficient number of coefficients are obtained, we still need to use the Pad\'e approximation to get voltage values out of the series.
 
 
-In the previous formulas, the number of the bus has not been explicitly detailed. All the $\textbf{V}$ and the $\textbf{W}$ are matrices of dimension $n \times nbus$ (number of coefficients by number of buses in the grid) This structures are depicted in the figure \ref{fig:CoefficientsStructure}. For instance $\textbf{V}_n$ is the $n^{th}$ row of the coefficients structure $\textbf{V}$.
+In the previous formulas, the number of the bus has not been explicitly detailed. All the ${V}$ and the ${W}$ are matrices of dimension $n \times nbus$ (number of coefficients by number of buses in the grid) This structures are depicted in the figure \ref{fig:CoefficientsStructure}. For instance ${V}_n$ is the $n^{th}$ row of the coefficients structure ${V}$.
 
 
 \begin{figure}[h]
@@ -2969,7 +3005,7 @@ The equation \ref{eq:McLaurinV} provides us with an expression to obtain the vol
 
 Well, it is true that the equation \ref{eq:McLaurinV} provides an approximation of the voltage by means of a series (this is similar to a Taylor approximation), but in practice, the approximation might provide a wrong value for a given number of coefficients. The Pad\'e approximation accelerates the convergence of any given series, so that you get a more accurate result with less coefficients. This means that for the same series of voltage coefficients, using the equation \ref{eq:McLaurinV} could give a completely wrong result, whereas by applying Pad\'e to those coefficients one could obtain a fairly accurate result.
 
-The Pad\'e approximation is a rational approximation of a function. In our case the function is $\textbf{V}(\alpha)$, represented by the coefficients structure $\textbf{V}$. The approximation is valid over a small domain of the function, in our case the domain is $\alpha=[0,1]$. The method requires the function to be continuous and differentiable for $\alpha=0$. Hence the Cauchy-Riemann condition. And yes, our function meets this condition, we tested it before.
+The Pad\'e approximation is a rational approximation of a function. In our case the function is ${V}(\alpha)$, represented by the coefficients structure ${V}$. The approximation is valid over a small domain of the function, in our case the domain is $\alpha=[0,1]$. The method requires the function to be continuous and differentiable for $\alpha=0$. Hence the Cauchy-Riemann condition. And yes, our function meets this condition, we tested it before.
 
 \paragraph{Pad\'e approximation algorithm}
 
@@ -3019,7 +3055,7 @@ q_MV_{N-M} + q_{M-1}V_{N-M+1} + ... + +V_N - p_N=0
 Once the coefficients are there, you would have defined completely the polynomials $P_N(\alpha)$ and $Q_M(\alpha)$, and it is only a matter of evaluating the equation \ref{eq:pade_apprx} for $\alpha=1$.\newline
 
 
-This process is done for every column of coefficients $\textbf{V}=\{V_0, V_1,V_2,V_3, ...,V_n\}$ of the structure depicted in the figure \ref{fig:CoefficientsStructure}. This means that we have to perform a Pad\'e approximation for every node, using the one columns of the voltage coefficients per Pad\'e approximation.
+This process is done for every column of coefficients ${V}=\{V_0, V_1,V_2,V_3, ...,V_n\}$ of the structure depicted in the figure \ref{fig:CoefficientsStructure}. This means that we have to perform a Pad\'e approximation for every node, using the one columns of the voltage coefficients per Pad\'e approximation.
 
 \paragraph{Wynn's Pad\'e approximation algorithm}
 
@@ -3055,8 +3091,8 @@ For PQ nodes:
 \begin{equation}
 \left\{
 \begin{array}{ll}
-\textbf{Y} \times \textbf{V}(\alpha) = 0 \quad \quad \quad \quad \forall \alpha=0\\
-\mathlarger{\textbf{Y} \times \textbf{V}(\alpha) = \frac{\alpha \textbf{S}}{\textbf{V}^*(\alpha^*)}} \quad \forall \alpha>0
+{Y} \times {V}(\alpha) = 0 \quad \quad \quad \quad \forall \alpha=0\\
+\mathlarger{{Y} \times {V}(\alpha) = \frac{\alpha {S}}{{V}^*(\alpha^*)}} \quad \forall \alpha>0
 \end{array}
 \right.
 \end{equation}
@@ -3066,8 +3102,8 @@ For PV nodes:
 \begin{equation}
 \left\{
 \begin{array}{ll}
-\mathlarger{\textbf{Y} \times \textbf{V}(\alpha) = \frac{ \textbf{S}}{\textbf{V}^*(\alpha^*)}} \quad \forall \alpha=0\\
-\mathlarger{\textbf{Y} \times \textbf{V}(\alpha) = \frac{ \textbf{S} - j \textbf{Q}(\alpha)}{\textbf{V}^*(\alpha^*)}} \quad \forall \alpha>0
+\mathlarger{{Y} \times {V}(\alpha) = \frac{ {S}}{{V}^*(\alpha^*)}} \quad \forall \alpha=0\\
+\mathlarger{{Y} \times {V}(\alpha) = \frac{ {S} - j {Q}(\alpha)}{{V}^*(\alpha^*)}} \quad \forall \alpha>0
 \end{array}
 \right.
 \end{equation}
@@ -3124,18 +3160,18 @@ V^{SP}_{im, 1}\\
 \quad \forall n = 0
 \end{equation}
 
-Form the solution vector $\textbf{V}[n]$ you can compute the buses calculated power and then get the reactive power at the PV nodes to initialize $\textbf{Q}[0]$:
+Form the solution vector ${V}[n]$ you can compute the buses calculated power and then get the reactive power at the PV nodes to initialize ${Q}[0]$:
 
 \begin{equation}
-\textbf{S} = \textbf{V}[0] \cdot (\textbf{Y}_{bus} \times \textbf{V}[0])^*
+{S} = {V}[0] \cdot ({Y}_{bus} \times {V}[0])^*
 \label{Scalc}
 \end{equation}
 
 \begin{equation}
-\textbf{Q}_i[0] = Im(\textbf{S}_{i}) \quad \forall i \in PV
+{Q}_i[0] = Im \{ {S}_{i} \}  \quad \forall i \in PV
 \end{equation}
 
-The initial inverse voltage coefficients $\textbf{W}[0]$ are obtained by:
+The initial inverse voltage coefficients ${W}[0]$ are obtained by:
 
 \begin{equation}
 W_i[0] = \frac{1}{V_i[0]}  \quad \forall i \in N
@@ -3195,6 +3231,8 @@ f2 = P_i \cdot W^*_i[n-1] + conv(n, Q_i, W^*_i) \quad \forall i \in PV
 \epsilon[n] = \delta_{n1} \cdot \frac{1}{2} \left(|V_i^SP|^2 - |V_i[0]|^2\right) - \frac{1}{2} conv(n, V_i, V_i^*)  \quad \forall i \in PV, n > 0
 \end{equation}
 
+\marginnote{$\delta_{nk}$ is a function that returns $1$ when $n==k$ and $0$ otherwise.}
+
 The convolution $conv$ is defined as:
 
 \begin{equation}
@@ -3203,7 +3241,7 @@ conv(n, A, B) = \sum_{m=0}^{n-1} A[m] \cdot B[n-m]
 
 The system matrix ($A_{sys}$) is the same for all the orders of $n>0$, therefore we only build it once, and we factorize it to solve the subsequent coefficients.
 
-After the voltages $\textbf{V}[n]$ and the reactive power at the PV nodes $Q[n]$ is obtained solving the linear system (eq \ref{lin_sys_2}), we must solve the inverse voltage coefficients of order $n$ for all the buses:
+After the voltages ${V}[n]$ and the reactive power at the PV nodes $Q[n]$ is obtained solving the linear system (eq \ref{lin_sys_2}), we must solve the inverse voltage coefficients of order $n$ for all the buses:
 
 \begin{equation}
 W_i[n] = \frac{- \mathlarger{\sum_{m=0}^{n}W_i[m] \cdot V_i[n-m]} }{V_i[0]} \quad  \forall i \in N, n>0
@@ -3215,10 +3253,10 @@ W_i[n] = \frac{- \mathlarger{\sum_{m=0}^{n}W_i[m] \cdot V_i[n-m]} }{V_i[0]} \qua
 Repeat step 2 until a sufficiently low error is achieved or a maximum number of iterations (coefficients).
 
 
-The error is computed by comparing the calculated power $\textbf{S}$ (eq \ref{Scalc}) with the specified power injections $\textbf{S}^{SP}$:
+The error is computed by comparing the calculated power ${S}$ (eq \ref{Scalc}) with the specified power injections ${S}^{SP}$:
 
 \begin{equation}
-mismatch = \textbf{S} - \textbf{S}^{SP}
+mismatch = {S} - {S}^{SP}
 \end{equation}
 
 \begin{equation}
@@ -3226,77 +3264,94 @@ error = |mismatch|_\infty = max(abs(mismatch))
 \end{equation}
 
 
-
+\newpage
 \section{Post voltage solution: Compute the power flows} \label{post_voltage_solution}
 
 Ironically, what is called the power flow problem does not compute the power flows in the branches of a grid. It computes the node voltages. In this section we explain how to compute the current and power that flows through the grid branches using a given voltage solution vector.
 
-First we compute the branches per unit currents:
+
+\marginnote{
+	The variables are:
+	
+	\begin{itemize}
+		\item $[Y_{bus}]$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
+		\item $[C_f]$: Connectivity matrix of the branches and the \textit{from} buses.
+		\item $[C_t]$:Connectivity matrix of the branches and the \textit{to} buses.
+		\item $[V]$: Array of bus voltages in p.u.
+		\item $[I_f]$: Array of currents at the \textit{from} buses in p.u.
+		\item $[I_t]$: Array of currents at the \textit{to} buses in p.u.
+		\item $[S_f]$: Array of powers at the \textit{from} buses in p.u.
+		\item $[S_t]$: Array of powers at the \textit{to} buses in p.u.	
+		\item $[rate]$: Array of branch ratings in MVA.
+	\end{itemize}
+}
+
+
+First we compute the branches per unit currents in the \textit{from} and \textit{to} sides:
 
 \begin{equation}
-{{I}_f = ({C}_f \times {Y}_{bus}) \times {V}}
+{[I_f] = ([C_f] \times [Y_{bus}]) \times [V]}
 \end{equation}
 
 \begin{equation}
-{{I}_t = ({C}_t \times {Y}_{bus}) \times {V}}
+{[I_t] = ([C_t] \times [Y_{bus}]) \times [V]}
 \end{equation}
 
 
-These are matrix-vector multiplications. The result is the per unit currents flowing through a branch seen from the \textit{from} bus or from the \textit{to} bus.
+These are matrix-vector multiplications. The result is the per unit currents vector flowing through a branch, seen from the \textit{from} bus or from the \textit{to} bus.
 
 
-Then we compute the power values:
+Then we compute the power values in the \textit{from} and \textit{to} sides:
 
 \begin{equation}
-{{S}_f = ({C}_f \times {V}) \cdot {I}_f^*}
+{[S_f] = ([C_f] \times [V]) \cdot [I_f]^*}
 \end{equation}
 
 \begin{equation}
-{{S}_t = ({C}_t \times {V}) \cdot {I}_t^*}
+{[S_t] = ([C_t] \times [V]) \cdot [I_t]^*}
 \end{equation}
 
-These are element-wise multiplications, resulting in the per unit power flowing through a branch seen from the \textit{from} bus or from the \textit{to} bus.
+These are element-wise multiplications of two vectors, resulting in the per unit power flowing through a branch seen from the \textit{from} bus or from the \textit{to} bus.
 
 Now we can compute the losses in MVA as:
 
 \begin{equation}
-{{losses} = |{S}_f - {S}_t| \cdot Sbase}
+{{losses} = |[S_f] - [S_t]| \cdot Sbase}
 \end{equation}
 
 And also the branches loading in per unit as:
 \begin{equation}
-{{loading} = \frac{max(|{S}_f|, |{S}_t|) \cdot Sbase}{ {rate}}}
+{{loading} = \frac{max(|[S_f]|, |[S_t]|) \cdot Sbase}{ [rate]}}
 \end{equation}
+
+Another way of computing the loading would be to perform the average of the injected powers:
+
+\begin{equation}
+{{loading} = \frac{max(|[S_f] - [S_t]|) \cdot Sbase}{ [rate]}}
+\end{equation}
+
+\marginnote{Note that $[S_f]$ has the opposite sign of $[S_t]$, therefore to sum the two values we actually need to subtract them.}
+
 
 Finally we compute the power in all nodes:
 
 \begin{equation}
-{S}_{bus} = V \cdot (Y_{bus} \times V - I_{bus})^*
+[S_{bus}] = [V] \cdot \left([Y_{bus}] \times [V] - [I_{bus}] \right)^*
 \end{equation}
-The imaginary part of $S_{bus}$ at the PV nodes is he calculated reactive power.
+The imaginary part of $[S_{bus}]$ at the PV nodes is he calculated reactive power.
+
+\marginnote{The calculated reactive power is used to check the generation reactive power limits after the power flow.}
 
 \begin{equation}
-{Q}_{pv} = Im(S_{bus, pv})
+[Q_{pv}] = Im \{[S_{bus}]_{(pv)} \}
 \end{equation}
 
-The variables are:
 
-\begin{itemize}
-	\item ${Y}_{bus}$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
-	\item ${C}_f$: Connectivity matrix of the branches and the \textit{from} buses.
-	\item ${C}_t$:Connectivity matrix of the branches and the \textit{to} buses.
-	\item ${V}$: Array of bus voltages in p.u.
-	\item ${I}_f$: Array of currents at the \textit{from} buses in p.u.
-	\item ${I}_t$: Array of currents at the \textit{to} buses in p.u.
-	\item ${S}_f$: Array of powers at the \textit{from} buses in p.u.
-	\item ${S}_t$: Array of powers at the \textit{to} buses in p.u.	
-	\item ${rate}$: Array of branch ratings in MVA.
-\end{itemize}
 
 \newpage
 \section{Reactive power control: The outer loop}
 
-The power flow result seen in the previous section \ref{post_voltage_solution} computes values of reactive power for the PV nodes ($Q_{pv}$). These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
+The power flow result seen in the previous section \ref{post_voltage_solution} computes values of reactive power for the PV nodes $[Q_{pv}]$. These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
 
 Many academic texts suggest that the PV-PQ switching has to be done within the iteration of the power flow solution. That is fundamentally wrong because it introduces discontinuities in the power flow numerical process that is assumed to be smooth. Hence if the PQ-PV switching is done inside the power flow numerical loop, it will be a miracle if the process converges.
 
@@ -3315,9 +3370,9 @@ The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
 	reactive power was fixed at its lower limit:
 	
 	\begin{itemize}
-		\item If the bus voltage magnitude $|V_i| \geq Vset_i$, then it remains a $PQ$ bus at current iteration and set $Q_i = Qmin_i$.
+		\item If the bus voltage magnitude $Vm_i \geq Vset_i$, then it remains a $PQ$ bus at current iteration and set $Q_i = Qmin_i$.
 		
-		\item If $|V_i| < Vset_i$ , then compare $Q_i$ with the upper and lower limits.
+		\item If $Vm_i < Vset_i$ , then compare $Q_i$ with the upper and lower limits.
 		
 		\begin{itemize}
 			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus but set $Q_i = Qmax_i$.
@@ -3332,9 +3387,9 @@ The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
 	\item Bus $i$ is a $PQ$ bus in the previous iteration and its reactive power was fixed at its upper limit:
 	
 	\begin{itemize}
-		\item If its voltage magnitude $|V_i| \leq Vset_i$ , then the bus $i$ still a $PQ$ bus and set $Q_i = Qmax_i$.
+		\item If its voltage magnitude $Vm_i \leq Vset_i$ , then the bus $i$ still a $PQ$ bus and set $Q_i = Qmax_i$.
 	
-		\item If $|V_i| > Vset_i$ , then compare between $Q_i$ and its upper/lower limits:
+		\item If $Vm_i > Vset_i$ , then compare between $Q_i$ and its upper/lower limits:
 	
 		\begin{itemize}
 			\item If $Q_i \geq Qmax_i$ , then it is still a $PQ$ bus and set $Q_i = Qmax_i$.
@@ -3461,17 +3516,17 @@ PG_i^{min} \leq PG_i \leq PG_i^{max}  \quad \forall i \in generators
 \end{equation}
 
 \begin{equation}
-|V|_i^{min} \leq |V|_i \leq |V|_i^{max}  \quad \forall i \in pq
+Vm_i^{min} \leq Vm_i \leq Vm_i^{max}  \quad \forall i \in pq
 \end{equation}
 
 The equation \ref{eq:AC_linear_power_flow} can be transformed to the following equations:
 
 \begin{equation}
--\sum_{k}^{pvpq}Bs_{k,i} \cdot \Delta\theta_i + \sum_{k}^{pq}G_{k,i} \cdot \Delta|V_i| = \sum_{g}^{generators_i} PG_{g} - \sum_{l}^{loads_i} PD_l \quad \forall i \in pvpq
+-\sum_{k}^{pvpq}Bs_{k,i} \cdot \Delta\theta_i + \sum_{k}^{pq}G_{k,i} \cdot \Delta Vm_i = \sum_{g}^{generators_i} PG_{g} - \sum_{l}^{loads_i} PD_l \quad \forall i \in pvpq
 \end{equation}
 
 \begin{equation}
--\sum_{k}^{pqpv}Gs_{k,i} \cdot \Delta\theta_i - \sum_{k}^{pq}B_{k,i} \cdot \Delta|V_i| = - \sum_{l}^{loads_i} QD_l \quad \forall i \in pq
+-\sum_{k}^{pqpv}Gs_{k,i} \cdot \Delta\theta_i - \sum_{k}^{pq}B_{k,i} \cdot \Delta Vm_i = - \sum_{l}^{loads_i} QD_l \quad \forall i \in pq
 \end{equation}
 
 \begin{equation}
@@ -3479,7 +3534,7 @@ The equation \ref{eq:AC_linear_power_flow} can be transformed to the following e
 \end{equation}
 
 \begin{equation}
-|V_i| = |V_i|^{SP} + \Delta |V_i|
+Vm_i = Vm_i^{SP} + \Delta Vm_i
 \end{equation}
 
 %-------------------------------------------------------------------------------
@@ -3618,22 +3673,22 @@ In our case, we will draw load and generation samples, evaluate the voltage by r
 \begin{enumerate}
 	\item Construct the CDF of all the loads and generators from their profiles of data. For the loads we construct a DSF for the active power and another for the reactive power, for the generators, we only need the CDF for the active power.
 	
-	\item Initialize control variables: $iterations = 0$, $\textbf{V}_{summation} = 0$
+	\item Initialize control variables: $iterations = 0$, ${V}_{summation} = 0$
 	
 	\item While the variance is less than a tolerance value:
 	
 	\begin{enumerate}
 		\item Construct the injection vectors $S$ and $I$, sampling from the CDF.
 		
-		\item Run a power flow (see chapter \ref{ch:power_flow}) with those arrays and get the voltages vector $\textbf{V}$.
+		\item Run a power flow (see chapter \ref{ch:power_flow}) with those arrays and get the voltages vector ${V}$.
 		
 		\item Increase the number of iterations: $iterations += 1$
 		
-		\item Compute the voltages summation: $\textbf{V}_{summation} += \textbf{V}$
+		\item Compute the voltages summation: ${V}_{summation} += {V}$
 		
-		\item Compute the voltage average: $\textbf{V}_{mean} = \textbf{V}_{summation} / iterations$
+		\item Compute the voltage average: ${V}_{mean} = {V}_{summation} / iterations$
 		
-		\item Compute the variance: $min((\textbf{V} - \textbf{V}_{mean})^2 / (iterations - 1))$
+		\item Compute the variance: $min(({V} - {V}_{mean})^2 / (iterations - 1))$
 		
 		\item Store all the values that you want to have at the end of the loop.
 		
@@ -3725,7 +3780,7 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \frac{\partial S_{inj}}{\partial \theta} = j \cdot V_{diag} \times (I_{bus,diag}-Y_{bus} \times V_{diag}  )^* 
 \end{equation}
 
-\begin{equation}\frac{\partial S_{inj}}{\partial |V|}=j \cdot E_{diag} \times (I_{bus,diag} + Y_{bus} \times V_{diag}  )^* \end{equation}
+\begin{equation}\frac{\partial S_{inj}}{\partial Vm}=j \cdot E_{diag} \times (I_{bus,diag} + Y_{bus} \times V_{diag}  )^* \end{equation}
 
 \marginnote{All these derivatives are square matrices in complex numbers.}
 	
@@ -3734,7 +3789,7 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \begin{equation}\frac{\partial S_{flow}}{\partial \theta} = j \cdot (I_{f,diag}^* \times C_f \times V_{diag} - [C_f \times V]_{diag} \times Y_f^* \times V_{diag}^* ) 
 \end{equation}
 
-\begin{equation}\frac{\partial S_{flow}}{\partial |V|}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
+\begin{equation}\frac{\partial S_{flow}}{\partial Vm}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
 \end{equation}
 
 
@@ -3743,12 +3798,12 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \begin{equation}\frac{\partial I_{mag}}{\partial \theta} = j \cdot Y_f \times V_{diag} 
 \end{equation}
 
-\begin{equation}\frac{\partial I_{mag}}{\partial |V|}=j \cdot Y_f \times E_{diag} 
+\begin{equation}\frac{\partial I_{mag}}{\partial Vm}=j \cdot Y_f \times E_{diag} 
 \end{equation}
 
 The matrices used for the derivatives computation and the calculated magnitudes vector ($h$) are:
 
-\begin{equation}E=\frac{V}{|V|}\end{equation}  
+\begin{equation}E=\frac{V}{Vm}\end{equation}  
 
 \begin{equation}
 V_f = C_f \times V
@@ -3783,50 +3838,50 @@ S_f = V_{f} \cdot I_{f}^*
 The submatrices $A1$, $A2$, $B1$...$F2$, to be used in the Jacobian $H$ are not the ones with all the entries, instead we have to use sub-matrices of the real or imaginary parts of the previously introduced derivative matrices where the rows to keep are the ones with the indices of the nodes or branches with measurements of the respective magnitudes and the columns to keep are the ones with the indices of the non slack nodes for $A1$, $B1$, $C1$, $D1$, $E1$ and $F1$ and all the columns for the others. Therefore the submatrices are:
 
 \begin{equation}
-A1 = Re\left(\frac{\partial S_{flow}}{\partial |V|}\right)_{[np_{flow}, pqpv]}
+A1 = Re \left\{   \frac{\partial S_{flow}}{\partial Vm}  \right\}_{[np_{flow}, pqpv]}
 \end{equation}
 \marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
 
 \begin{equation}
-A2 = Re\left(\frac{\partial S_{flow}}{\partial \theta}\right)_{[np_{flow}, :]}
+A2 = Re \left\{\frac{\partial S_{flow}}{\partial \theta} \right\}_{[np_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-B1 = Re\left(\frac{\partial S_{inj}}{\partial |V|}\right)_{[np_{inj}, pqpv]}
+B1 = Re \left\{\frac{\partial S_{inj}}{\partial Vm} \right\}_{[np_{inj}, pqpv]}
 \end{equation}
 
 \marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
 
 \begin{equation}
-B2 = Re\left(\frac{\partial S_{inj}}{\partial \theta}\right)_{[np_{inj}, :]}
+B2 = Re \left\{ \frac{\partial S_{inj}}{\partial \theta} \right\}_{[np_{inj}, :]}
 \end{equation}
 
 %%%%%%%%%%
 
 \begin{equation}
-C1 = Im\left(\frac{\partial S_{flow}}{\partial |V|}\right)_{[nq_{flow}, pqpv]}
+C1 = Im\left\{  \frac{\partial S_{flow}}{\partial Vm}\right\}_{[nq_{flow}, pqpv]}
 \end{equation}
 
 \marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
 
 \begin{equation}
-C2 = Im\left(\frac{\partial S_{flow}}{\partial \theta}\right)_{[nq_{flow}, :]}
+C2 = Im\left\{\frac{\partial S_{flow}}{\partial \theta}\right\}_{[nq_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-D1 = Im\left(\frac{\partial S_{inj}}{\partial |V|}\right)_{[nq_{inj}, pqpv]}
+D1 = Im\left\{\frac{\partial S_{inj}}{\partial Vm}\right\}_{[nq_{inj}, pqpv]}
 \end{equation}
 
 \marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
 
 \begin{equation}
-D2 = Im\left(\frac{\partial S_{inj}}{\partial \theta}\right)_{[nq_{inj}, :]}
+D2 = Im\left\{\frac{\partial S_{inj}}{\partial \theta}\right\}_{[nq_{inj}, :]}
 \end{equation}
 
 %%%%%%%%%%
 
 \begin{equation}
-E1 = abs\left(\frac{\partial I_{flow}}{\partial |V|}\right)_{[nI_{flow}, pqpv]}
+E1 = abs\left(\frac{\partial I_{flow}}{\partial Vm}\right)_{[nI_{flow}, pqpv]}
 \end{equation}
 
 \marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
@@ -3836,13 +3891,13 @@ E2 = abs\left(\frac{\partial I_{flow}}{\partial \theta}\right)_{[nI_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-F1 = \frac{\partial |V|}{\partial |V|}_{[nv, pqpv]} = diag([1])_{[nv, pqpv]}
+F1 = \frac{\partial Vm}{\partial Vm}_{[nv, pqpv]} = diag([1])_{[nv, pqpv]}
 \end{equation}
 
 \marginnote{$nv$ is a vector of node indices where there are voltage module measurements.}
 
 \begin{equation}
-F2 = \frac{\partial |V|}{\partial \theta}_{[nv, :]}= [0]_{[nv, :]}
+F2 = \frac{\partial Vm}{\partial \theta}_{[nv, :]}= [0]_{[nv, :]}
 \end{equation}
 
 \paragraph{Calculated measurements $h$}
@@ -3866,12 +3921,12 @@ f3
 
 
 \begin{equation}
-a3 = Re\left(S_{flow}\right)_{[np_{flow}]}
+a3 = Re\left\{ S_{flow}\right\}_{[np_{flow}]}
 \end{equation}
 \marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
 
 \begin{equation}
-b3 = Re\left(S_{inj}\right)_{[np_{inj}]}
+b3 = Re\left\{S_{inj}\right\}_{[np_{inj}]}
 \end{equation}
 
 \marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
@@ -3880,14 +3935,14 @@ b3 = Re\left(S_{inj}\right)_{[np_{inj}]}
 %%%%%%%%%%
 
 \begin{equation}
-c3 = Im\left(S_{flow}\right)_{[nq_{flow}]}
+c3 = Im\left\{S_{flow}\right\}_{[nq_{flow}]}
 \end{equation}
 
 \marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
 
 
 \begin{equation}
-d3 = Im\left(S_{inj}\right)_{[nq_{inj}]}
+d3 = Im\left\{S_{inj}\right\}_{[nq_{inj}]}
 \end{equation}
 
 \marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
@@ -3901,36 +3956,36 @@ e3 = abs\left(I_f\right)_{[nI_{flow}]}
 \marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
 
 \begin{equation}
-f3 = |V|_{[nv]}
+f3 = Vm_{[nv]}
 \end{equation}
 
-\marginnote{$nv$ is a vector of node indices where there are voltage module measurements. Note that $|V|$ is the module of the last iteration voltage solution.}
+\marginnote{$nv$ is a vector of node indices where there are voltage module measurements. Note that $Vm$ is the module of the last iteration voltage solution.}
 
 
 \paragraph{The solution vector $\Delta x$}
 
-The linear system solution will produce a vector ($\Delta x$) at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta |V|$) for all the nodes including the slack.
+The linear system solution will produce a vector ($\Delta x$) at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta Vm$) for all the nodes including the slack.
 
 \begin{equation}
-\Delta \textbf{x} = [ \Delta \theta_{pqpv} \quad \Delta|\textbf{V}|_{all} ]
+\Delta {x} = [ \Delta \theta_{pqpv} \quad \Delta|{V}|_{all} ]
 \end{equation}
 
 In this fashion we can split the increments vector:
 
 \begin{equation}
-\Delta \theta_{pqpv} = \Delta \textbf{x}[:npqpv]]
+\Delta \theta_{pqpv} = \Delta {x}[:npqpv]]
 \end{equation}
 
 \marginnote{The angle increments go from the first until the index equal to the number of pq and pv nodes $npqpv$}, from there until the end we find the voltage module increments.
 
 \begin{equation}
-\Delta |\textbf{V}| = \Delta \textbf{x}[npqpv::]]
+\Delta |{V}| = \Delta {x}[npqpv::]]
 \end{equation}
 
 To compose the voltage solution at the iteration $k+1$:
 
 \begin{equation}
-\textbf{V}^{(k+1} =  \textbf{V}^{(k} + \Delta |\textbf{V}| ^{-j \cdot \Delta \theta}
+{V}^{(k+1} =  {V}^{(k} + \Delta |{V}| ^{-j \cdot \Delta \theta}
 \end{equation}
 
 The outcome of the method are the node voltages (vector $V$). From those one shall compose the branch power flows
@@ -4007,6 +4062,374 @@ R_{i, i} = \sigma_{i, i}^2
 %	CHAPTER Transient stability
 %-------------------------------------------------------------------------------
 %\chapter{Transient stability}
+
+
+
+
+%-------------------------------------------------------------------------------
+%	CHAPTER Example grid
+%-------------------------------------------------------------------------------
+\appendix
+\chapter{Example grid}
+
+After having introduced the basics, this appendix defines a simple grid to help fine tuning the programmed algorithms. The grid used will be the 5 Bus grid presented in \cite{powell2004power}.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/Lynn5Bus.eps}
+	\caption{5 bus grid with terminals and switches.}
+	\label{fig:IEEE5}
+\end{figure}
+
+The grid is defined with the following data:
+
+\begin{table}[ht]
+	%	\centering
+	%	\color{maincolor}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		\rowcolor{maincolor}
+		{\color{white}Name}  & {\color{white}is slack} & {\color{white}Vnom}  & {\color{white}Vmin} & {\color{white}Vmax} \\ \hline
+		CN1   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		CN2   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		CN3   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+		CN4   & True      & 230.0 & 0.9  & 1.1  \\ \hline
+		CN5   & False     & 230.0 & 0.9  & 1.1  \\ \hline
+	\end{tabular}
+	\caption{Bus data}
+	\label{tbl:IEEE5:bus_data}
+\end{table}
+
+
+\begin{table}[ht]
+	%	\centering
+	\resizebox{\textwidth}{!}{
+		%	\color{maincolor}
+		\begin{tabular}{|l|l|l|l|l|l|l|l|}
+			\hline
+			\rowcolor{maincolor}
+			{\color{white}Name}       & {\color{white}bus from} & {\color{white}bus to}  & {\color{white}rate}  & {\color{white}R}       & {\color{white}X}      & {\color{white}G} & {\color{white}B}       \\ \hline
+			Branch 0-1 & Bus 0     & Bus 1   &  400   & 0.00281 & 0.0281 & 0 & 0.00712 \\ \hline
+			Branch 0-3 & Bus 0     & Bus 3   &  224.4 & 0.00304 & 0.0304 & 0 & 0.00658 \\ \hline
+			Branch 0-4 & Bus 0     & Bus 4   &  273.3 & 0.00064 & 0.0064 & 0 & 0.03126 \\ \hline
+			Branch 1-2 & Bus 1     & Bus 2   &  128.3 & 0.00108 & 0.0108 & 0 & 0.01852 \\ \hline
+			Branch 2-3 & Bus 2     & Bus 3   &  34.6  & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+			Branch 3-4 & Bus 3     & Bus 4   &  240   & 0.00297 & 0.0297 & 0 & 0.00674 \\ \hline
+		\end{tabular}
+	}
+	\caption{Branch data}
+	\label{tbl:IEEE5:branch_data}
+\end{table}
+
+
+\begin{table}[ht]
+	%	\centering
+	%	\color{maincolor}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		\rowcolor{maincolor}
+		{\color{white}Name} & {\color{white}Terminal}    & {\color{white}Z}  & {\color{white}I}  & {\color{white}S}         \\ \hline
+		L2 & T25 &  0j & 0j & 40 + 20j   \\ \hline
+		L3 & T26 &  0j & 0j & 25 + 15j   \\ \hline
+		L4 & T27 &  0j & 0j & 40 + 20j \\ \hline
+		L5 & T28 &  0j & 0j & 50 + 20j \\ \hline
+	\end{tabular}
+	\caption{Load data}
+	\label{tbl:IEEE5:load_data}
+\end{table}
+
+
+\begin{table}[ht]
+	%	\centering
+	%	\color{maincolor}
+	\begin{tabular}{|l|l|l|l|l|l|l|}
+		\hline
+		\rowcolor{maincolor}
+		{\color{white}name}       & {\color{white}bus}      & {\color{white}P}      & {\color{white}Vset} & {\color{white}Snom} & {\color{white}Qmin} & {\color{white}Qmax}  \\ \hline
+		Gen 0a & Bus 0  & 40     & 1    & 9999 & -30  & 30    \\ \hline
+		Gen 0b & Bus 0  & 170    & 1    & 9999 & 0    & 127.5 \\ \hline
+		Gen 2 & Bus 2  & 323.49 & 1    & 9999 & -390 & 390   \\ \hline
+		Gen 3 & Bus 3  & 0      & 1    & 9999 & 0    & 150   \\ \hline
+		Gen 4 & Bus 4  & 466.51 & 1    & 9999 & -450 & 450   \\ \hline
+	\end{tabular}
+	\caption{Generator data}
+	\label{tbl:IEEE5:gen_data}
+\end{table}
+
+
+
+%This data will be used in the next chapters to compute examples of the magnitudes.
+
+
+\newpage
+\section{Grid compilation results}
+
+First the topological compilation results:
+
+
+\begin{table}[h!]
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+	\toprule
+	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
+	\midrule
+	CN1 &   1 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 \\
+	CN2 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 \\
+	CN3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	CN4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	CN5 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 \\
+	\bottomrule
+\end{tabular}
+}
+\caption{$CN\_T$}
+\end{table}
+
+
+\begin{table}[h!]
+	\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+	\toprule
+	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
+	\midrule
+	BR1 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR2 &   0 &   0 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 \\
+	BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	\bottomrule
+\end{tabular}
+}
+\caption{$BR\_T\_f$}
+\end{table}
+
+
+\begin{table}[h!]
+	\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+	\toprule
+	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
+	\midrule
+	BR1 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR2 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 \\
+	BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	BR7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	\bottomrule
+\end{tabular}
+}
+\caption{$BR\_T\_t$}
+\end{table}
+
+
+\begin{table}[h!]
+	\resizebox{\textwidth}{!}{
+\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
+	\toprule
+	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
+	\midrule
+	SW1  &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW2  &   0 &   0 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW3  &   0 &   0 &   0 &   0 &   1 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW4  &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW5  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW6  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW7  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW8  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW9  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW10 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW11 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW12 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
+	SW13 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 \\
+	SW14 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 \\
+	\bottomrule
+\end{tabular}
+}
+\caption{$SW\_T$}
+\end{table}
+
+
+\begin{table}[h!]
+	\begin{tabular}{lr}
+		\toprule
+		{} &  States \\
+		\midrule
+		SW1  &       1 \\
+		SW2  &       1 \\
+		SW3  &       1 \\
+		SW4  &       1 \\
+		SW5  &       1 \\
+		SW6  &       1 \\
+		SW7  &       1 \\
+		SW8  &       1 \\
+		SW9  &       1 \\
+		SW10 &       1 \\
+		SW11 &       1 \\
+		SW12 &       1 \\
+		SW13 &       1 \\
+		SW14 &       1 \\
+		\bottomrule
+	\end{tabular}
+	\caption{$SW\_states$}
+\end{table}
+
+
+
+
+---------------------------------------- RESULTS ----------------------------------------
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+		\midrule
+		L2 &    0 &    1 &    0 &    0 &    0 \\
+		L3 &    0 &    0 &    1 &    0 &    0 \\
+		L4 &    0 &    0 &    0 &    1 &    0 \\
+		L5 &    0 &    0 &    0 &    0 &    1 \\
+		\bottomrule
+	\end{tabular}
+\caption{$LD\_CN$}
+\end{table}
+
+
+
+
+%\begin{table}[h!]
+%	\begin{tabular}{lrrrrr}
+%		\toprule
+%		Empty DataFrame
+%		Columns: Index(['CN1', 'CN2', 'CN3', 'CN4', 'CN5'], dtype='object')
+%		Index: Index([], dtype='object') \\
+%		\bottomrule
+%	\end{tabular}
+%\caption{$SH\_CN$}
+%\end{table}
+
+
+
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+		\midrule
+		G1 &    1 &    0 &    0 &    0 &    0 \\
+		\bottomrule
+	\end{tabular}
+\caption{$GEN\_CN$}
+\end{table}
+
+
+
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+		\midrule
+		BR1 &    1 &    0 &    0 &    0 &   -1 \\
+		BR2 &    1 &    0 &   -1 &    0 &    0 \\
+		BR3 &    1 &   -1 &    0 &    0 &    0 \\
+		BR4 &    0 &    1 &   -1 &    0 &    0 \\
+		BR5 &    0 &    1 &    0 &    0 &   -1 \\
+		BR6 &    0 &    0 &    1 &   -1 &    0 \\
+		BR7 &    0 &    0 &    0 &    1 &   -1 \\
+		\bottomrule
+	\end{tabular}
+\caption{$BR\_CN$}
+\end{table}
+
+
+
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+		\midrule
+		CN1 &    1 &    1 &    1 &    0 &    1 \\
+		CN2 &    1 &    1 &    1 &    0 &    1 \\
+		CN3 &    1 &    1 &    1 &    1 &    0 \\
+		CN4 &    0 &    0 &    1 &    1 &    1 \\
+		CN5 &    1 &    1 &    0 &    1 &    1 \\
+		\bottomrule
+	\end{tabular}
+\caption{$CN\_CN$}
+\end{table}
+
+
+
+
+
+The calculated node results in positive sequence are:
+%
+%\begin{table}[h!]
+%	\centering	
+%%	\color{maincolor}
+%	\begin{tabular}{|l|l|l|l|l|}
+%		\hline
+%		\rowcolor{maincolor}
+%		{\color{white}Bus}   & {\color{white}Power (p.u.)}                 & {\color{white}Voltage (p.u.)} & {\color{white}Current (p.u.)} & {\color{white}Bus types} \\ \hline
+%		Bus 0 & 2.1+0j                     & 1+0j         & 0j             & 2         \\ \hline
+%		Bus 1 & -3-0.9861j                 & 1+0j         & 0j             & 1         \\ \hline
+%		Bus 2 & 0.2349-0.9861j & 1+0j         & 0j             & 2         \\ \hline
+%		Bus 3 & -0.9999-0.9999j            & 1+0j         & 0j             & 3         \\ \hline
+%		Bus 4 & 4.6651+0j                  & 1+0j         & 0j             & 2         \\ \hline
+%	\end{tabular}
+%\caption{Node results}
+%\label{my-label}
+%\end{table}
+
+$$
+S_{bus,1} = \left[ \begin{array}{ccccc}
+1.55+0  j & -0.4 -0.2 j & -0.25-0.15j & -0.4 -0.2 j & -0.5 -0.2 j\\
+\end{array} \right] p.u.
+$$
+
+$$
+V_{bus,1} = \left[ \begin{array}{ccccc}
+1+0j, & 1+0j,  & 1+0j, & 1+0j,  & 1+0j \\
+\end{array} \right] p.u.
+$$
+
+$$
+Types = \left[ \begin{array}{ccccc}
+Slack, & PQ,  & PQ, & PQ,  & PQ \\
+\end{array} \right] p.u.
+$$
+
+%\begin{table}[h!]
+%	\centering
+%%	\color{maincolor}
+%	\begin{tabular}{|l|l|l|l|l|l|}
+%		\hline
+%		\rowcolor{maincolor}
+%		{\color{white}} & {\color{white}Bus 0} & {\color{white}Bus 1}  & {\color{white}Bus 2}  & {\color{white}Bus 3} & {\color{white}Bus 4}  \\ \hline
+%		Bus 0 & 22.25-222.48j & -3.525+35.23j & 0j                                       & -3.26+32.57j & -15.47+154.70j \\ \hline
+%		Bus 1 & -3.52+35.23j & 12.69-126.9j & -9.17+91.68j  & 0j                                       & 0j                                       \\ \hline
+%		Bus 2 & 0j                                       & -9.17+91.68j  & 12.50-125.0j   & -3.33+33.34j & 0j                                       \\ \hline
+%		Bus 3 & -3.26+32.57j & 0j                                       & -3.33+33.34j & 9.92-99.23j   & -3.33+33.34j \\ \hline
+%		Bus 4 & -15.47+154.70j) & 0j                                       & 0j                                       & -3.34+33.34j & 18.80-188.02j \\ \hline
+%	\end{tabular}
+%\caption{Admittance matrix}
+%\label{ex:Y}
+%\end{table}
+
+$$
+Y_{bus,1} = \left[ \begin{array}{ccccc}
+10.959-25.997j & -3.425 +7.534j & -3.425 +7.534j &  0.    +0.   j & -4.11 +10.959j\\
+-3.425 +7.534j & 11.672-26.061j & -4.124 +9.278j &  0.    +0.   j & -4.124 +9.278j\\
+-3.425 +7.534j & -4.124 +9.278j & 10.475-23.119j & -2.927 +6.341j &  0.    +0.   j\\
+ 0.    +0.   j &  0.    +0.   j & -2.927 +6.341j &  7.051-15.595j & -4.124 +9.278j\\
+-4.11 +10.959j & -4.124 +9.278j &  0.    +0.   j & -4.124 +9.278j & 12.357-29.486j
+
+\end{array} \right] p.u.
+$$
+
 
 
 \backmatter
