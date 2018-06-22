@@ -783,6 +783,9 @@ We observe that the calculation outcome is a fair approximation of the original 
 %-------------------------------------------------------------------------------
 \chapter{Topology analysis and consolidation}
 
+This chapter explains how to model the devices that compose an electrical grid and how to convert those elements into calculation matrices and vectors to run the simulations.
+
+
 \section{The branch element} 
 \label{ch:branch}
 
@@ -1438,6 +1441,7 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 %-------------------------------------------------------------------------------
 %	CHAPTER The bus and it's connected elements
 %-------------------------------------------------------------------------------
+\newpage
 \section{The bus and it's connected elements}
 
 The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), and a power ($S$), an admittance ($Y$) and a current ($I$) potentially connected.
@@ -1451,168 +1455,6 @@ The bus model is based upon the traditionally called \textit{ZIP} bus model to i
 
 The admittance, power and current values at the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
 
-
-\subsection{The substation: Topology processing}
-\label{TopologyProcessing}
-In reality a substation is a collection of real bus bars (metal bars usually made of copper or aluminium) switchgear and shunt devices. The use of a substation is to change the connectivity topology of the grid.
-
-In Energy Management Systems Software (EMS) the topology is specified using the following devices:
-
-\begin{figure}
-	\includegraphics[width=0.99\linewidth]{img/Substation.eps}
-	\caption{Substation example with all the connectivity representation in the CIM / EMS representation. On the right side there is the reduction of the topology to a calculation model.}
-	\label{substation_model}
-\end{figure}
-
-\begin{itemize}
-	\item Connectivity Node (CN): This is a physical joint of devices. It is usually assimilated to a bus bar.
-	\item Terminal (T): This element represents the terminal of a device. It can be regarded as a joining of two devices.
-	\item Switch (SW): A device to interrupt the flow of electric current. There may be many more variants of this device.
-	\item Branch (BR): Any element used to transport power.
-	\item Shunt (SH): Any device used to inject or subtract power (loads, generators, etc.)
-\end{itemize}
-
-For calculation, the substation connectivity is solved first, originating one or more calculation buses. Therefore, the substations are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation. We shall start by forming the connectivity matrices of each type of device with the terminal devices. From those connectivity primitives, we are able to form any connectivity matrix in the circuit. The connectivity matrices of buses and branches is of special interest for calculation.
-
-
-\begin{table}[ht]
-	\centering
-	\resizebox{\textwidth}{!}{
-		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
-		\toprule
-		{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
-		\midrule
-		CN1 &   0 &   1 &   0 &   1 &   0 &   0 &   1 &   0 &   0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-		CN2 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 \\
-		CN3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    1 &    0 &    0 \\
-		\bottomrule
-		\end{tabular}
-	}
-\caption{Connectivity matrix of the connectivity nodes (Buses) with the terminals: $CN\_T$}
-\end{table}
-
-
-\begin{table}[ht]
-	\centering
-	\resizebox{\textwidth}{!}{
-		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
-			\toprule
-			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
-			\midrule
-			BR1 &   1 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			BR2 &   0 &   0 &   1 &   0 &   0 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 \\
-			BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 \\
-			\bottomrule
-		\end{tabular}
-	}
-\caption{Connectivity matrix of the branch objects with the terminals: $BR\_T$}
-\end{table}
-
-
-\begin{table}[ht]
-	\centering
-	\resizebox{\textwidth}{!}{
-		\begin{tabular}{lrrrrrrrrrrrrrrrrrrr}
-			\toprule
-			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 \\
-			\midrule
-			SW1 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW2 &   0 &   0 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW3 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-			SW7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 \\
-			SW8 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 \\
-			\bottomrule
-		\end{tabular}
-	}
-\caption{Connectivity matrix of the switch objects with the terminals: $SW\_T$}
-\end{table}
-
-\begin{table}[ht]
-\begin{tabular}{lr}
-	\toprule
-	{} &  States \\
-	\midrule
-	SW1 &       0 \\
-	SW2 &       1 \\
-	SW3 &       1 \\
-	SW4 &       1 \\
-	SW5 &       1 \\
-	SW6 &       0 \\
-	SW7 &       1 \\
-	SW8 &       1 \\
-	\bottomrule
-\end{tabular}
-\caption{Switch states (0: open, 1: closed): $SW\_states$}
-\end{table}
-
-Modify the switches connectivity matrix with the switch states vector:
-\begin{equation}
-SW\_T\_state = SW\_T \cdot SW\_states
-\end{equation}
-
-Compute the connectivity matrix of the branches and the switches:
-\begin{equation}
-BR\_SW = BR\_T \times SW\_T\_state^\top
-\end{equation}
-
-Compute the connectivity matrix of the connectivity nodes (buses) and the switches:
-\begin{equation}
-CN\_SW = CN_T \times SW\_T\_state^\top
-\end{equation}
-
-Compute the connectivity matrix of the connectivity nodes (buses) and the Branches:
-\begin{equation}
-CN\_BR = CN\_SW \times BR\_SW^\top
-\end{equation}
-This connectivity matrix is used for calculation since in the numerical methods we only care about buses and branches.
-
-
-\begin{table}[ht]
-\begin{tabular}{lrrrr}
-	\toprule
-	{} &  BR1 &  BR2 &  BR3 &  BR4 \\
-	\midrule
-	CN1 &    0 &    1 &    0 &    0 \\
-	CN2 &    0 &    0 &    1 &    0 \\
-	CN3 &    0 &    0 &    0 &    1 \\
-	\bottomrule
-\end{tabular}
-\caption{Calculated connectivity matrix of the Connectivity nodes (Buses) and the branches: $CN\_BR$}
-\end{table}
-
-%In the example depicted in the figure \ref{substation_model} it is shown how a node system is reduced from three real buses to two calculation buses by eliminating the non connected elements and associating the connected ones. The buses1, 2 are connected because the switches between them are closed, hence the three buses become one. the bus 3 is isolated from the others, but still connected to a line. The lines 1b, 2 and 3 are also connected through closed switches, hence those remain connected to their respective buses. However the line 1a is connected through an open switch, therefore is left out for calculation purposes.
-%
-%In order to calculate this reduction, we need to introduce extra nodes in the substation model. These are topological nodes that will help us to perform the connectivity calculation. Then we represent the substation as a node-branch graph:
-
-%\begin{center}
-%	\begin{figure}
-%		\includegraphics[width=0.6\linewidth]{img/Substation_graph.eps}
-%		\caption{Substation example graph.}
-%		\label{substation_graph}
-%	\end{figure}
-%\end{center}
-%
-%
-%Observe the islands formed:
-%
-%\begin{itemize}
-%	\item Island 1: {Bus1}, {Bus2}, nL1b, nL2, nS12, nS13, nS21, nS31, nSL1b, nSL2, nground.
-%	\item Island 2: {Bus3}, nL3, nSL3.
-%	\item Island 3: nL1a, nSL1a.
-%\end{itemize}
-
-%Removing the topological nodes, only two islands remain:
-%
-%\begin{itemize}
-%	\item Island 1: {Bus1, Bus2}.  -> these two form a joint calculation node.
-%	\item Island 2: {Bus3}.
-%\end{itemize}
-%
-%Now we only need to check which non topological branches are in every island and associate them to the formed calculation node.
 
 \subsection{Static device}
 
@@ -1743,9 +1585,219 @@ The main parameters of a voltage controlled generator are:\\
 %	CHAPTER Topology analysis and consolidation
 %-------------------------------------------------------------------------------
 
-\section{Islands detection}
+\newpage
+\section{Topology processing}
+\label{TopologyProcessing}
+ In Energy Management Systems Software (EMS) the topology is specified using devices as connectivity nods, terminals, jumpers, branches, etc. These topological objects must be converted into a Bus-Branch model in order to be able to compute power flows and other electrical calculations. The topological process presented here is efficient and can render both the grid connectivity as the calculation matrices ($Y_{Bus}$, $S_{bus}$, etc.)
 
-The admittance matrix of a circuit with islands is singular. Therefore, the circuit it cannot be solved. To overcome this issue, we have to divide the circuit into fully connected islands for calculation. The algorithm to achieve this is the Breadth First Search (BFS) algorithm.
+\begin{figure}[h!]
+	\includegraphics[width=0.7\linewidth]{img/Substation.eps}
+	\caption{Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}
+	\label{substation_model}
+\end{figure}
+
+The elements presented in the example of the figure \ref{substation_model} are:
+
+\begin{itemize}
+	\item Connectivity Node (CN): This is a physical joint of devices. It is usually assimilated to a bus bar.
+	\item Terminal (T): This element represents the terminal of a device. It can be regarded as a joining of two devices.
+	\item Switch (SW): A device to interrupt the flow of electric current. There may be many more variants of this device.
+	\item Branch (BR): Any element used to transport power.
+	\item Shunt (SH): Any device used to inject or subtract power (loads, generators, etc.)
+\end{itemize}
+
+For calculation, the connectivity is solved first, originating one or more calculation buses. The switches, terminals, etc. are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation. We shall start by forming the connectivity matrices of each type of device with the terminal devices. From those connectivity primitives, we are able to form any connectivity matrix in the circuit. 
+
+The following primitive matrices are formed by element inspection. This is, going through the objects stored in memory and inspecting the terminals that correspond to each one of them.
+
+The simplest way to do this is to go through the terminals first and construct a dictionary to relate the terminal ID with the terminal position index in the terminals list of objects. This dictionary is later used to get the terminal index of each of the other elements of the grid.
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+%			\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
+%			\midrule
+			CN1 &     &   1 &     &   1 &     &     &   1 &     &     &    1 &      &      &      &      &      &      &      &      &      &      &    1 &      &      \\
+			CN2 &     &     &     &     &     &     &     &     &   1 &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      \\
+			CN3 &     &     &     &     &     &     &     &     &     &      &      &    1 &      &      &      &      &    1 &      &      &    1 &      &      &      \\
+			CN4 &     &     &     &     &   1 &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			CN5 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &    1 &      &      &      &      \\
+%			\bottomrule
+		\end{tabular}
+	}
+	\caption{Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[CN\_T]$}
+\end{table}
+
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+%			\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
+%			\midrule
+			BR1 &     &     &     &     &   1 &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			BR2 &     &     &     &     &     &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      \\
+			BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      \\
+			J1  &     &     &     &     &     &     &     &   1 &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			J2  &     &     &     &     &     &     &     &     &     &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      \\
+%			\bottomrule
+		\end{tabular}
+	}
+	\caption{Connectivity matrix of the branch objects with the terminals at the "from" side: $[BR\_T\_from]$}
+\end{table}
+
+\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+ \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+%	\toprule
+	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
+%	\midrule
+	BR1 &   1 &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR2 &     &     &   1 &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      \\
+	BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      \\
+	J1  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      \\
+	J2  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 \\
+%	\bottomrule
+\end{tabular}
+	}
+\caption{Connectivity matrix of the branch objects with the terminals at the "to" side: $[BR\_T\_to]$}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\resizebox{\textwidth}{!}{
+		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+%			\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
+%			\midrule
+			SW1 &   1 &   1 &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			SW2 &     &     &   1 &   1 &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			SW3 &     &     &     &     &     &     &   1 &   1 &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			SW4 &     &     &     &     &     &     &     &     &   1 &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      \\
+			SW5 &     &     &     &     &     &     &     &     &     &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      \\
+			SW6 &     &     &     &     &     &     &     &     &     &      &      &    1 &      &      &      &      &      &      &      &      &      &      &    1 \\
+			SW7 &     &     &     &     &     &     &     &     &     &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      \\
+			SW8 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      \\
+%			\bottomrule
+		\end{tabular}
+	}
+	\caption{Connectivity matrix of the switch objects with the terminals: $[SW\_T]$}
+\end{table}
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrrrrr}
+%		\toprule
+		{} &  SW1 &  SW2 &  SW3 &  SW4 &  SW5 &  SW6 &  SW7 &  SW8 \\
+%		\midrule
+		States &    0 &    1 &    1 &    1 &    1 &    0 &    1 &    1 \\
+%		\bottomrule
+	\end{tabular}
+	\caption{Switch states (0: open, 1: closed): $[SW\_states]$}
+\end{table}
+
+\vspace{1cm}
+
+We need as many primitive matrices as device types there are in the grid. Once the primitive matrices of all the devices are formed we can start the topological processing by multiplying these primitive matrices. We shall start by modifying the switches connectivity matrix with the switch states vector:
+
+\begin{equation}
+[SW\_T\_state] = [SW\_T] \times diag([SW\_states])
+\end{equation}
+
+This operation causes the switches open/close state to be applied to the topological calculations. Next, compute the connectivity matrix of the branches and the switches:
+
+\begin{equation}
+[BR\_SW\_from] = [BR\_T\_from] \times [SW\_T\_state]^\top
+\end{equation}
+\begin{equation}
+[BR\_SW\_to] = [BR\_T\_to] \times [SW\_T\_state]^\top
+\end{equation}
+
+Then, compute the connectivity matrix of the connectivity nodes (buses) and the switches:
+\begin{equation}
+[CN\_SW] = [CN\_T] \times [SW\_T\_state]^\top
+\end{equation}
+
+Compute the connectivity matrix of the Branches and the connectivity nodes (buses):
+
+\begin{equation}
+[BR\_from\_CN] = [BR\_SW\_from]  \times [CN\_SW]^\top
+\end{equation}
+
+\begin{equation}
+[BR\_to\_CN] = [BR\_SW\_to]  \times [CN\_SW]^\top
+\end{equation}
+
+These connectivity matrices are used for calculation since in the numerical methods we only care about buses and branches.
+
+
+\begin{table}[ht]
+	 \begin{tabular}{lrrrrr}
+%		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+%		\midrule
+		BR1 &      &      &      &    1 &      \\
+		BR2 &      &      &      &    1 &      \\
+		BR3 &      &    1 &      &      &      \\
+		BR4 &      &      &    1 &      &      \\
+		J1  &    1 &      &      &      &      \\
+		J2  &    1 &      &      &      &      \\
+%		\bottomrule
+	\end{tabular}
+	\caption{Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[BR\_from\_CN]$}
+\end{table}
+
+\begin{table}[ht]
+	 \begin{tabular}{lrrrrr}
+%		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+%		\midrule
+		BR1 &      &      &      &      &      \\
+		BR2 &    1 &      &      &      &      \\
+		BR3 &      &      &      &      &    1 \\
+		BR4 &      &      &      &      &    1 \\
+		J1  &      &    1 &      &      &      \\
+		J2  &      &      &      &      &      \\
+%		\bottomrule
+	\end{tabular}
+	\caption{Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[BR\_to\_CN]$}
+\end{table}
+
+\vspace{0.5cm}
+
+The graph of the circuit is automatically constructed by computing the Bus-Bus adjacency matrix  $[CN\_CN]$:
+
+\begin{equation}
+[CN\_CN] = [CN\_SW] \times [CN\_SW]^\top
+\end{equation}
+
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+%		\toprule
+		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+%		\midrule
+		CN1 &    1 &    1 &      &    1 &      \\
+		CN2 &    1 &    1 &      &      &    1 \\
+		CN3 &      &      &    1 &      &    1 \\
+		CN4 &    1 &      &      &    1 &      \\
+		CN5 &      &    1 &    1 &      &    1 \\
+%		\bottomrule
+	\end{tabular}
+	\caption{Grid adjacency matrix $[CN\_CN]$, also known as $A$. Serves as a graph to detect the islands formed.}
+\end{table}
+
+\vspace{0.5cm}
+
+At this point the topological process has to continue by detecting if any island has been formed.
+
+\subsection{Islands detection}
+
+The admittance matrix of a circuit with more than one island is singular. Therefore, the circuit has to be split in sub-circuits in order to be solved. The suggested algorithm to achieve this is the Depth First Search ($DFS$) algorithm.
 
 \begin{figure}[h!]
 	\centering
@@ -1754,457 +1806,128 @@ The admittance matrix of a circuit with islands is singular. Therefore, the circ
 	\label{fig:general_graph}
 \end{figure}
 
-A c++ implementation of a Graph with functions to detect the islands (\verb|connectedComponents|) is as follows:
 
-{\color{verbatimcolor}
-	\begin{verbatim}
-	class Graph {
+We already determined that the circuit complete graph is given by the Bus-Bus connectivity matrix $[CN\_CN]$. This matrix is also known as the node adjacency matrix. For algorithmic purposes we will call the adjacency matrix $A$. As a side note, the matrix $A$ is a sparse matrix. 
+
+\marginnote{Here $A$ it is chosen to be a CSC sparse matrix. This is important because the following algorithm uses the CSC sparse structure to find the adjacent elements of a node.}
+
+\begin{enumerate}
+	\item $N$ is the number of nodes.
+	\item Declare \verb|visited| as a vector of length $N$.
+	\item Declare \verb|islands| as a list of lists.
+	\item Declare \verb|island_idx = 0|.
+	\item For $i=0$ to $N$:
 	
-		/**
-		* @brief Number of vertices
-		*/
-		std::size_t V;
-			
-		/**
-		* @brief Array of lists containing adjacency (this is the graph)
-		*/
-		std::list<std::size_t> *adj;
-			
-		/**
-		* @brief A function used by DFS
-		* @param v index of the node
-		* @param visited array of visited nodes
-		* @param islands structure to map the islands
-		* @param island_idx index of the island
-		*/
-		void DFSUtil(std::size_t v, bool visited[], 
-					 std::vector<std::vector<std::size_t>> *islands, 
-					 std::size_t island_idx) {
+	\begin{enumerate}
+		\item If \verb|visited[i] = False|
 		
-		// Mark the current node as visited and prlong it
-		visited[v] = true;
+		\begin{enumerate}
+			\item If \verb|island_idx| is greater or equal than the amount of islands in \verb|islands|, initialize a new island as an empty list into \verb|islands|.
+			
+			Next we need to run a DFS process for the current node $i$.
+			
+			\item Declare \verb|stack| as a Stack cue.
+			\item Append the node $i$ to the stack.
+			
+			\item While the \verb|stack| is not empty:
+			
+			\begin{enumerate}
+				\item Pick the first element of the stack: \verb|v = stack.pop(0)|
+				
+				\item Add the picked element to the current island: \verb|islands[island_idx].append(v)|
+								
+				\item For \verb|j=A.indptr[v]| to \verb|A.indptr[v+1]|:
+				
+				\begin{itemize}
+					\item Declare \verb|k=A.indices[j]|. Here $k$ is the column index in the CSC storage scheme.
+					
+					\item If \verb|visited[k] = false| then add $k$ to the stack.
+				\end{itemize}
+			
+				\item End of the for loop.
+				
+			\end{enumerate}
+			
+			\item End of the while loop.
+			
+			\item Increase the island index: \verb|island_idx += 1|
 		
-		// add element to the island
-		islands->at(island_idx).push_back(v);
+		\end{enumerate}
 		
-		// Recur for all the vertices adjacent to this vertex
-		std::list<std::size_t>::iterator i;
-		for(i = adj[v].begin(); i != adj[v].end(); ++i)
-			if(!visited[*i])
-				DFSUtil(*i, visited, islands, island_idx);
-		}
-			
-		public:	
-		
-		/**
-		* @brief Graph constructor
-		* @param V number of vertices
-		*/
-		Graph(std::size_t vertex_number){
-			V = vertex_number;
-			adj = new std::list<std::size_t>[vertex_number];
-		}
-		
-		/** 
-		* @brief Graph destructor
-		*/
-		~Graph() {
-			// free the memory
-			delete [] adj;
-		}
-		
-		
-		/**
-		* @brief add an undirected edge
-		* @param v node index "from"
-		* @param w node index "to"
-		*/
-		void add_edge(std::size_t v, std::size_t w){
-			adj[v].push_back(w);
-			adj[w].push_back(v);
-		}
-		
-		
-		/**
-		* @brief Method to get the islands of a graph
-		*/
-		std::vector<std::vector<std::size_t>> connectedComponents(){
-		
-			// storage structure for the islands
-			std::vector<std::vector<std::size_t>> islands;
-			
-			// set the island index
-			std::size_t island_idx = 0;
-			
-			// Mark all the vertices as not visited
-			bool *visited = new bool[V];
-			for(std::size_t v = 0; v < V; v++)
-			visited[v] = false;
-			
-			// go though all the vertices...
-			for (std::size_t v = 0; v < V; v++) {
-			
-			// if v has not been visited...
-			if (visited[v] == false) {
-			
-			// add new island, because the recursive process 
-			// has already visited all the island connected to v
-			if (island_idx >= islands.size())
-			islands.push_back(std::vector<std::size_t>());
-			
-			// store all reachable vertices from v recursivelly
-			DFSUtil(v, visited, &islands, island_idx);
-			
-			// increase the islands index
-			island_idx++;
-			}
-			
-			}
-			
-			// sort the islands to maintain raccord
-			for (std::size_t i=0; i < islands.size(); i++)
-			std::sort(islands[i].begin(), islands[i].end());
-			
-			return islands;
-		}
-		
-		};
-	
-	}
-	\end{verbatim}
-}
+	\end{enumerate}
 
+\item End of the for loop.
 
+\item End of the algorithm
+\end{enumerate}
 
-\section{Phases reduction} \label{phase_reduction}
+At the end of the algorithm we have a list where each element is a list of bus indices composing a circuit island. With this information we are able to split the singular circuit matrices into non-singular matrices in order to be able to compute the electrical calculations.
 
-In a three phase system, there may be branches that only transport one or two of the phases. Such systems are unbalanced by design and require a special treatment to prepare for the simulation. As irregular as these systems may be, they exist and a complete simulation engine should be prepared to simulate them too.
-
-To prepare the system for the simulation, we must identify the phases that arrive to each bus under the assumption that all the buses are \'a-priori able to transport three phases.
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.99\linewidth]{img/phase_reduction.eps}
-	\caption{This picture shows a 7-node grid with unbalanced connections. The connectivity bus incidence matrix reduction is depicted as well in order to illustrate the phase reduction mechanism that allows the calculation of this circuit. Only the white cells remain after removing the dark cells that correspond to not connected phases.}
-	\label{fig:phase_reduction}
-\end{figure}
-
-The algorithms presented in the next sections are prepared to form the full three-phase matrices and vectors and take into account the formation of the mask vectors to be able to reduce the vectors and matrices later.
-
-\section{Calculation of the voltage, power and current vectors}
-
-All numerical methods of electrical calculation need the admittance matrix and a series of vectors of compatible dimensions. These vectors are;
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=0.9\linewidth]{img/CircuitEquation.eps}
-	\caption{Nodal circuit equation. The goal is to compile the properties of the different objects into the calculation matrices and vectors.}
-	\label{fig:CircuitEquation}
-\end{figure}
-
-First the devices connectivity matrices need to be built. Some matrices used here were introduced first in the section \ref{TopologyProcessing}.
-
-\marginnote{$[LD\_T]$: Connectivity matrix of the load devices with their terminals. $[CN\_T]$: Connectivity matrix of the connectivity nodes with their terminals.}
-\begin{equation}
-[LD\_CN] = [LD\_T] \times [CN\_T]^\top
-\end{equation}
-
-
-\begin{itemize}
-	\item $[S_{bus}]$: Nodal power injections vector in p.u.
-	
-	\begin{equation}
-	[S_{demand}] = [LD\_CN]^\top \times [LD\_Power]
-	\end{equation}
-	
-	\marginnote{$[LD\_CN]$: Load-Bus connectivity matrix. $[LD\_Power]$: Vector of load values.}
-	
-	\begin{equation}
-	[S_{generation}] = [GEN\_CN]^\top \times [GEN\_Power]
-	\end{equation}
-	
-	\marginnote{$[GEN\_CN]$: Generator-Bus connectivity matrix. $[GEN\_Power]$: Vector of generation values.}
-	
-	\begin{equation}
-	[S_{bus}] = [S_{generation}] - [S_{demand}]
-	\end{equation}
-	
-	
-	\item $[V_{bus}]$: Nodal voltages vector. This vector shall be initialized to a vector $[V_{bus}] = [1] \cdot Vset$.
-	
-	\item $[I_{bus}]$:  Nodal current injections vector.
-	
-	\begin{equation}
-	[I_{bus}] = [LD\_CN]^\top \times [LD\_Current]
-	\end{equation}
-	
-	
-	
-	\item $[Y_{zip}]$:  Nodal shunt admittances vector. These are the admittances corresponding the ZIP model (\textit{YISV} model in this document). These admittances are added to the diagonal of the admittance matrix ($[Y_{bus}]$).
-	
-	\begin{equation}
-	[Y_{zip} ]= [LD\_CN]^\top \times [LD\_Admittance]
-	\end{equation}
-\end{itemize}
-
-
-These vectors depend on the magnitudes of the elements connected to each bus (or node). Remember that we have decided that the loads, generators and others are stored in each bus element, this allows us to create a function at the bus object level that "compiles" its voltage, current and power and that these are compiled at the circuit level in the corresponding vectors.
-
-%# form the power injections vector
-%PD = self.LD_CN.transpose() * self.LD_Power  # demand (complex)
-%PG = self.GEN_CN.transpose() * self.Gen_Power  # generation (real)
-%self.Sbus = (PG - PD) / self.Sbase
-%self.Ibus = np.zeros_like(self.Sbus)
-
-
-%# Voltage vector
-%# self.Vbus = self.GEN_CN.transpose() * self.Gen_voltage
-%self.Vbus = np.ones_like(self.Sbus)
-
-%# form the shunt vector
-%self.Ysh = self.SH_CN.transpose() * self.SH_Power
-
-%The algorithm is as follows:
-%
-%{\color{verbatimcolor}
-%	\begin{verbatim}
-%	n = number of buses in the circuit
-%	
-%	Y_zip = complex_vector(n)
-%	I = complex_vector(n)
-%	S = complex_vector(n)
-%	V = complex_vector(n)
-%	types = vector(n)
-%	
-%	for i=0 to n:
-%	    // assign the values to the vectors at the position i
-%	    buses[i].get_YISV(i, Y, I, S, V, types) 
-%	end
-%	
-%	// after this loop all the bus related vectors will be filled
-%	// now, we need to divide some of them by the base power to 
-%	// have them in per unit.
-%	Y_zip /= Sbase
-%	I /= Sbase
-%	S /= Sbase
-%	\end{verbatim}
-%}
-%
-%The last code relies on a function implemented inside each bus object (\verb|get_YISV(i, Y_zip, I, S, V, types)|). The pseudo code of such function would be:
-%
-%{\color{verbatimcolor}
-%	\begin{verbatim}
-%	i: bus index // external parameter
-%	loads: list of loads within the bus object
-%	generators: list of generators within the bus object
-%	batteries: list of batteries within the bus object
-%	
-%	V[i]=1.0
-%	
-%	if bus_type is not VD:
-%	    bus_type=PQ
-%	end
-%	
-%	for k=0 to number_of_loads:
-%	    S[i] -= loads[k].S  // loads are a negative injection
-%	    I[i] -= loads[k].I
-%	    Y_zip[i] += loads[k].Y  // the impedance is positive always
-%	end
-%	
-%	for k=0 to number_of_generators:
-%	    S[i] += generator[k].P + 0j
-%	    V[i] *= generator[k].V_set
-%	    if bus_type is not VD: 
-%	        bus_type=PV
-%	    end
-%	end
-%	
-%	for k=0 to number_of_batteries:
-%	    S[i] += batteries[k].P + 0j
-%	    V[i] *= batteries[k].V_set
-%	    if bus_type is not VD: 
-%	        bus_type=PV
-%	    end
-%	end
-%	
-%	types[i] = bus_type
-%	
-%	\end{verbatim}
-%}
-
-
-\newpage
-\section{Calculation of the admittance matrices}  \label{Y_calculation}
+\section{Calculation matrices and vectors}  \label{Y_calculation}
 
 For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
 
-\begin{itemize}
-	
-	\item $n$: Number of buses.
-	
-	\item $m$: Number of branches.
-	
-	\item $Y_{bus}$ or simply $Y$: Complete admittance matrix.
-	
-	It is a sparse matrix of size $n \times n$
-	
-	\item $Y_{series}$: Admittance matrix of the series elements. It contains no value coming from shunt elements or the shunt parts of the branch model.
-	
-	It is a sparse matrix of size $n \times n$
-	
-	\item $Y_{shunt}$: Admittance vector of the shunt elements and the shunt parts of the branch model. 
-	
-	It is a vector of size $n$
-	
-	\item $Y_f$: Admittance matrix of the branches with their \textit{from} bus.
-	
-	It is a sparse matrix of size $m \times n$
-	
-	\item $C_t$: Connectivity matrix of the branches with their \textit{to} bus.
-	
-	\item $C_f$: Connectivity matrix of the branches with their \textit{from} bus.
-	
-	It is a sparse matrix of size $m \times n$
-	
-	\item $Y_t$: Admittance matrix of the branches with their \textit{to} bus.
-	
-    It is a sparse matrix of size $m \times n$\newline
-\end{itemize}
+%\begin{itemize}
+%	
+%	\item $n$: Number of buses.
+%	
+%	\item $m$: Number of branches.
+%	
+%	\item $Y_{bus}$ or simply $Y$: Complete admittance matrix.
+%	
+%	It is a sparse matrix of size $n \times n$
+%	
+%	\item $Y_{series}$: Admittance matrix of the series elements. It contains no value coming from shunt elements or the shunt parts of the branch model.
+%	
+%	It is a sparse matrix of size $n \times n$
+%	
+%	\item $Y_{shunt}$: Admittance vector of the shunt elements and the shunt parts of the branch model. 
+%	
+%	It is a vector of size $n$
+%	
+%	\item $Y_f$: Admittance matrix of the branches with their \textit{from} bus.
+%	
+%	It is a sparse matrix of size $m \times n$
+%	
+%	\item $C_t$: Connectivity matrix of the branches with their \textit{to} bus.
+%	
+%	\item $C_f$: Connectivity matrix of the branches with their \textit{from} bus.
+%	
+%	It is a sparse matrix of size $m \times n$
+%	
+%	\item $Y_t$: Admittance matrix of the branches with their \textit{to} bus.
+%	
+%    It is a sparse matrix of size $m \times n$\newline
+%\end{itemize}
+%
+%Where $n$ is the number of buses and $m$ is the number of branches.
+%
+%The relation between the admittance matrix and the series and shunt admittance matrices is the following:
+%\begin{equation}
+%Y_{bus} = Y_{series} + Y_{shunt}
+%\end{equation}
 
-Where $n$ is the number of buses and $m$ is the number of branches.
+%# form the power injections vector
+%demand_power = self.C_load_bus.T * self.load_power  # demand (complex)
+%generation_power = self.C_gen_bus.T * self.generator_power  # generation (real)
+%self.calc.Sbus = (generation_power - demand_power) / self.Sbase  # power vector in p.u.
+%self.calc.Ibus = np.zeros_like(self.calc.Sbus)
+%
+%# Voltage vector
+%# self.Vbus = self.GEN_CN.T * self.Gen_voltage
+%self.calc.Vbus = np.ones_like(self.calc.Sbus)
+%
+%# form the shunt vector
+%self.calc.Ysh = self.C_shunt_bus.T * self.shunt_power
+%
+%# form the admittance matrix
+%self.calc.Yf = diags(self.BR_yff) * self.calc.C_branch_bus_f + diags(self.BR_yft) * self.calc.C_branch_bus_t
+%self.calc.Yt = diags(self.BR_ytf) * self.calc.C_branch_bus_f + diags(self.BR_ytt) * self.calc.C_branch_bus_t
+%self.calc.Ybus = self.calc.C_branch_bus_f.T * self.calc.Yf + self.calc.C_branch_bus_t.T * self.calc.Yt + diags(self.calc.Ysh)
 
-The relation between the admittance matrix and the series and shunt admittance matrices is the following:
 \begin{equation}
-Y_{bus} = Y_{series} + Y_{shunt}
+demand\_power = self.C_load_bus.T * self.load_power
 \end{equation}
-
-%\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the positive sequence model is the following:
-%
-%{\color{verbatimcolor}
-%\begin{verbatim}
-%n = number of buses in the circuit
-%m = number of branches in the circuit
-%
-%// declare the matrices
-%Y = complex_sparse(n, n)
-%Yf = complex_sparse(m, n)
-%Yt = complex_sparse(m, n)
-%yshunt = complex_vector(n)
-%yseries = complex_sparse(n, n)
-%
-%// set the buses admittances
-%for i=0 to n:
-%
-%    // get all the bus-connected power, current andmittance and voltage
-%    y, curr, s, v = buses[i].get_YISV()
-%
-%    Yshunt[i] = y
-%end
-%
-%//set the branches admittances
-%for i=0 to m:
-%    // get the bus indices matching the busses of this branch
-%    f = get_bus_index(branches[i].bus_from)
-%    t = get_bus_index(branches[i].bus_to)
-%    
-%    // compose the basic elements (only for pisitive sequence)
-%    z_series = complex(branches[i].R, branches[i].X)
-%    y_shunt = complex(branches[i].G, branches[i].B)
-%    tap = branches[i].tap_module * exp(-1j * branches[i].angle)
-%    Ysh = y_shunt / 2
-%    Ys = 1 / z_series
-%
-%    // compose the matrix sub elements
-%    Ytt = Ys + Ysh
-%    Yff = Ytt / (tap * conj(tap))
-%    Yft = - Ys / conj(tap)
-%    Ytf = - Ys / tap    
-%    Yff_sh = Ysh
-%    Ytt_sh = Yff_sh / (tap * conj(tap))
-%    
-%    // Full admittance matrix
-%    Ybus[f, f] += Yff
-%    Ybus[f, t] += Yft
-%    Ybus[t, f] += Ytf
-%    Ybus[t, t] += Ytt
-%    
-%    // Y-from and Y-to for the lines power flow computation (optional)
-%    Yf[i, f] += Yff
-%    Yf[i, t] += Yft
-%    Yt[i, f] += Ytf
-%    Yt[i, t] += Ytt
-%        
-%    // Connectivity matrices
-%    Cf[i, f] = 1
-%    Cf[i, t] = -1
-%    Ct[i, f] = -1
-%    Ct[i, t] = 1
-%    
-%    // Y shunt
-%    Yshunt[f] += Yff_sh
-%    Yshunt[t] += Ytt_sh
-%    
-%    // Y series
-%    Yseries[f, f] += Ys / (tap * conj(tap))
-%    Yseries[f, t] += Yft
-%    Yseries[t, f] += Ytf
-%    Yseries[t, t] += Ys
-%end
-%
-%\end{verbatim}
-%}
-%
-%\paragraph{Algorithm} The algorithmic logic to build the matrices in pseudo code for the three-phase model is the following:
-%
-%{\color{verbatimcolor}
-%    \begin{verbatim}
-%    For every branch:
-%    
-%    Get the branch submatrices Yff, Yft, Ytf and Ytt.
-%    
-%    a = 0
-%    for i in phases_from:
-%        b = 0
-%        for j in phases_to:
-%        
-%	        # Admittance matrix
-%	        Ybus[f * n_phase + i, f * n_phase + j] += Yff[a, b]
-%	        Ybus[f * n_phase + i, t * n_phase + j] += Yft[a, b]
-%	        Ybus[t * n_phase + i, f * n_phase + j] += Ytf[a, b]
-%	        Ybus[t * n_phase + i, t * n_phase + j] += Ytt[a, b]
-%	        
-%	        # branch-bus admittance matrices (optional)
-%	        Yf[k * n_phase + i, f * n_phase + j] += Yff[a, b]
-%	        Yf[k * n_phase + i, t * n_phase + j] += Yft[a, b]
-%	        Yt[k * n_phase + i, f * n_phase + j] += Ytf[a, b]
-%	        Yt[k * n_phase + i, t * n_phase + j] += Ytt[a, b]
-%	        
-%	        # branch-bus connectivity matrices
-%	        Cf[k * n_phase + i, f * n_phase + j] = 1
-%	        Cf[k * n_phase + i, t * n_phase + j] = -1
-%	        Ct[k * n_phase + i, f * n_phase + j] = -1
-%	        Ct[k * n_phase + i, t * n_phase + j] = 1
-%	        
-%	        # masks
-%	        mask_r[f * n_phase + i] = 1
-%	        mask_r[t * n_phase + i] = 1
-%	        
-%	        mask_c[f * n_phase + j] = 1
-%	        mask_c[t * n_phase + j] = 1
-%	        
-%	        mask_k[k * n_phase + i] = 1
-%        
-%	        b += 1
-%	    end
-%	    
-%        a += 1
-%    end
-%    
-%\end{verbatim}
-%}
-%
-%This algorithm will produce the full three-phase matrices. These matrices need to be reduced as explained in the section \ref{phase_reduction}.
-
 %-------------------------------------------------------------------------------
 %    CHAPTER Power flow
 %-------------------------------------------------------------------------------
@@ -2711,7 +2434,7 @@ The complete algorithm is:
 \item End.
 \end{enumerate}
 
-\section{Linear DC power flow}
+\section{Linear power flow}\label{DCPF}
 The so called direct current power flow (or just DC power flow) is a convenient oversimplification of the power flow procedure.
 
 It assumes that in any branch the reactive part of the impedance is much larger than the resistive part, hence the resistive part is neglected, and that all the voltages modules are the nominal per unit values. This is, $[Vm]=[1]$ for load nodes and $[Vm]=[V_{set}]$ for the generator nodes, where $[V_{set}]$ is the generator set point value.
@@ -2798,9 +2521,9 @@ The new voltage is then:
 This method usually produces a solution with a large power mismatch. That is to be expected because the method is an oversimplification with no iterative convergence criteria, just a straight forward set of operations.
 
 
-\section{Linear AC power flow} \label{ACPF}
+\section{A better linear power flow} \label{ACPF}
 
-The AC linear approximation is a much more convenient linearisation of the power flow equation, because it provides the voltage module and angle. This procedure is great for real time applications such as large grids SCADA applications.
+The linear approximation presented in this section is a much more convenient linearisation of the power flow equation, because it provides the voltage module and angle. This procedure is great for real time applications such as large grids SCADA applications.
 
 Using the formulation presented in \cite{rossoni2016linearized}, we obtain a way to solve circuits in one shot (without iterations) with quite positive results for a linear approximation.
 
@@ -3420,7 +3143,7 @@ The switching logic is applied only to the buses that are $PV$ in the first plac
 The optimal power flow are a set of problems which implementation call for the usage of MIP solvers (Mixed-Integer Programming solvers). However that is not a hard requirement and other methods might be used such as genetic algorithms, convex solvers, etc.
 
 
-\section{DC optimal power flow}
+\section{Optimal power flow}
 
 The power flow problem consists in finding the voltages of a circuit given the nodal power injections and the circuit admittances. The power flow equation in summation expression is:
 
@@ -3430,7 +3153,7 @@ S_i=V_i \sum_j^{nodes} \left(Y_{ij} \cdot V_j\right) ^* \quad  \forall i \in nod
 
 The non-vectorized expression is of use now, because the MIP formulation of the OPF problem does not allow vectorization usually.
 
-The optimal power flow problem consists in finding the generators power injections that supply the demand and the losses while minimizing the grid violations (Voltages out of bounds and branch flows limits). Here we are going to adapt the formulation developed in the previous chapter in order to accommodate the generators dispatch.
+The optimal power flow problem consists in finding the generators power injections that supply the demand and the losses while minimizing the grid violations (Voltages out of bounds and branch flows limits). Here we are going to adapt the linear power flow formulation developed in the section \ref{DCPF} in order to accommodate the generators dispatch.
 
 Minimize the generators dispatch cost, including the cost of the slack generators:
 
@@ -3495,9 +3218,9 @@ There are plenty of other formulations that feature ramps, multiple periods and 
 For an overview of such methods see \cite{taylor2015convex}.
 
 \newpage
-\section{AC optimal power flow}
+\section{A better optimal power flow}
 
-This section introduces the use of the AC linear power flow (see \ref{ACPF}) as theoretical source to obtain an AC optimal power flow. In the power flow problem the power values are fixed whereas in the optimal power flow both generation and voltage are unknown.
+This section introduces the use of a linear power flow derived from the power flow algorithm presented in the section \ref{ACPF}. In this formulation, both the voltage module and angle are subject to control. In the power flow problem the power values are fixed whereas in the optimal power flow both generation and voltage are unknown.
 
 The linear program is:
 
@@ -3777,127 +3500,135 @@ Note that the Jacobian formulated here is composed of 12 real-valued submatrices
 \marginnote{The derivatives computation using matrix formulation has been taken from \cite{zimmerman2010ac}.}
 
 \begin{equation}
-\frac{\partial S_{inj}}{\partial \theta} = j \cdot V_{diag} \times (I_{bus,diag}-Y_{bus} \times V_{diag}  )^* 
+\left[ \frac{\partial S_{inj}}{\partial \theta} \right]  = j \cdot [V_{diag}] \times ([I_{bus,diag}] - [Y_{bus}] \times [V_{diag}]  )^* 
 \end{equation}
 
-\begin{equation}\frac{\partial S_{inj}}{\partial Vm}=j \cdot E_{diag} \times (I_{bus,diag} + Y_{bus} \times V_{diag}  )^* \end{equation}
+\begin{equation}
+\left[ \frac{\partial S_{inj}}{\partial Vm} \right]  = j \cdot [E_{diag}] \times ([I_{bus,diag}] + [Y_{bus}] \times [V_{diag} ] )^* 
+\end{equation}
 
 \marginnote{All these derivatives are square matrices in complex numbers.}
 	
 
 
-\begin{equation}\frac{\partial S_{flow}}{\partial \theta} = j \cdot (I_{f,diag}^* \times C_f \times V_{diag} - [C_f \times V]_{diag} \times Y_f^* \times V_{diag}^* ) 
+\begin{equation}
+\left[ \frac{\partial S_{flow}}{\partial \theta}  \right]   = j \cdot ([I_{f,diag}]^* \times [C_f] \times[ V_{diag}] - diag([C_f] \times [V]) \times [Y_f]^* \times [V_{diag}]^* ) 
 \end{equation}
 
-\begin{equation}\frac{\partial S_{flow}}{\partial Vm}=I_{f,diag}^* \times C_f \times E_{diag}- [C_f \times V]_{diag} \times Y_f^* \times E_{diag}^* 
+\begin{equation}
+\left[ \frac{\partial S_{flow}}{\partial Vm} \right]    = [I_{f,diag}]^* \times [C_f] \times [E_{diag}] - diag([C_f] \times [V]) \times [Y_f]^* \times [E_{diag}]^* 
 \end{equation}
 
 
-\marginnote{The matrices with the subindex $diag$ are diagonal matrices constructed from the vector with the same name. For instance $V_{diag}$  is a diagonal matrix formed with the voltages vector $V$.}
+\marginnote{The matrices with the subindex $diag$ are diagonal matrices constructed from the vector with the same name. For instance $[V_{diag}]$  is a diagonal matrix formed with the voltages vector $[V]$.}
 
-\begin{equation}\frac{\partial I_{mag}}{\partial \theta} = j \cdot Y_f \times V_{diag} 
+\begin{equation}
+\left[ \frac{\partial I_{mag}}{\partial \theta} \right]   = j \cdot [Y_f] \times [V_{diag} ]
 \end{equation}
 
-\begin{equation}\frac{\partial I_{mag}}{\partial Vm}=j \cdot Y_f \times E_{diag} 
+\begin{equation}
+\left[ \frac{\partial I_{mag}}{\partial Vm}  \right]  =j \cdot [Y_f] \times [E_{diag} ]
 \end{equation}
 
 The matrices used for the derivatives computation and the calculated magnitudes vector ($h$) are:
 
-\begin{equation}E=\frac{V}{Vm}\end{equation}  
+\begin{equation}
+[E]=\frac{[V]}{[Vm]}
+\end{equation}  
 
 \begin{equation}
-V_f = C_f \times V
+[V_f] = [C_f] \times [V]
 \label{eq:voltage_from}
 \end{equation}
 
 \begin{equation}
-Y_f = C_f \times Y_{bus} 
+[Y_f] = [C_f] \times [Y_{bus} ]
 \label{eq:admittace_from}
 \end{equation}
 
 \begin{equation}
-I_f = Y_f \times V 
+[I_f] = [Y_f] \times [V] 
 \label{eq:current_from}
 \end{equation}
 
 \begin{equation}
-I_{inj} = Y_{bus}  \times  V + I_{bus}
+[I_{inj}] = [Y_{bus}]  \times  [V] + [I_{bus}]
 \label{eq:current_inj}
 \end{equation}
 
 \begin{equation}
-S_{inj} = V  \cdot  I_{inj}^*
+[S_{inj}] = [V]  \cdot  [I_{inj}]^*
 \label{eq:power_injection}
 \end{equation}
 
 \begin{equation}
-S_f = V_{f} \cdot I_{f}^*
+[S_f] = [V_{f}] \cdot [I_{f}]^*
 \label{eq:power_from}
 \end{equation}
 
-The submatrices $A1$, $A2$, $B1$...$F2$, to be used in the Jacobian $H$ are not the ones with all the entries, instead we have to use sub-matrices of the real or imaginary parts of the previously introduced derivative matrices where the rows to keep are the ones with the indices of the nodes or branches with measurements of the respective magnitudes and the columns to keep are the ones with the indices of the non slack nodes for $A1$, $B1$, $C1$, $D1$, $E1$ and $F1$ and all the columns for the others. Therefore the submatrices are:
+The submatrices $[A1]$, $[A2]$, $[B1]$...$[F2]$, to be used in the Jacobian $[H]$ are not the ones with all the entries, instead we have to use sub-matrices of the real or imaginary parts of the previously introduced derivative matrices where the rows to keep are the ones with the indices of the nodes or branches with measurements of the respective magnitudes and the columns to keep are the ones with the indices of the non slack nodes for $[A1]$, $[B1]$, $[C1]$, $[D1]$, $[E1]$ and $[F1]$ and all the columns for the others. Therefore the submatrices are:
 
 \begin{equation}
-A1 = Re \left\{   \frac{\partial S_{flow}}{\partial Vm}  \right\}_{[np_{flow}, pqpv]}
+[A1] = Re \left\{  \left[  \frac{\partial S_{flow}}{\partial Vm} \right] \right\}_{[np_{flow}, pqpv]}
 \end{equation}
 \marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
 
 \begin{equation}
-A2 = Re \left\{\frac{\partial S_{flow}}{\partial \theta} \right\}_{[np_{flow}, :]}
+[A2] = Re \left\{ \left[  \frac{\partial S_{flow}}{\partial \theta} \right] \right\}_{[np_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-B1 = Re \left\{\frac{\partial S_{inj}}{\partial Vm} \right\}_{[np_{inj}, pqpv]}
+[B1] = Re \left\{ \left[  \frac{\partial S_{inj}}{\partial Vm} \right] \right\}_{[np_{inj}, pqpv]}
 \end{equation}
 
 \marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
 
 \begin{equation}
-B2 = Re \left\{ \frac{\partial S_{inj}}{\partial \theta} \right\}_{[np_{inj}, :]}
+[B2] = Re \left\{ \left[   \frac{\partial S_{inj}}{\partial \theta} \right] \right\}_{[np_{inj}, :]}
 \end{equation}
 
 %%%%%%%%%%
 
 \begin{equation}
-C1 = Im\left\{  \frac{\partial S_{flow}}{\partial Vm}\right\}_{[nq_{flow}, pqpv]}
+[C1] = Im\left\{  \left[   \frac{\partial S_{flow}}{\partial Vm}  \right]  \right\}_{[nq_{flow}, pqpv]}
 \end{equation}
 
 \marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
 
 \begin{equation}
-C2 = Im\left\{\frac{\partial S_{flow}}{\partial \theta}\right\}_{[nq_{flow}, :]}
+[C2] = Im\left\{ \left[  \frac{\partial S_{flow}}{\partial \theta}  \right] \right\}_{[nq_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-D1 = Im\left\{\frac{\partial S_{inj}}{\partial Vm}\right\}_{[nq_{inj}, pqpv]}
+[D1] = Im\left\{ \left[  \frac{\partial S_{inj}}{\partial Vm}  \right]  \right\}_{[nq_{inj}, pqpv]}
 \end{equation}
 
 \marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
 
 \begin{equation}
-D2 = Im\left\{\frac{\partial S_{inj}}{\partial \theta}\right\}_{[nq_{inj}, :]}
+[D2] = Im\left\{ \left[  \frac{\partial S_{inj}}{\partial \theta}   \right] \right\}_{[nq_{inj}, :]}
 \end{equation}
 
 %%%%%%%%%%
 
 \begin{equation}
-E1 = abs\left(\frac{\partial I_{flow}}{\partial Vm}\right)_{[nI_{flow}, pqpv]}
+[E1] = abs\left(   \left[   \frac{\partial I_{flow}}{\partial Vm}  \right] \right)_{[nI_{flow}, pqpv]}
 \end{equation}
 
 \marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
 
 \begin{equation}
-E2 = abs\left(\frac{\partial I_{flow}}{\partial \theta}\right)_{[nI_{flow}, :]}
+[E2] = abs\left( \left[  \frac{\partial I_{flow}}{\partial \theta}  \right] \right)_{[nI_{flow}, :]}
 \end{equation}
 
 \begin{equation}
-F1 = \frac{\partial Vm}{\partial Vm}_{[nv, pqpv]} = diag([1])_{[nv, pqpv]}
+[F1] =  \left[  \frac{\partial Vm}{\partial Vm}  \right]_{[nv, pqpv]}  = diag([1])_{[nv, pqpv]}
 \end{equation}
 
 \marginnote{$nv$ is a vector of node indices where there are voltage module measurements.}
 
 \begin{equation}
-F2 = \frac{\partial Vm}{\partial \theta}_{[nv, :]}= [0]_{[nv, :]}
+[F2] =  \left[  \frac{\partial Vm}{\partial \theta}  \right]_{[nv, :]}= [0]_{[nv, :]}
 \end{equation}
 
 \paragraph{Calculated measurements $h$}
@@ -3905,7 +3636,7 @@ F2 = \frac{\partial Vm}{\partial \theta}_{[nv, :]}= [0]_{[nv, :]}
 To compute the residual ($z-h$) we need to compute the vector $h$. As the Jacobian, this vector is composed of 6 subvectors matching the Jacobian structure.
 
 \begin{equation}
-h=
+[h]=
 \left[
 \begin{array}{cc}
 a3 \\
@@ -3921,12 +3652,12 @@ f3
 
 
 \begin{equation}
-a3 = Re\left\{ S_{flow}\right\}_{[np_{flow}]}
+[a3] = Re\left\{[ S_f] \right\}_{[np_{flow}]}
 \end{equation}
 \marginnote{$np_{flow}$ is a vector of branch indices where there are active power flow measurements.}
 
 \begin{equation}
-b3 = Re\left\{S_{inj}\right\}_{[np_{inj}]}
+[b3] = Re\left\{ [S_{inj}]  \right\}_{[np_{inj}]}
 \end{equation}
 
 \marginnote{$np_{inj}$ is a vector of node indices where there are active power injection measurements.}
@@ -3935,14 +3666,14 @@ b3 = Re\left\{S_{inj}\right\}_{[np_{inj}]}
 %%%%%%%%%%
 
 \begin{equation}
-c3 = Im\left\{S_{flow}\right\}_{[nq_{flow}]}
+[c3] = Im\left\{  [S_f] \right\}_{[nq_{flow}]}
 \end{equation}
 
 \marginnote{$nq_{flow}$ is a vector of branch indices where there are reactive power flow measurements.}
 
 
 \begin{equation}
-d3 = Im\left\{S_{inj}\right\}_{[nq_{inj}]}
+[d3] = Im\left\{ [S_{inj}] \right\}_{[nq_{inj}]}
 \end{equation}
 
 \marginnote{$nq_{inj}$ is a vector of node indices where there are reactive power injection measurements.}
@@ -3950,13 +3681,13 @@ d3 = Im\left\{S_{inj}\right\}_{[nq_{inj}]}
 %%%%%%%%%%
 
 \begin{equation}
-e3 = abs\left(I_f\right)_{[nI_{flow}]}
+[e3] = abs\left([I_f]\right)_{[nI_{flow}]}
 \end{equation}
 
 \marginnote{$nI_{flow}$ is a vector of branch indices where there are current flow module measurements.}
 
 \begin{equation}
-f3 = Vm_{[nv]}
+[f3] = [Vm]_{[nv]}
 \end{equation}
 
 \marginnote{$nv$ is a vector of node indices where there are voltage module measurements. Note that $Vm$ is the module of the last iteration voltage solution.}
@@ -3964,32 +3695,39 @@ f3 = Vm_{[nv]}
 
 \paragraph{The solution vector $\Delta x$}
 
-The linear system solution will produce a vector ($\Delta x$) at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta Vm$) for all the nodes including the slack.
+The linear system solution will produce a vector $[\Delta x]$ at each iteration. This vector contains the increments of the voltage angle ($\Delta \theta$) extended with the increments of the voltage modules ($\Delta Vm$) for all the nodes including the slack.
+
 
 \begin{equation}
-\Delta {x} = [ \Delta \theta_{pqpv} \quad \Delta|{V}|_{all} ]
+[\Delta x] =
+\left[
+\begin{array}{cc}
+ \Delta \theta_{(pqpv)} \\
+ \Delta Vm\\
+\end{array}
+\right]
+\label{SE_voltage_inc}
 \end{equation}
 
 In this fashion we can split the increments vector:
 
 \begin{equation}
-\Delta \theta_{pqpv} = \Delta {x}[:npqpv]]
+[\Delta \theta] _{pqpv} = [\Delta x]_{[:npqpv]}
 \end{equation}
 
 \marginnote{The angle increments go from the first until the index equal to the number of pq and pv nodes $npqpv$}, from there until the end we find the voltage module increments.
 
 \begin{equation}
-\Delta |{V}| = \Delta {x}[npqpv::]]
+ [\Delta Vm] = [\Delta x]_{[npqpv::]}
 \end{equation}
 
 To compose the voltage solution at the iteration $k+1$:
 
 \begin{equation}
-{V}^{(k+1} =  {V}^{(k} + \Delta |{V}| ^{-j \cdot \Delta \theta}
+[V]^{(k+1} =  [V]^{(k} + [\Delta Vm] ^{-j \cdot [\Delta \theta]}
 \end{equation}
 
-The outcome of the method are the node voltages (vector $V$). From those one shall compose the branch power flows
-using the equations described in \ref{post_voltage_solution}.
+The outcome of the method are the node voltages vector $[V]$. From this voltage solution, one shall compose the branch power flows using the equations described in \ref{post_voltage_solution}.
 
 \subsection{Augmented Hatchel matrix method}
 
@@ -4170,15 +3908,15 @@ First the topological compilation results:
 \begin{table}[h!]
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
-	\toprule
+%	\toprule
 	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
-	\midrule
-	CN1 &   1 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 \\
-	CN2 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 \\
-	CN3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	CN4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	CN5 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 \\
-	\bottomrule
+%	\midrule
+	CN1 &   1 &     &     &     &   1 &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &    1 &      &      &      \\
+	CN2 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &    1 &      &      &      &    1 &      &      &      &    1 &      &      &      &      &      &      &      &    1 \\
+	CN3 &     &     &     &     &     &     &     &   1 &   1 &      &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &    1 &      &      &      &      &      &      &      \\
+	CN4 &     &     &     &     &     &     &     &     &     &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &      \\
+	CN5 &     &     &     &   1 &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      &    1 &      &      &      &    1 &      &      &      &      &      \\
+%	\bottomrule
 \end{tabular}
 }
 \caption{$CN\_T$}
@@ -4188,17 +3926,17 @@ First the topological compilation results:
 \begin{table}[h!]
 	\resizebox{\textwidth}{!}{
 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
-	\toprule
+%	\toprule
 	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
-	\midrule
-	BR1 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR2 &   0 &   0 &   0 &   0 &   0 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 \\
-	BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	\bottomrule
+%	\midrule
+	BR1 &     &   1 &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR2 &     &     &     &     &     &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      &      \\
+	BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR5 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      &      \\
+	BR6 &     &     &     &     &     &     &     &     &     &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR7 &     &     &     &     &     &     &     &     &     &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+%	\bottomrule
 \end{tabular}
 }
 \caption{$BR\_T\_f$}
@@ -4208,17 +3946,17 @@ First the topological compilation results:
 \begin{table}[h!]
 	\resizebox{\textwidth}{!}{
 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
-	\toprule
+%	\toprule
 	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
-	\midrule
-	BR1 &   0 &   0 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR2 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR3 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 \\
-	BR4 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR5 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR6 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	BR7 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	\bottomrule
+%	\midrule
+	BR1 &     &     &   1 &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR2 &     &     &     &     &     &     &   1 &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      \\
+	BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR5 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      \\
+	BR6 &     &     &     &     &     &     &     &     &     &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	BR7 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+%	\bottomrule
 \end{tabular}
 }
 \caption{$BR\_T\_t$}
@@ -4228,52 +3966,41 @@ First the topological compilation results:
 \begin{table}[h!]
 	\resizebox{\textwidth}{!}{
 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr}
-	\toprule
+%	\toprule
 	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 &  T24 &  T25 &  T26 &  T27 &  T28 &  T29 &  T30 &  T31 &  T32 &  T33 \\
-	\midrule
-	SW1  &   1 &   1 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW2  &   0 &   0 &   1 &   1 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW3  &   0 &   0 &   0 &   0 &   1 &   1 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW4  &   0 &   0 &   0 &   0 &   0 &   0 &   1 &   1 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW5  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW6  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW7  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW8  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW9  &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW10 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW11 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW12 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 \\
-	SW13 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 &    0 &    0 \\
-	SW14 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &   0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    0 &    1 &    1 \\
-	\bottomrule
+%	\midrule
+	SW1  &   1 &   1 &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW2  &     &     &   1 &   1 &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW3  &     &     &     &     &   1 &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW4  &     &     &     &     &     &     &   1 &   1 &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW5  &     &     &     &     &     &     &     &     &   1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW6  &     &     &     &     &     &     &     &     &     &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW7  &     &     &     &     &     &     &     &     &     &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW8  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW9  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW1  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+	SW11 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      &      &      \\
+	SW12 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      \\
+	SW13 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &    1 &      &      \\
+	SW14 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 &    1 \\
+%	\bottomrule
 \end{tabular}
 }
-\caption{$SW\_T$}
+\caption{$[SW\_T]$}
 \end{table}
 
 
 \begin{table}[h!]
-	\begin{tabular}{lr}
-		\toprule
-		{} &  States \\
-		\midrule
-		SW1  &       1 \\
-		SW2  &       1 \\
-		SW3  &       1 \\
-		SW4  &       1 \\
-		SW5  &       1 \\
-		SW6  &       1 \\
-		SW7  &       1 \\
-		SW8  &       1 \\
-		SW9  &       1 \\
-		SW10 &       1 \\
-		SW11 &       1 \\
-		SW12 &       1 \\
-		SW13 &       1 \\
-		SW14 &       1 \\
-		\bottomrule
-	\end{tabular}
-	\caption{$SW\_states$}
+	\resizebox{\textwidth}{!}{
+ \begin{tabular}{lrrrrrrrrrrrrrr}
+%	\toprule
+	{} &  SW1 &  SW2 &  SW3 &  SW4 &  SW5 &  SW6 &  SW7 &  SW8 &  SW9 &  SW10 &  SW11 &  SW12 &  SW13 &  SW14 \\
+%	\midrule
+	States &    1 &    1 &    1 &    1 &    1 &    1 &    1 &    1 &    1 &     1 &     1 &     1 &     1 &     1 \\
+%	\bottomrule
+\end{tabular}
+}
+	\caption{$[SW\_states]$}
 \end{table}
 
 
@@ -4283,16 +4010,16 @@ First the topological compilation results:
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrr}
-		\toprule
+%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-		\midrule
-		L2 &    0 &    1 &    0 &    0 &    0 \\
-		L3 &    0 &    0 &    1 &    0 &    0 \\
-		L4 &    0 &    0 &    0 &    1 &    0 \\
-		L5 &    0 &    0 &    0 &    0 &    1 \\
-		\bottomrule
+%		\midrule
+		L2 &      &    1 &      &      &      \\
+		L3 &      &      &    1 &      &      \\
+		L4 &      &      &      &    1 &      \\
+		L5 &      &      &      &      &    1 \\
+%		\bottomrule
 	\end{tabular}
-\caption{$LD\_CN$}
+\caption{$[LD\_CN]$}
 \end{table}
 
 
@@ -4314,13 +4041,13 @@ First the topological compilation results:
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrr}
-		\toprule
+%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-		\midrule
-		G1 &    1 &    0 &    0 &    0 &    0 \\
-		\bottomrule
+%		\midrule
+		G1 &    1 &      &      &      &      \\
+%		\bottomrule
 	\end{tabular}
-\caption{$GEN\_CN$}
+\caption{$[GEN\_CN]$}
 \end{table}
 
 
@@ -4328,19 +4055,19 @@ First the topological compilation results:
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrr}
-		\toprule
+%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-		\midrule
-		BR1 &    1 &    0 &    0 &    0 &   -1 \\
-		BR2 &    1 &    0 &   -1 &    0 &    0 \\
-		BR3 &    1 &   -1 &    0 &    0 &    0 \\
-		BR4 &    0 &    1 &   -1 &    0 &    0 \\
-		BR5 &    0 &    1 &    0 &    0 &   -1 \\
-		BR6 &    0 &    0 &    1 &   -1 &    0 \\
-		BR7 &    0 &    0 &    0 &    1 &   -1 \\
-		\bottomrule
+%		\midrule
+		BR1 &    1 &      &      &      &   -1 \\
+		BR2 &    1 &      &   -1 &      &      \\
+		BR3 &    1 &   -1 &      &      &      \\
+		BR4 &      &    1 &   -1 &      &      \\
+		BR5 &      &    1 &      &      &   -1 \\
+		BR6 &      &      &    1 &   -1 &      \\
+		BR7 &      &      &      &    1 &   -1 \\
+%		\bottomrule
 	\end{tabular}
-\caption{$BR\_CN$}
+\caption{$[BR\_CN]$}
 \end{table}
 
 
@@ -4348,17 +4075,17 @@ First the topological compilation results:
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrr}
-		\toprule
+%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-		\midrule
-		CN1 &    1 &    1 &    1 &    0 &    1 \\
-		CN2 &    1 &    1 &    1 &    0 &    1 \\
-		CN3 &    1 &    1 &    1 &    1 &    0 \\
-		CN4 &    0 &    0 &    1 &    1 &    1 \\
-		CN5 &    1 &    1 &    0 &    1 &    1 \\
-		\bottomrule
+%		\midrule
+		CN1 &    1 &    1 &    1 &      &    1 \\
+		CN2 &    1 &    1 &    1 &      &    1 \\
+		CN3 &    1 &    1 &    1 &    1 &      \\
+		CN4 &      &      &    1 &    1 &    1 \\
+		CN5 &    1 &    1 &      &    1 &    1 \\
+%		\bottomrule
 	\end{tabular}
-\caption{$CN\_CN$}
+\caption{$[CN\_CN]$}
 \end{table}
 
 
