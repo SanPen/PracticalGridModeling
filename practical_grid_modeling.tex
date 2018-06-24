@@ -1,8 +1,8 @@
 
 %\documentclass{tufte-book}
 %\documentclass[a4paper,twoside,fleqn]{tufte-book}
-%\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
-\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
+\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
+%\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
 
 % set main font
 \usepackage{helvet}
@@ -1163,7 +1163,6 @@ $$
 
 
 
-\newpage
 \subsection{Transformer}
 
 The three phase transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
@@ -1592,19 +1591,19 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 
 \chapter{Topology analysis and consolidation} \label{topology}
 
-This chapter explains how to model the devices that compose an electrical grid and how to convert those elements into calculation matrices and vectors to run the simulations.
-
+In Energy Management Systems Software (EMS) the topology is specified using devices as connectivity nodes, terminals, jumpers, branches, etc. These topological objects must be converted into a Bus-Branch model in order to be able to compute power flows and other electrical calculations.
 
 
 \section{Topology processing}
 \label{TopologyProcessing}
-In Energy Management Systems Software (EMS) the topology is specified using devices as connectivity nods, terminals, jumpers, branches, etc. These topological objects must be converted into a Bus-Branch model in order to be able to compute power flows and other electrical calculations. The topological process presented here is efficient and can render both the grid connectivity as the calculation matrices ($Y_{Bus}$, $S_{bus}$, etc.)
+ The topological process presented here is efficient and can render both the grid connectivity and the calculation matrices ($Y_{Bus}$, $S_{bus}$, etc.) using linear algebra as much as possible.
 
 \begin{figure}[h!]
 	\includegraphics[width=0.7\linewidth]{img/Substation.eps}
 	\caption{Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}
 	\label{substation_model}
 \end{figure}
+
 
 The elements presented in the example of the figure \ref{substation_model} are:
 
@@ -1615,6 +1614,7 @@ The elements presented in the example of the figure \ref{substation_model} are:
 	\item Branch (BR): Any element used to transport power.
 	\item Shunt (SH): Any device used to inject or subtract power (loads, generators, etc.)
 \end{itemize}
+
 
 For calculation, the connectivity is solved first, originating one or more calculation buses. The switches, terminals, etc. are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation. We shall start by forming the connectivity matrices of each type of device with the terminal devices. From those connectivity primitives, we are able to form any connectivity matrix in the circuit. 
 
@@ -1805,10 +1805,10 @@ The graph of the circuit is automatically constructed by computing the Bus-Bus a
 
 At this point the topological process has to continue by detecting if any island has been formed.
 
-%\newpage
+\newpage
 \section{Islands detection}
 
-The admittance matrix of a circuit with more than one island is singular. Therefore, the circuit has to be split in sub-circuits in order to be solved. The suggested algorithm to achieve this is the Depth First Search ($DFS$) algorithm.
+The admittance matrix of a circuit with more than one island is singular. Therefore, the circuit has to be split in sub-circuits in order to be solved. The suggested algorithm to find the islands of a circuit is the Depth First Search ($DFS$) algorithm.
 
 \begin{figure}[h!]
 	\centering
@@ -1818,12 +1818,14 @@ The admittance matrix of a circuit with more than one island is singular. Theref
 \end{figure}
 
 
-We already determined that the circuit complete graph is given by the Bus-Bus connectivity matrix $[C_{bus, bus}]$. This matrix is also known as the node adjacency matrix. For algorithmic purposes we will call the adjacency matrix $A$. As a side note, the matrix $A$ is a sparse matrix. See \cite{CSC_matrix}.
+Previously it was already determined that the circuit complete graph is given by the Bus-Bus connectivity matrix $[C_{bus, bus}]$. This matrix is also known as the node adjacency matrix. For algorithmic purposes we will call it the adjacency matrix $A$. As a side note, the matrix $A$ is a sparse matrix. See \cite{CSC_matrix}.
 
 \marginnote{For algorithmic purposes,  $A$ it is chosen to be a CSC sparse matrix. This is important because the following algorithm uses the CSC sparse structure to find the adjacent elements of a node. }
 
+The algorithm to find the circuit islands is:
+
 \begin{enumerate}
-	\item $N$ is the number of nodes.
+	\item $N$ is the number of nodes (buses) of the circuit.
 	\item Declare \verb|visited| as a vector of length $N$.
 	\item Declare \verb|islands| as a list of lists.
 	\item Declare \verb|island_idx = 0|.
@@ -1835,7 +1837,7 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 		\begin{enumerate}
 			\item If \verb|island_idx| is greater or equal than the amount of islands in \verb|islands|, initialize a new island as an empty list into \verb|islands|.
 			
-			Next we need to run a DFS process for the current node $i$.
+			// Next we need to run a DFS process for the current node $i$.
 			
 			\item Declare \verb|stack| as a Stack cue.
 			\item Append the node $i$ to the stack.
@@ -1850,7 +1852,7 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 				\item For \verb|j=A.col_ptr[v]| to \verb|A.col_ptr[v+1]|:
 				
 				\begin{itemize}
-					\item Declare \verb|k=A.row_ind[j]|. Here $k$ is the row index in the CSC storage scheme.
+					\item Declare \verb|k=A.row_ind[j]|. Here $k$ is the row index in the CSC sparse storage scheme.
 					
 					\item If \verb|visited[k] = false| then add $k$ to the stack.
 				\end{itemize}
@@ -1872,11 +1874,11 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 	\item End of the algorithm
 \end{enumerate}
 
-At the end of the algorithm we have a list where each element is a list of bus indices composing a circuit island. With this information we are able to split the singular circuit matrices into non-singular matrices in order to be able to compute the electrical calculations.
+At the end of the algorithm we have a list where each element is a list of bus indices composing a circuit island. With this information we are able to split the singular circuit matrices into non-singular matrices in order to be able to compute the electrical calculations. Needless to say that if only only island is found, the circuit is already one island and no matrix subdivision is needed.
 
 \section{Finding the branch indices that correspond to an island}
 
-When splitting the circuit into island it is not enough to know the nodes that compose that island, we need the branches that fall into that island as well. To accomplish that, we can define the following branch-bus connectivity matrix:
+When splitting the circuit into island it is not enough to know the nodes that compose that island, we need to know which branches fall into each island as well. To accomplish that, we can define the following branch-bus connectivity matrix:
 
 \begin{equation}
 [C] = [C_f] + [C_t]
@@ -4005,7 +4007,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$BR\_T\_f$}
+\caption{$C_{branch\_f, terminal}$}
 \end{table}
 
 
@@ -4025,7 +4027,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$BR\_T\_t$}
+\caption{$C_{branch\_t, terminal}$}
 \end{table}
 
 
@@ -4066,7 +4068,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-	\caption{$[SW\_states]$}
+	\caption{$[switch\_states]$}
 \end{table}
 
 
@@ -4085,7 +4087,7 @@ First the topological compilation results:
 		L5 &      &      &      &      &    1 \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[LD\_CN]$}
+\caption{$[C_{load, bus}]$}
 \end{table}
 
 
@@ -4113,7 +4115,7 @@ First the topological compilation results:
 		G1 &    1 &      &      &      &      \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[GEN\_CN]$}
+\caption{$[C_{generation, bus}]$}
 \end{table}
 
 
@@ -4124,16 +4126,16 @@ First the topological compilation results:
 %		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
 %		\midrule
-		BR1 &    1 &      &      &      &   -1 \\
-		BR2 &    1 &      &   -1 &      &      \\
-		BR3 &    1 &   -1 &      &      &      \\
-		BR4 &      &    1 &   -1 &      &      \\
-		BR5 &      &    1 &      &      &   -1 \\
-		BR6 &      &      &    1 &   -1 &      \\
-		BR7 &      &      &      &    1 &   -1 \\
+		BR1 &    1 &      &      &      &    1 \\
+		BR2 &    1 &      &    1 &      &      \\
+		BR3 &    1 &    1 &      &      &      \\
+		BR4 &      &    1 &    1 &      &      \\
+		BR5 &      &    1 &      &      &    1 \\
+		BR6 &      &      &    1 &    1 &      \\
+		BR7 &      &      &      &    1 &    1 \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[BR\_CN]$}
+\caption{$[C]$}
 \end{table}
 
 
