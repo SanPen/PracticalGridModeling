@@ -1941,6 +1941,16 @@ Chapter \ref{devices} discussed how to create matrix primitives to represent som
 
 For the computations ahead we will need to have a number of admittance-based matrices. We will compose matrices and vector for the complete circuit, and then split those per circuit island. Remember that the calculation matrices are only valid for island circuits, this is because multi-island circuits present singular admittance matrices that lead to no numerical solution by their own.
 
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/ElementBusAgregation.eps}
+	\caption{Element bus aggregations.}
+	\label{fig:ElementBusAgregation}
+\end{figure}
+
+The logic is to have a vector of magnitudes of an object type (i.e. all the active power power for all the generators) and a connectivity matrix that relates the generators with the buses of the grid. Multiplying the connectivity matrix by the element magnitudes vector we obtain the buses magnitudes vector that we need for calculation.
+
+
 %        # form the power injections vector
 %demand_power = self.C_load_bus.T * self.load_power  # demand (complex)
 %generation_power = self.C_gen_bus.T * self.generator_power  # generation (real)
@@ -1966,10 +1976,10 @@ For the computations ahead we will need to have a number of admittance-based mat
 %self.calc.types = (self.C_load_bus.sum(axis=0).A1 + self.C_gen_bus.sum(axis=0).A1 * 10).reshape(-1)
 %self.calc.ref, self.calc.pq, self.calc.pv = self.calc.compute_pqpv(self.calc.types, self.calc.ref)
 
-
+\paragraph{Power, current and voltage vectors}
 
 \begin{equation}
-[demand\_power ]= [C_{load,bus}]^\top \cdot [load\_power]
+[demand\_power ]= [C_{load,bus}]^\top \cdot [load\_power\_S]
 \end{equation}
 
 \begin{equation}
@@ -1980,9 +1990,18 @@ For the computations ahead we will need to have a number of admittance-based mat
 [S_{bus}] = [generation\_power]  - [demand\_power]
 \end{equation}
 
+
 \begin{equation}
-[Ysh ]= [C_{shunt,bus}]^\top \cdot [shunt\_power]
+[I_{bus}] = - [C_{load,bus}]^\top \cdot [load\_power\_I]
 \end{equation}
+
+\paragraph{Admittance matrix}
+
+\begin{equation}
+[Ysh ]= [C_{shunt,bus}]^\top \cdot [shunt\_power] + [C_{load,bus}]^\top \cdot [load\_power\_Y]
+\end{equation}
+
+
 
 \begin{equation}
 Y_f = diag([BR_{yff}]) \times [C_f] + diag([BR_{yft}]) \times [C_t]
@@ -1992,8 +2011,10 @@ Y_f = diag([BR_{yff}]) \times [C_f] + diag([BR_{yft}]) \times [C_t]
 Y_t = diag([BR_{ytf}]) \times [C_f] + diag([BR_{ytt}]) \times [C_t]
 \end{equation}
 
+\marginnote{$[BR_{yff}]$, $[BR_{yft}]$, $[BR_{ytf}]$ and $[BR_{ytt}]$ are vectors of length equal to the number of branches, where the branch primitive admittance matrix components are stored. This way we can leverage the connectivity matrices $[C_f]$ and $[C_t]$ to form $[Y_{bus}]$}
+
 \begin{equation}
-Ybus = [C_f]^\top \times [Y_f] + [C_t]^\top \times Y_t + diag(Ysh)
+Ybus = [C_f]^\top \times [Y_f] + [C_t]^\top \times Y_t + diag([Ysh])
 \end{equation}
 
 %-------------------------------------------------------------------------------
