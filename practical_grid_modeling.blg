@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: practical_grid_modeling.aux
+The style file: plainnat.bst
+Database file #1: bibliography.bib
+Warning--entry type for "subramanian2014application" isn't style-file defined
+--line 85 of file bibliography.bib
+Warning--empty journal in TriasHELM
+You've used 13 entries,
+            2773 wiz_defined-function locations,
+            666 strings with 6905 characters,
+and the built_in function-call counts, 5008 in all, are:
+= -- 419
+> -- 250
+< -- 11
++ -- 88
+- -- 75
+* -- 350
+:= -- 784
+add.period$ -- 39
+call.type$ -- 13
+change.case$ -- 59
+chr.to.int$ -- 13
+cite$ -- 27
+duplicate$ -- 260
+empty$ -- 461
+format.name$ -- 94
+if$ -- 1047
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 16
+newline$ -- 73
+num.names$ -- 52
+pop$ -- 156
+preamble$ -- 1
+purify$ -- 51
+quote$ -- 0
+skip$ -- 190
+stack$ -- 0
+substring$ -- 125
+swap$ -- 19
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 118
+warning$ -- 1
+while$ -- 47
+width$ -- 0
+write$ -- 166
+(There were 2 warnings)

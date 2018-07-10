@@ -1,8 +1,8 @@
 
 %\documentclass{tufte-book}
 %\documentclass[a4paper,twoside,fleqn]{tufte-book}
-%\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
-\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
+\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
+%\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
 
 % set main font
 \usepackage{helvet}
@@ -777,15 +777,160 @@ We observe that the calculation outcome is a fair approximation of the original 
 
 
 
-
 %-------------------------------------------------------------------------------
-%	CHAPTER The branch element
+%	CHAPTER Device models
 %-------------------------------------------------------------------------------
-\chapter{Topology analysis and consolidation}
-
-This chapter explains how to model the devices that compose an electrical grid and how to convert those elements into calculation matrices and vectors to run the simulations.
 
 
+\chapter{Device models} \label{devices}
+
+In this chapter, the goal is to define the primitive matrices and vectors that represent the grid devices in the calculation circuit-wide matrices and vectors.
+
+\begin{figure}[h!]
+	\includegraphics[width=0.9\linewidth]{img/CircuitEquation.eps}
+	\caption{Representation of the circuit equation.}
+	\label{fig:circuit_equation}
+\end{figure}
+
+The branches will be represented as components of the circuit admittance matrix $[Y_{bus}]$. The loads, may be composed by constant power, constant current and constant admittance, those belong to $[S_{bus}]$, $[I_{bus}]$ and the diagonal of $[Y_{bus}]$ respectively. The voltage controlled devices such as generators, contribute only active power $[P]$ to $[S_{bus}]$ and voltage module $[Vm]$ to $[V_{bus}]$.
+
+\section{The bus and it's connected elements}
+
+The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), and a power ($S$), an admittance ($Y$) and a current ($I$) potentially connected.
+
+
+%\begin{marginfigure}
+%	\includegraphics[width=0.99\linewidth]{img/NodeElements.eps}
+%	\caption{$YISV$ Bus model.}
+%	\label{bus_model}
+%\end{marginfigure}
+
+The admittance, power and current values at the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
+
+
+\subsection{Static device}
+
+We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device). Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
+
+\begin{marginfigure}
+	\includegraphics[width=0.99\linewidth]{img/ZIP_model.eps}
+	\caption{$ZIP$ / $YISV$ device model.}
+	\label{zip_model}
+\end{marginfigure}
+
+The modelling of a static device (i.e. load) is done as a composition of fixed impedance, fixed current and fixed power. This is known to match best the real behaviour of loads in electrical grids (Although in transmission they tend to be more fixed power-dominated). This is known as the ZIP model of a load. Here we are going to refer to it as ZIS, given that we actually specify the complex power ($S$) and not the real power ($P$).
+
+\begin{table}[h!]
+	%	\color{maincolor}
+	\begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		name & Name of the device (string) & - \\ 
+		\hline 
+		number of phases & Number of phases of the device (integer) & - \\ 
+		\hline 
+		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
+		\hline 
+		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
+		\hline 
+		Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
+		\hline 
+		I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
+		\hline 
+		S & Power (complex number) & MW, MVAr \\ 
+		\hline
+	\end{tabular} 
+	\caption{Main properties of the static device object. More properties my be added if needed.}
+\end{table}
+
+\vspace{0.5cm}
+
+The impedance $Z$ is converted to admittance with $Y=1/Z$.
+
+When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
+
+%\paragraph{Shunt connected impedances/admittances}
+A three phase admittance device such as a ZIP load or a capacitor bank has to be integrated into the nodal equation (see figure \ref{fig:CircuitEquation})
+
+Consider the model from the figure \ref{delta_shunt_model}. The primitive admittance matrix is then:
+
+In the case of a device connected in $\Delta$, the primitive matrix is:
+\begin{equation}
+Y_{device} = \left[ \begin{array}{ccc}
+y_{aa} & y_{ab} &  y_{ac} \\
+y_{ab} & y_{bb} & y_{bc} \\  
+y_{ac} & y_{bc} & y_{cc}
+\end{array} \right] 
+\end{equation}
+
+\begin{marginfigure}
+	\includegraphics[width=0.99\linewidth]{img/DeltaShuntDevice.eps}
+	\caption{$\Delta$/Y shunt model.}
+	\label{delta_shunt_model}
+\end{marginfigure}
+
+Here, $y_{ab}$, $y_{bc}$ and $y_{ac}$ are given, and $y_{aa}$, $y_{bb}$ and $y_{cc}$ are computed as:
+
+$$y_{aa} = y_{ab} + y_{ac}$$
+$$y_{bb} = y_{ab} + y_{bc}$$
+$$y_{cc} = y_{ac} + y_{bc}$$
+
+In the case of a device connected in $Y$, the primitive matrix is:
+\begin{equation}
+Y_{device} = \left[ \begin{array}{ccc}
+y_{aa} & 0 &  0 \\
+0 & y_{bb} & 0 \\  
+0 & 0 & y_{cc}
+\end{array} \right] 
+\end{equation}
+
+The primitive matrices are added to the diagonal of the circuit admittance matrix $[Y_{bus}]$
+
+\subsection{Voltage controlled device}
+
+A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
+
+The main parameters of a voltage controlled generator are:\\
+
+\begin{marginfigure}
+	\includegraphics[width=0.4\linewidth]{img/PV_model.eps}
+	\caption{$PV$ device model.}
+	\label{pv_model}
+\end{marginfigure}
+
+\begin{table}[h!]
+	%	\color{maincolor}
+	\begin{tabular}{|p{2cm}|p{5cm}|p{2cm}|}
+		\hline 
+		\rowcolor{maincolor}
+		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
+		\hline 
+		name & Name of the device (string) & - \\ 
+		\hline 
+		number of phases & Number of phases of the device (integer) & - \\ 
+		\hline 
+		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
+		\hline 
+		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
+		\hline 
+		$V_{set}$ & Set voltage (number) & p.u. \\ 
+		\hline 
+		$P$ & Power (number) & MW \\ 
+		\hline
+		$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
+		\hline
+		$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
+		\hline
+	\end{tabular} 
+\end{table}
+
+\vspace{0.5cm}
+
+%When forming the 
+
+\newpage
 \section{The branch element} 
 \label{ch:branch}
 
@@ -825,21 +970,21 @@ The generalized admittance matrix that corresponds to the $\Pi$ model is:
 Where:
 
 \begin{table}[h!]
-\begin{center}
-\begin{tabularx}{\textwidth}{XXXX}
-\toprule
-
-${Y}_{pp}$ &  ${Y}_{ps}$ & ${Y}_{sp}$ & ${Y}_{ss}$\\
-
-\midrule
-
-$\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\beta^2}$\\
-
-\bottomrule
-\end{tabularx}
-\end{center}
-  \caption{Equations of the generalized $\Pi$ model.}
-  \label{pi_model_equations}
+	\begin{center}
+		\begin{tabularx}{\textwidth}{XXXX}
+			\toprule
+			
+			${Y}_{pp}$ &  ${Y}_{ps}$ & ${Y}_{sp}$ & ${Y}_{ss}$\\
+			
+			\midrule
+			
+			$\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\alpha^2}$ &  $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{-{Y}_{series}}{\alpha\beta}$ & $\frac{{Y}_{series} + \frac{{Y}_{sh}}{2}}{\beta^2}$\\
+			
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{Equations of the generalized $\Pi$ model.}
+	\label{pi_model_equations}
 \end{table}
 
 The formula \ref{pi_main_formula} will be used to compute the network admittance matrices.
@@ -847,7 +992,7 @@ The formula \ref{pi_main_formula} will be used to compute the network admittance
 
 \subsection{Positive sequence model}
 
- Since the positive sequence simulation is very popular, a positive sequence model of the $\Pi$ branch model is presented. The formulation of the admittance matrix of the branch is similar to the one presented for three phases, but each sub-matrix has only one element (one equivalent phase).
+Since the positive sequence simulation is very popular, a positive sequence model of the $\Pi$ branch model is presented. The formulation of the admittance matrix of the branch is similar to the one presented for three phases, but each sub-matrix has only one element (one equivalent phase).
 
 \begin{center}
 	\begin{figure}[h]
@@ -976,20 +1121,20 @@ $$
 Now we need to find the branch model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
 
 \begin{equation}
-	\begin{split}
-		Y_{pp} = Y_{ss} = Y_{series} + Y_{sh}/2 = \\
-		 \left[ \begin{array}{ccc}
-		0.0112-j0.0232  & -0.0054+j0.008   & -0.0020+j0.0052 \\ -0.0054+j0.008  &  0.0125-j0.024 & -0.0033+j0.0063 \\ -0.0020+j0.0052 &  -0.0033+j0.0063 & 0.0100-j0.0224
-		\end{array} \right]\quad  p.u.
-	\end{split}
+\begin{split}
+Y_{pp} = Y_{ss} = Y_{series} + Y_{sh}/2 = \\
+\left[ \begin{array}{ccc}
+0.0112-j0.0232  & -0.0054+j0.008   & -0.0020+j0.0052 \\ -0.0054+j0.008  &  0.0125-j0.024 & -0.0033+j0.0063 \\ -0.0020+j0.0052 &  -0.0033+j0.0063 & 0.0100-j0.0224
+\end{array} \right]\quad  p.u.
+\end{split}
 \end{equation}
 
 \begin{equation}
-	\begin{split}
-		Y_{ps} = Y_{sp} = -Y_{series} = \\ \left[ \begin{array}{ccc}
-		-0.0112+j0.0232  & 0.0054-j0.008   & 0.0020-j0.0052 \\  0.0054-j0.008  &  -0.0125+j0.024 & 0.0033-j0.0063 \\  0.0020-j0.0052 &  0.0033-j0.0063 & -0.0100+j0.0224
-		\end{array} \right]\quad  p.u.
-	\end{split}
+\begin{split}
+Y_{ps} = Y_{sp} = -Y_{series} = \\ \left[ \begin{array}{ccc}
+-0.0112+j0.0232  & 0.0054-j0.008   & 0.0020-j0.0052 \\  0.0054-j0.008  &  -0.0125+j0.024 & 0.0033-j0.0063 \\  0.0020-j0.0052 &  0.0033-j0.0063 & -0.0100+j0.0224
+\end{array} \right]\quad  p.u.
+\end{split}
 \end{equation}
 
 If we convert the three-phase matrices into positive sequence values we obtain:
@@ -1018,7 +1163,6 @@ $$
 
 
 
-\newpage
 \subsection{Transformer}
 
 The three phase transformer model implements the branch model as well, but the model admittances $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$ vary depending on the connections types at the primary and at the secondary.
@@ -1026,31 +1170,31 @@ The three phase transformer model implements the branch model as well, but the m
 The most common transformer connections at the terminals are:
 
 \begin{itemize}
-\item Delta ($\Delta$)
-\item Wye ($Y$)
-\item Grounded Wye (the neutral is grounded) ($Yg$)
+	\item Delta ($\Delta$)
+	\item Wye ($Y$)
+	\item Grounded Wye (the neutral is grounded) ($Yg$)
 \end{itemize}
 
 
 
 \begin{table}[h!]\index{typefaces!sizes}
-\begin{center}
-\begin{tabularx}{\textwidth}{XXXXX}
-\toprule
-Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
-\midrule
- $Yg$ & $Yg$ 			& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_I$ 		& $-\frac{1}{\alpha\beta}Y_I$\\
- $Yg$ & $Y$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$	\\
- $Yg$ & $\Delta$  		& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
- $Y$ & $Yg$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$ \\
- $Y$ & $Y$  			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
- $\Delta$ & $\Delta$ 	& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$		& $-\frac{1}{\alpha\beta}Y_{II}$\\
- $\Delta$ & $Yg$ 		& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{I}$		& $\frac{1}{\alpha\beta}Y_{III}$\\
-\bottomrule
-\end{tabularx}
-\end{center}
-  \caption{Three-phase transformer impedances of the branch model.}
-  \label{transfoemer_impedances_table}
+	\begin{center}
+		\begin{tabularx}{\textwidth}{XXXXX}
+			\toprule
+			Primary & Secondary & $Y_{pp}$  & $Y_{ss}$ & $Y_{ps}$ and $Y_{sp}$\\
+			\midrule
+			$Yg$ & $Yg$ 			& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_I$ 		& $-\frac{1}{\alpha\beta}Y_I$\\
+			$Yg$ & $Y$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$	\\
+			$Yg$ & $\Delta$  		& $\frac{1}{\alpha^2}Y_I$ 				& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
+			$Y$ & $Yg$ 			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{3\beta^2}Y_{II}$	& $-\frac{1}{3\alpha\beta}Y_{II}$ \\
+			$Y$ & $Y$  			& $\frac{1}{3\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$ 	& $\frac{1}{\alpha\beta}Y_{III}$	 \\
+			$\Delta$ & $\Delta$ 	& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{II}$		& $-\frac{1}{\alpha\beta}Y_{II}$\\
+			$\Delta$ & $Yg$ 		& $\frac{1}{\alpha^2}Y_{II}$			& $\frac{1}{\beta^2}Y_{I}$		& $\frac{1}{\alpha\beta}Y_{III}$\\
+			\bottomrule
+		\end{tabularx}
+	\end{center}
+	\caption{Three-phase transformer impedances of the branch model.}
+	\label{transfoemer_impedances_table}
 \end{table}
 
 The table \ref{transfoemer_impedances_table} lays out the branch admittances for every pair of connections. The source for this model is the excellent book by J.Arrillaga\cite{arrillaga1990computer}.
@@ -1107,98 +1251,98 @@ In order to get the series impedance and shunt admittance of the transformer to 
 Then, the series and shunt impedances are computed as follows:
 
 \begin{multicols}{2}
-Nominal impedance HV (Ohm): 
-\begin{equation}
-Zn_{hv} = U_{hv}^2 / S_n
-\end{equation}
-
-
-Nominal impedance LV (Ohm): 
-\begin{equation}
-Zn_{lv} = U_{lv}^2 / S_n
-\end{equation}
-
-Short circuit impedance (p.u.): 
-\begin{equation}
-z_{sc} = U_{sc} / 100
-\end{equation}
-
-Short circuit resistance (p.u.): 
-\begin{equation}
-r_{sc} = \frac{P_{cu} / 1000}{S_n}
-\end{equation}
-
-Short circuit reactance (p.u.):
-\begin{equation}
-x_{sc} = \sqrt{z_{sc}^2 - r_{sc} ^2}
-\end{equation}
-
-
-HV resistance (p.u.):
-\begin{equation}
-r_{cu,hv} = r_{sc} \cdot GR_{hv1}
-\end{equation}
-
-LV resistance (p.u.): 
-\begin{equation}
-r_{cu,lv} = r_{sc} \cdot (1 - GR_{hv1})
-\end{equation}
-
-HV shunt reactance (p.u.): 
-\begin{equation}
-xs_{hv} = x_{sc} \cdot GX_{hv1}
-\end{equation}
-
-LV shunt reactance (p.u.): 
-\begin{equation}
-xs_{lv} = x_{sc} \cdot (1 - GX_{hv1})
-\end{equation}
-
-Shunt resistance (p.u.): 
-\begin{equation}
-r_{fe} = \frac{Sn}{P_{fe} / 1000}
-\end{equation}
-
-Magnetization impedance (p.u.):
-\begin{equation}
-z_m = \frac{1}{I_0 / 100}
-\end{equation}
-
-Magnetization reactance (p.u.):
-\begin{equation}
-x_m = \frac{1}{\sqrt{\frac{1}{z_m^2} - \frac{1}{r_{fe}^2}}}
-\end{equation}
-
-If the content of the square root is negative, set the magnetization impedance to zero.\\
-
-
-The final complex calculated parameters in per unit are:
-
-Magnetizing impedance (or series impedance): 
-\begin{equation}
-z_{series} = Z_m = r_{sc} +j \cdot x_{sc}
-\end{equation}
-
-The series admittance is [p.u.]: 
-\begin{equation}
-y_{series} = \frac{1}{z_{series}}
-\end{equation}
-
-Leakage impedance (or shunt impedance): 
-\begin{equation}
-Z_l = r_{fe} + j \cdot x_{m}
-\end{equation}
-
-Shunt admittance [p.u.]: 
-\begin{equation}
-y_{shunt} = 1 / Z_l
-\end{equation}
-
-
-The series admittance for the three-phase model [p.u.]: 
-\begin{equation}
-y_{t} = \frac{3}{z_{series}}
-\end{equation}
+	Nominal impedance HV (Ohm): 
+	\begin{equation}
+	Zn_{hv} = U_{hv}^2 / S_n
+	\end{equation}
+	
+	
+	Nominal impedance LV (Ohm): 
+	\begin{equation}
+	Zn_{lv} = U_{lv}^2 / S_n
+	\end{equation}
+	
+	Short circuit impedance (p.u.): 
+	\begin{equation}
+	z_{sc} = U_{sc} / 100
+	\end{equation}
+	
+	Short circuit resistance (p.u.): 
+	\begin{equation}
+	r_{sc} = \frac{P_{cu} / 1000}{S_n}
+	\end{equation}
+	
+	Short circuit reactance (p.u.):
+	\begin{equation}
+	x_{sc} = \sqrt{z_{sc}^2 - r_{sc} ^2}
+	\end{equation}
+	
+	
+	HV resistance (p.u.):
+	\begin{equation}
+	r_{cu,hv} = r_{sc} \cdot GR_{hv1}
+	\end{equation}
+	
+	LV resistance (p.u.): 
+	\begin{equation}
+	r_{cu,lv} = r_{sc} \cdot (1 - GR_{hv1})
+	\end{equation}
+	
+	HV shunt reactance (p.u.): 
+	\begin{equation}
+	xs_{hv} = x_{sc} \cdot GX_{hv1}
+	\end{equation}
+	
+	LV shunt reactance (p.u.): 
+	\begin{equation}
+	xs_{lv} = x_{sc} \cdot (1 - GX_{hv1})
+	\end{equation}
+	
+	Shunt resistance (p.u.): 
+	\begin{equation}
+	r_{fe} = \frac{Sn}{P_{fe} / 1000}
+	\end{equation}
+	
+	Magnetization impedance (p.u.):
+	\begin{equation}
+	z_m = \frac{1}{I_0 / 100}
+	\end{equation}
+	
+	Magnetization reactance (p.u.):
+	\begin{equation}
+	x_m = \frac{1}{\sqrt{\frac{1}{z_m^2} - \frac{1}{r_{fe}^2}}}
+	\end{equation}
+	
+	If the content of the square root is negative, set the magnetization impedance to zero.\\
+	
+	
+	The final complex calculated parameters in per unit are:
+	
+	Magnetizing impedance (or series impedance): 
+	\begin{equation}
+	z_{series} = Z_m = r_{sc} +j \cdot x_{sc}
+	\end{equation}
+	
+	The series admittance is [p.u.]: 
+	\begin{equation}
+	y_{series} = \frac{1}{z_{series}}
+	\end{equation}
+	
+	Leakage impedance (or shunt impedance): 
+	\begin{equation}
+	Z_l = r_{fe} + j \cdot x_{m}
+	\end{equation}
+	
+	Shunt admittance [p.u.]: 
+	\begin{equation}
+	y_{shunt} = 1 / Z_l
+	\end{equation}
+	
+	
+	The series admittance for the three-phase model [p.u.]: 
+	\begin{equation}
+	y_{t} = \frac{3}{z_{series}}
+	\end{equation}
 \end{multicols}
 
 \marginnote{we divide the impedance by 3, to reflect the three phases.}
@@ -1210,42 +1354,42 @@ Let's consider a distribution transformer with the following nameplate character
 
 
 \begin{multicols}{2}
-\begin{itemize}
-\item Primary connection: $\Delta$
-\item Secondary connection: $Yg$
-\item $S_n = 0.5 MVA$
-\item $U_{hv} = 20  kV$
-\item $U_{lv} = 0.4 kV$
-
-\item $U_{sc} = 6  \%$
-\item $p_{cu} = 6  kW$
-\item $p_{fe} = 1.4 kW$
-\item $I_0 = 0.28 \%$
-
-\item $GR_{hv} = 0.5$
-\item $GX_{hv} = 0.5$
-\end{itemize}
+	\begin{itemize}
+		\item Primary connection: $\Delta$
+		\item Secondary connection: $Yg$
+		\item $S_n = 0.5 MVA$
+		\item $U_{hv} = 20  kV$
+		\item $U_{lv} = 0.4 kV$
+		
+		\item $U_{sc} = 6  \%$
+		\item $p_{cu} = 6  kW$
+		\item $p_{fe} = 1.4 kW$
+		\item $I_0 = 0.28 \%$
+		
+		\item $GR_{hv} = 0.5$
+		\item $GX_{hv} = 0.5$
+	\end{itemize}
 \end{multicols}
 
 
 First we obtain the impedance value, from the short circuit study:
 \begin{multicols}{2}
-$$Zn_{hv} =  800 \quad \Omega$$
-$$Zn_{lv} =  0.3200 \quad \Omega$$
-$$z_{sc} =  0.0600 \quad p.u.$$
-$$r_{sc} =  0.0120 \quad p.u.$$
-$$x_{sc} =  17.0103 \quad p.u.$$
-$$r_{cu,hv} =  0.0060 \quad p.u.$$
-$$r_{cu,lv} =  0.0060 \quad p.u.$$
-$$x_{s,hv} =  8.5052 \quad p.u.$$
-$$x_{s,lv} =  8.5052 \quad p.u.$$
-$$r_{fe} =  357.1429 \quad p.u.$$
-$$z_m =  357.1429 \quad p.u.$$
-$$x_m =  24296003999.8084 \quad p.u.$$
-$$z_{series} =  0.0120 + j17.0103 \quad p.u.$$
-$$y_{series} =  0.0000 - j0.0588 \quad p.u.$$
-$$y_{shunt} =  0.0000 - j0.0000 \quad p.u.$$
-$$y_t =  0.0001 - j0.1764 \quad p.u.$$
+	$$Zn_{hv} =  800 \quad \Omega$$
+	$$Zn_{lv} =  0.3200 \quad \Omega$$
+	$$z_{sc} =  0.0600 \quad p.u.$$
+	$$r_{sc} =  0.0120 \quad p.u.$$
+	$$x_{sc} =  17.0103 \quad p.u.$$
+	$$r_{cu,hv} =  0.0060 \quad p.u.$$
+	$$r_{cu,lv} =  0.0060 \quad p.u.$$
+	$$x_{s,hv} =  8.5052 \quad p.u.$$
+	$$x_{s,lv} =  8.5052 \quad p.u.$$
+	$$r_{fe} =  357.1429 \quad p.u.$$
+	$$z_m =  357.1429 \quad p.u.$$
+	$$x_m =  24296003999.8084 \quad p.u.$$
+	$$z_{series} =  0.0120 + j17.0103 \quad p.u.$$
+	$$y_{series} =  0.0000 - j0.0588 \quad p.u.$$
+	$$y_{shunt} =  0.0000 - j0.0000 \quad p.u.$$
+	$$y_t =  0.0001 - j0.1764 \quad p.u.$$
 \end{multicols}
 
 Once the we have obtained the $y_t$ value, we start building the appropriate branch impedance matrices $Y_{pp}$, $Y_{ps}$, $Y_{sp}$ and $Y_{ss}$.
@@ -1439,162 +1583,27 @@ Since all the electrical models are in per-unit values, the voltage regulator is
 
 
 %-------------------------------------------------------------------------------
-%	CHAPTER The bus and it's connected elements
-%-------------------------------------------------------------------------------
-\newpage
-\section{The bus and it's connected elements}
-
-The bus model is based upon the traditionally called \textit{ZIP} bus model to indicate that the same model includes an impedance ($Z$), a current ($I$) and a power ($P$) value. To be consistent with our nomenclature, here we are going to refer to it as the $YISV$ model since at the node there is voltage($V$), and a power ($S$), an admittance ($Y$) and a current ($I$) potentially connected.
-
-
-\begin{marginfigure}
-	\includegraphics[width=0.99\linewidth]{img/NodeElements.eps}
-	\caption{$YISV$ Bus model.}
-	\label{bus_model}
-\end{marginfigure}
-
-The admittance, power and current values at the bus are derived from the elements connected to it (loads, generators, capacitor banks, etc.)
-
-
-\subsection{Static device}
-
-We can define two main device types. One with no voltage control (Static device) and one with voltage module control on its connection bus (Voltage controlled device). Devices such as capacitor banks, and some types of generators match the static device definition, hence those will inherit the definition provided here with the possibility of extending the definition with additional properties.
-
-\begin{marginfigure}
-	\includegraphics[width=0.99\linewidth]{img/ZIP_model.eps}
-	\caption{$ZIP$ / $YISV$ device model.}
-	\label{zip_model}
-\end{marginfigure}
-
-The modelling of a static device (i.e. load) is done as a composition of fixed impedance, fixed current and fixed power. This is known to match best the real behaviour of loads in electrical grids (Although in transmission they tend to be more fixed power-dominated). This is known as the ZIP model of a load. Here we are going to refer to it as ZIS, given that we actually specify the complex power ($S$) and not the real power ($P$).
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|p{2cm}|p{3cm}|p{4cm}|}
-		\hline 
-		\rowcolor{maincolor}
-		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
-		\hline 
-		name & Name of the device (string) & - \\ 
-		\hline 
-		number of phases & Number of phases of the device (integer) & - \\ 
-		\hline 
-		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
-		\hline 
-		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
-		\hline 
-		Z & Impedance (complex number) & MW, MVAr at the bus nominal voltage \\ 
-		\hline 
-		I & Current (complex number) & MW, MVAr at the bus nominal voltage \\ 
-		\hline 
-		S & Power (complex number) & MW, MVAr \\ 
-		\hline
-	\end{tabular} 
-	\caption{Main properties of the static device object. More properties my be added if needed.}
-\end{table}
-
-\vspace{0.5cm}
-
-The impedance $Z$ is converted to admittance with $Y=1/Z$.
-
-When the systems matrix are forming, the admittance ($Y$) is added to the diagonal of the admittance matrix ($Ybus$ or simply $Y$), the power ($S$) os added to the power injections vector ($Sbus$ or simply $S$) and the current is added to the current injections vector ($Ibus$ or simply $I$). See the figure \ref{fig:CircuitEquation}.
-
-%\paragraph{Shunt connected impedances/admittances}
-A three phase admittance device such as a ZIP load or a capacitor bank has to be integrated into the nodal equation (see figure \ref{fig:CircuitEquation})
-
-Consider the model from the figure \ref{delta_shunt_model}. The primitive admittance matrix is then:
-
-In the case of a device connected in $\Delta$, the primitive matrix is:
-\begin{equation}
-Y_{device} = \left[ \begin{array}{ccc}
-y_{aa} & y_{ab} &  y_{ac} \\
-y_{ab} & y_{bb} & y_{bc} \\  
-y_{ac} & y_{bc} & y_{cc}
-\end{array} \right] 
-\end{equation}
-
-\begin{marginfigure}
-	\includegraphics[width=0.99\linewidth]{img/DeltaShuntDevice.eps}
-	\caption{$\Delta$/Y shunt model.}
-	\label{delta_shunt_model}
-\end{marginfigure}
-
-Here, $y_{ab}$, $y_{bc}$ and $y_{ac}$ are given, and $y_{aa}$, $y_{bb}$ and $y_{cc}$ are computed as:
-
-$$y_{aa} = y_{ab} + y_{ac}$$
-$$y_{bb} = y_{ab} + y_{bc}$$
-$$y_{cc} = y_{ac} + y_{bc}$$
-
-In the case of a device connected in $Y$, the primitive matrix is:
-\begin{equation}
-Y_{device} = \left[ \begin{array}{ccc}
-y_{aa} & 0 &  0 \\
-0 & y_{bb} & 0 \\  
-0 & 0 & y_{cc}
-\end{array} \right] 
-\end{equation}
-
-The primitive matrices are added to the diagonal of the circuit admittance matrix $[Y_{bus}]$
-
-\subsection{Voltage controlled device}
-
-A voltage controlled generator is a generator that sets the voltage of the bus where it is connected.
-
-The main parameters of a voltage controlled generator are:\\
-
-\begin{marginfigure}
-	\includegraphics[width=0.4\linewidth]{img/PV_model.eps}
-	\caption{$PV$ device model.}
-	\label{pv_model}
-\end{marginfigure}
-
-\begin{table}[h!]
-%	\color{maincolor}
-	\begin{tabular}{|p{2cm}|p{5cm}|p{2cm}|}
-		\hline 
-		\rowcolor{maincolor}
-		{\color{white} Param.} & {\color{white} Description} & {\color{white} Unit} \\ 
-		\hline 
-		name & Name of the device (string) & - \\ 
-		\hline 
-		number of phases & Number of phases of the device (integer) & - \\ 
-		\hline 
-		phases & Phases vector (i.e. [0, 1, 2] for ABC, [0,2] for AC, etc.) &- \\ 
-		\hline 
-		conn & Connectivity mode ($Y$ or $\Delta$) & - \\ 
-		\hline 
-		$V_{set}$ & Set voltage (number) & p.u. \\ 
-		\hline 
-		$P$ & Power (number) & MW \\ 
-		\hline
-		$Q_{min}$ & Reactive power lower limit (number) & MVAr \\ 
-		\hline
-		$Q_{max}$ & Reactive power upper limit (number) & MVAr \\ 
-		\hline
-	\end{tabular} 
-\end{table}
-
-\vspace{0.5cm}
-
-%When forming the 
-
-
-
-
-%-------------------------------------------------------------------------------
-%	CHAPTER Topology analysis and consolidation
+%	CHAPTER Topology
 %-------------------------------------------------------------------------------
 
-\newpage
+
+
+
+\chapter{Topology analysis and consolidation} \label{topology}
+
+In Energy Management Systems Software (EMS) the topology is specified using devices as connectivity nodes, terminals, jumpers, branches, etc. These topological objects must be converted into a Bus-Branch model in order to be able to compute power flows and other electrical calculations.
+
+
 \section{Topology processing}
 \label{TopologyProcessing}
- In Energy Management Systems Software (EMS) the topology is specified using devices as connectivity nods, terminals, jumpers, branches, etc. These topological objects must be converted into a Bus-Branch model in order to be able to compute power flows and other electrical calculations. The topological process presented here is efficient and can render both the grid connectivity as the calculation matrices ($Y_{Bus}$, $S_{bus}$, etc.)
+ The topological process presented here is efficient and can render both the grid connectivity and the calculation matrices ($Y_{Bus}$, $S_{bus}$, etc.) using linear algebra as much as possible.
 
 \begin{figure}[h!]
 	\includegraphics[width=0.7\linewidth]{img/Substation.eps}
 	\caption{Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}
 	\label{substation_model}
 \end{figure}
+
 
 The elements presented in the example of the figure \ref{substation_model} are:
 
@@ -1606,6 +1615,7 @@ The elements presented in the example of the figure \ref{substation_model} are:
 	\item Shunt (SH): Any device used to inject or subtract power (loads, generators, etc.)
 \end{itemize}
 
+
 For calculation, the connectivity is solved first, originating one or more calculation buses. The switches, terminals, etc. are irrelevant at calculation level, but they are very relevant in the definition of the grid topology prior to the calculation. We shall start by forming the connectivity matrices of each type of device with the terminal devices. From those connectivity primitives, we are able to form any connectivity matrix in the circuit. 
 
 The following primitive matrices are formed by element inspection. This is, going through the objects stored in memory and inspecting the terminals that correspond to each one of them.
@@ -1615,67 +1625,67 @@ The simplest way to do this is to go through the terminals first and construct a
 \begin{table}[ht]
 	\centering
 	\resizebox{\textwidth}{!}{
-		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
-%			\toprule
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+			%			\toprule
 			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
-%			\midrule
+			%			\midrule
 			CN1 &     &   1 &     &   1 &     &     &   1 &     &     &    1 &      &      &      &      &      &      &      &      &      &      &    1 &      &      \\
 			CN2 &     &     &     &     &     &     &     &     &   1 &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      &      \\
 			CN3 &     &     &     &     &     &     &     &     &     &      &      &    1 &      &      &      &      &    1 &      &      &    1 &      &      &      \\
 			CN4 &     &     &     &     &   1 &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			CN5 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &    1 &      &      &      &      \\
-%			\bottomrule
+			%			\bottomrule
 		\end{tabular}
 	}
-	\caption{Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[CN\_T]$}
+	\caption{Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[C_{bus,terminal}]$}
 \end{table}
 
 
 \begin{table}[ht]
 	\centering
 	\resizebox{\textwidth}{!}{
-		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
-%			\toprule
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+			%			\toprule
 			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
-%			\midrule
+			%			\midrule
 			BR1 &     &     &     &     &   1 &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			BR2 &     &     &     &     &     &   1 &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &    1 &      &      &      &      &      &      &      &      \\
 			BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &    1 &      &      &      &      &      \\
 			J1  &     &     &     &     &     &     &     &   1 &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			J2  &     &     &     &     &     &     &     &     &     &      &    1 &      &      &      &      &      &      &      &      &      &      &      &      \\
-%			\bottomrule
+			%			\bottomrule
 		\end{tabular}
 	}
-	\caption{Connectivity matrix of the branch objects with the terminals at the "from" side: $[BR\_T\_from]$}
+	\caption{Connectivity matrix of the branch objects with the terminals at the "from" side: $[C_{branch,terminal\_f}]$}
 \end{table}
 
 \begin{table}[ht]
 	\centering
 	\resizebox{\textwidth}{!}{
- \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
-%	\toprule
-	{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
-%	\midrule
-	BR1 &   1 &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
-	BR2 &     &     &   1 &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
-	BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      \\
-	BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      \\
-	J1  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      \\
-	J2  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 \\
-%	\bottomrule
-\end{tabular}
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+			%	\toprule
+			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
+			%	\midrule
+			BR1 &   1 &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			BR2 &     &     &   1 &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
+			BR3 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &    1 &      &      &      &      &      &      &      \\
+			BR4 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &    1 &      &      &      &      \\
+			J1  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &    1 &      \\
+			J2  &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &    1 \\
+			%	\bottomrule
+		\end{tabular}
 	}
-\caption{Connectivity matrix of the branch objects with the terminals at the "to" side: $[BR\_T\_to]$}
+	\caption{Connectivity matrix of the branch objects with the terminals at the "to" side: $[C_{branch,terminal\_t}]$}
 \end{table}
 
 \begin{table}[h!]
 	\centering
 	\resizebox{\textwidth}{!}{
-		 \begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
-%			\toprule
+		\begin{tabular}{lrrrrrrrrrrrrrrrrrrrrrrr}
+			%			\toprule
 			{} &  T1 &  T2 &  T3 &  T4 &  T5 &  T6 &  T7 &  T8 &  T9 &  T10 &  T11 &  T12 &  T13 &  T14 &  T15 &  T16 &  T17 &  T18 &  T19 &  T20 &  T21 &  T22 &  T23 \\
-%			\midrule
+			%			\midrule
 			SW1 &   1 &   1 &     &     &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			SW2 &     &     &   1 &   1 &     &     &     &     &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
 			SW3 &     &     &     &     &     &     &   1 &   1 &     &      &      &      &      &      &      &      &      &      &      &      &      &      &      \\
@@ -1684,21 +1694,21 @@ The simplest way to do this is to go through the terminals first and construct a
 			SW6 &     &     &     &     &     &     &     &     &     &      &      &    1 &      &      &      &      &      &      &      &      &      &      &    1 \\
 			SW7 &     &     &     &     &     &     &     &     &     &      &      &      &      &    1 &    1 &      &      &      &      &      &      &      &      \\
 			SW8 &     &     &     &     &     &     &     &     &     &      &      &      &      &      &      &      &    1 &    1 &      &      &      &      &      \\
-%			\bottomrule
+			%			\bottomrule
 		\end{tabular}
 	}
-	\caption{Connectivity matrix of the switch objects with the terminals: $[SW\_T]$}
+	\caption{Connectivity matrix of the switch objects with the terminals: $[C_{switch,terminal}]$}
 \end{table}
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrrrrr}
-%		\toprule
+		%		\toprule
 		{} &  SW1 &  SW2 &  SW3 &  SW4 &  SW5 &  SW6 &  SW7 &  SW8 \\
-%		\midrule
+		%		\midrule
 		States &    0 &    1 &    1 &    1 &    1 &    0 &    1 &    1 \\
-%		\bottomrule
+		%		\bottomrule
 	\end{tabular}
-	\caption{Switch states (0: open, 1: closed): $[SW\_states]$}
+	\caption{Switch states (0: open, 1: closed): $[switch\_states]$}
 \end{table}
 
 \vspace{1cm}
@@ -1706,98 +1716,99 @@ The simplest way to do this is to go through the terminals first and construct a
 We need as many primitive matrices as device types there are in the grid. Once the primitive matrices of all the devices are formed we can start the topological processing by multiplying these primitive matrices. We shall start by modifying the switches connectivity matrix with the switch states vector:
 
 \begin{equation}
-[SW\_T\_state] = [SW\_T] \times diag([SW\_states])
+	[C_{switch\_state,terminal}] = [C_{switch,terminal}] \times diag([switch\_states])
 \end{equation}
 
 This operation causes the switches open/close state to be applied to the topological calculations. Next, compute the connectivity matrix of the branches and the switches:
 
 \begin{equation}
-[BR\_SW\_from] = [BR\_T\_from] \times [SW\_T\_state]^\top
+	[C_{branch, switch\_f}] = [C_{branch,terminal\_f}] \times [C_{switch\_state,terminal}]^\top
 \end{equation}
 \begin{equation}
-[BR\_SW\_to] = [BR\_T\_to] \times [SW\_T\_state]^\top
+	[C_{branch, switch\_t}] = [C_{branch,terminal\_t}] \times [C_{switch\_state,terminal}]^\top
 \end{equation}
 
 Then, compute the connectivity matrix of the connectivity nodes (buses) and the switches:
 \begin{equation}
-[CN\_SW] = [CN\_T] \times [SW\_T\_state]^\top
+	[C_{bus, switch}] = [C_{bus,terminal}] \times [C_{switch\_state,terminal}]^\top
 \end{equation}
 
 Compute the connectivity matrix of the Branches and the connectivity nodes (buses):
 
 \begin{equation}
-[BR\_from\_CN] = [BR\_SW\_from]  \times [CN\_SW]^\top
+	[C_f] = [C_{branch, switch\_f}]  \times [C_{bus, switch}]^\top
 \end{equation}
 
 \begin{equation}
-[BR\_to\_CN] = [BR\_SW\_to]  \times [CN\_SW]^\top
+	[C_t] = [C_{branch, switch\_t}]  \times [C_{bus, switch}]^\top
 \end{equation}
 
 These connectivity matrices are used for calculation since in the numerical methods we only care about buses and branches.
 
 
-\begin{table}[ht]
-	 \begin{tabular}{lrrrrr}
-%		\toprule
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-%		\midrule
+		%		\midrule
 		BR1 &      &      &      &    1 &      \\
 		BR2 &      &      &      &    1 &      \\
 		BR3 &      &    1 &      &      &      \\
 		BR4 &      &      &    1 &      &      \\
 		J1  &    1 &      &      &      &      \\
 		J2  &    1 &      &      &      &      \\
-%		\bottomrule
+		%		\bottomrule
 	\end{tabular}
-	\caption{Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[BR\_from\_CN]$}
+	\caption{Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[C_f]$}
 \end{table}
 
-\begin{table}[ht]
-	 \begin{tabular}{lrrrrr}
-%		\toprule
+\begin{table}[h!]
+	\begin{tabular}{lrrrrr}
+		%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-%		\midrule
+		%		\midrule
 		BR1 &      &      &      &      &      \\
 		BR2 &    1 &      &      &      &      \\
 		BR3 &      &      &      &      &    1 \\
 		BR4 &      &      &      &      &    1 \\
 		J1  &      &    1 &      &      &      \\
 		J2  &      &      &      &      &      \\
-%		\bottomrule
+		%		\bottomrule
 	\end{tabular}
-	\caption{Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[BR\_to\_CN]$}
+	\caption{Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[C_t]$}
 \end{table}
 
 \vspace{0.5cm}
 
-The graph of the circuit is automatically constructed by computing the Bus-Bus adjacency matrix  $[CN\_CN]$:
+The graph of the circuit is automatically constructed by computing the Bus-Bus adjacency matrix  $[C_{bus, bus}]$:
 
 \begin{equation}
-[CN\_CN] = [CN\_SW] \times [CN\_SW]^\top
+	[C_{bus, bus}] = [C_{bus, switch}] \times [C_{bus, switch}]^\top
 \end{equation}
 
 \begin{table}[h!]
 	\begin{tabular}{lrrrrr}
-%		\toprule
+		%		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
-%		\midrule
+		%		\midrule
 		CN1 &    1 &    1 &      &    1 &      \\
 		CN2 &    1 &    1 &      &      &    1 \\
 		CN3 &      &      &    1 &      &    1 \\
 		CN4 &    1 &      &      &    1 &      \\
 		CN5 &      &    1 &    1 &      &    1 \\
-%		\bottomrule
+		%		\bottomrule
 	\end{tabular}
-	\caption{Grid adjacency matrix $[CN\_CN]$, also known as $A$. Serves as a graph to detect the islands formed.}
+	\caption{Grid adjacency matrix $[C_{bus, bus}]$, also known as $A$. Serves as a graph to detect the islands formed.}
 \end{table}
 
 \vspace{0.5cm}
 
 At this point the topological process has to continue by detecting if any island has been formed.
 
-\subsection{Islands detection}
+\newpage
+\section{Islands detection}
 
-The admittance matrix of a circuit with more than one island is singular. Therefore, the circuit has to be split in sub-circuits in order to be solved. The suggested algorithm to achieve this is the Depth First Search ($DFS$) algorithm.
+The admittance matrix of a circuit with more than one island is singular. Therefore, the circuit has to be split in sub-circuits in order to be solved. The suggested algorithm to find the islands of a circuit is the Depth First Search ($DFS$) algorithm.
 
 \begin{figure}[h!]
 	\centering
@@ -1807,12 +1818,14 @@ The admittance matrix of a circuit with more than one island is singular. Theref
 \end{figure}
 
 
-We already determined that the circuit complete graph is given by the Bus-Bus connectivity matrix $[CN\_CN]$. This matrix is also known as the node adjacency matrix. For algorithmic purposes we will call the adjacency matrix $A$. As a side note, the matrix $A$ is a sparse matrix. 
+Previously it was already determined that the circuit complete graph is given by the Bus-Bus connectivity matrix $[C_{bus, bus}]$. This matrix is also known as the node adjacency matrix. For algorithmic purposes we will call it the adjacency matrix $A$. As a side note, the matrix $A$ is a sparse matrix. See \cite{CSC_matrix}.
 
-\marginnote{Here $A$ it is chosen to be a CSC sparse matrix. This is important because the following algorithm uses the CSC sparse structure to find the adjacent elements of a node.}
+\marginnote{For algorithmic purposes,  $A$ it is chosen to be a CSC sparse matrix. This is important because the following algorithm uses the CSC sparse structure to find the adjacent elements of a node. }
+
+The algorithm to find the circuit islands is:
 
 \begin{enumerate}
-	\item $N$ is the number of nodes.
+	\item $N$ is the number of nodes (buses) of the circuit.
 	\item Declare \verb|visited| as a vector of length $N$.
 	\item Declare \verb|islands| as a list of lists.
 	\item Declare \verb|island_idx = 0|.
@@ -1824,7 +1837,7 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 		\begin{enumerate}
 			\item If \verb|island_idx| is greater or equal than the amount of islands in \verb|islands|, initialize a new island as an empty list into \verb|islands|.
 			
-			Next we need to run a DFS process for the current node $i$.
+			// Next we need to run a DFS process for the current node $i$.
 			
 			\item Declare \verb|stack| as a Stack cue.
 			\item Append the node $i$ to the stack.
@@ -1835,15 +1848,15 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 				\item Pick the first element of the stack: \verb|v = stack.pop(0)|
 				
 				\item Add the picked element to the current island: \verb|islands[island_idx].append(v)|
-								
-				\item For \verb|j=A.indptr[v]| to \verb|A.indptr[v+1]|:
+				
+				\item For \verb|j=A.col_ptr[v]| to \verb|A.col_ptr[v+1]|:
 				
 				\begin{itemize}
-					\item Declare \verb|k=A.indices[j]|. Here $k$ is the column index in the CSC storage scheme.
+					\item Declare \verb|k=A.row_ind[j]|. Here $k$ is the row index in the CSC sparse storage scheme.
 					
 					\item If \verb|visited[k] = false| then add $k$ to the stack.
 				\end{itemize}
-			
+				
 				\item End of the for loop.
 				
 			\end{enumerate}
@@ -1851,63 +1864,94 @@ We already determined that the circuit complete graph is given by the Bus-Bus co
 			\item End of the while loop.
 			
 			\item Increase the island index: \verb|island_idx += 1|
-		
+			
 		\end{enumerate}
 		
 	\end{enumerate}
-
-\item End of the for loop.
-
-\item End of the algorithm
+	
+	\item End of the for loop.
+	
+	\item End of the algorithm
 \end{enumerate}
 
-At the end of the algorithm we have a list where each element is a list of bus indices composing a circuit island. With this information we are able to split the singular circuit matrices into non-singular matrices in order to be able to compute the electrical calculations.
+At the end of the algorithm we have a list where each element is a list of bus indices composing a circuit island. With this information we are able to split the singular circuit matrices into non-singular matrices in order to be able to compute the electrical calculations. Needless to say that if only only island is found, the circuit is already one island and no matrix subdivision is needed.
 
-\section{Calculation matrices and vectors}  \label{Y_calculation}
+\section{Finding the branch indices that correspond to an island}
 
-For the computations ahead we will need to have a number of admittance-based matrices. Remember that these matrices are only valid for island circuits, this is a multi-island circuit will have a set of these matrices per island. Otherwise the matrices would be singular.
+When splitting the circuit into island it is not enough to know the nodes that compose that island, we need to know which branches fall into each island as well. To accomplish that, we can define the following branch-bus connectivity matrix:
 
-%\begin{itemize}
-%	
-%	\item $n$: Number of buses.
-%	
-%	\item $m$: Number of branches.
-%	
-%	\item $Y_{bus}$ or simply $Y$: Complete admittance matrix.
-%	
-%	It is a sparse matrix of size $n \times n$
-%	
-%	\item $Y_{series}$: Admittance matrix of the series elements. It contains no value coming from shunt elements or the shunt parts of the branch model.
-%	
-%	It is a sparse matrix of size $n \times n$
-%	
-%	\item $Y_{shunt}$: Admittance vector of the shunt elements and the shunt parts of the branch model. 
-%	
-%	It is a vector of size $n$
-%	
-%	\item $Y_f$: Admittance matrix of the branches with their \textit{from} bus.
-%	
-%	It is a sparse matrix of size $m \times n$
-%	
-%	\item $C_t$: Connectivity matrix of the branches with their \textit{to} bus.
-%	
-%	\item $C_f$: Connectivity matrix of the branches with their \textit{from} bus.
-%	
-%	It is a sparse matrix of size $m \times n$
-%	
-%	\item $Y_t$: Admittance matrix of the branches with their \textit{to} bus.
-%	
-%    It is a sparse matrix of size $m \times n$\newline
-%\end{itemize}
-%
-%Where $n$ is the number of buses and $m$ is the number of branches.
-%
-%The relation between the admittance matrix and the series and shunt admittance matrices is the following:
-%\begin{equation}
-%Y_{bus} = Y_{series} + Y_{shunt}
-%\end{equation}
+\begin{equation}
+[C] = [C_f] + [C_t]
+\end{equation}
 
-%# form the power injections vector
+Say we open the switch SW7 of figure \ref{substation_model}. The resulting Branch-Bus connectivity matrix is:
+
+\begin{table}[h!]
+ \begin{tabular}{lrrrrr}
+%	\toprule
+	{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
+%	\midrule
+	BR1 &      &      &      &    1 &      \\
+	BR2 &    1 &      &      &    1 &      \\
+	BR3 &      &      &      &      &    1 \\
+	BR4 &      &      &    1 &      &    1 \\
+	J1  &    1 &    1 &      &      &      \\
+	J2  &    1 &      &      &      &      \\
+%	\bottomrule
+\end{tabular}
+	\caption{Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}
+\end{table}
+
+\vspace{0.5cm}
+
+If we select the columns that match with the particular indices of an island, we get:
+
+\begin{equation}
+[C_{island}] = [C]_{(:, island)}
+\end{equation}
+
+One of the two islands formed when opening SW7 is the one composed by the buses CN1, CN2 and CN4. The matrix $[C_{island}]$ for that island is:
+
+\begin{table}[h!]
+	\begin{tabular}{lccc|c}
+		%	\toprule
+		{} &  CN1 &  CN2 &  CN4 & column summation\\
+		%	\midrule
+		BR1 &      &      &     1    &  1\\
+		BR2 &    1 &      &      1   &  2 \\
+		BR3 &      &      &          &  0\\
+		BR4 &      &      &          &  0\\
+		J1  &    1 &    1 &          &  2\\
+		J2  &    1 &      &          &  1\\
+		%	\bottomrule
+	\end{tabular}
+	\caption{Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}
+\end{table}
+\vspace{0.5cm}
+
+Performing the summation of the rows of $[C_{island}]$ we know that if a row summation is greater than zero, then the branch belongs to the island. In this case we may conclude that BR1, BR2, J1 and J2 belong to the first island.
+
+%-------------------------------------------------------------------------------
+%	SECTION Topology analysis and consolidation
+%-------------------------------------------------------------------------------
+
+\section{Putting it all together: Composing calculation matrices and vectors}
+
+Chapter \ref{devices} discussed how to create matrix primitives to represent some devices present in the grid. At the beginning of this chapter, it was discussed how to process the topological information into connectivity matrices. Here we are going to explain how to merge both in order to compose the final calculation matrices and vectors.
+
+For the computations ahead we will need to have a number of admittance-based matrices. We will compose matrices and vector for the complete circuit, and then split those per circuit island. Remember that the calculation matrices are only valid for island circuits, this is because multi-island circuits present singular admittance matrices that lead to no numerical solution by their own.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.8\linewidth]{img/ElementBusAgregation.eps}
+	\caption{Element bus aggregations.}
+	\label{fig:ElementBusAgregation}
+\end{figure}
+
+The logic is to have a vector of magnitudes of an object type (i.e. all the active power power for all the generators) and a connectivity matrix that relates the generators with the buses of the grid. Multiplying the connectivity matrix by the element magnitudes vector we obtain the buses magnitudes vector that we need for calculation.
+
+
+%        # form the power injections vector
 %demand_power = self.C_load_bus.T * self.load_power  # demand (complex)
 %generation_power = self.C_gen_bus.T * self.generator_power  # generation (real)
 %self.calc.Sbus = (generation_power - demand_power) / self.Sbase  # power vector in p.u.
@@ -1924,10 +1968,55 @@ For the computations ahead we will need to have a number of admittance-based mat
 %self.calc.Yf = diags(self.BR_yff) * self.calc.C_branch_bus_f + diags(self.BR_yft) * self.calc.C_branch_bus_t
 %self.calc.Yt = diags(self.BR_ytf) * self.calc.C_branch_bus_f + diags(self.BR_ytt) * self.calc.C_branch_bus_t
 %self.calc.Ybus = self.calc.C_branch_bus_f.T * self.calc.Yf + self.calc.C_branch_bus_t.T * self.calc.Yt + diags(self.calc.Ysh)
+%
+%# types logic:
+%# if the number is < 10 -> PQ
+%# if the number is >= 10 -> PV
+%# later, choose a PV gen as Slack
+%self.calc.types = (self.C_load_bus.sum(axis=0).A1 + self.C_gen_bus.sum(axis=0).A1 * 10).reshape(-1)
+%self.calc.ref, self.calc.pq, self.calc.pv = self.calc.compute_pqpv(self.calc.types, self.calc.ref)
+
+\paragraph{Power, current and voltage vectors}
 
 \begin{equation}
-demand\_power = self.C_load_bus.T * self.load_power
+[demand\_power ]= [C_{load,bus}]^\top \cdot [load\_power\_S]
 \end{equation}
+
+\begin{equation}
+[generation\_power ]= [C_{generation,bus}]^\top \cdot [generation\_power]
+\end{equation}
+
+\begin{equation}
+[S_{bus}] = [generation\_power]  - [demand\_power]
+\end{equation}
+
+
+\begin{equation}
+[I_{bus}] = - [C_{load,bus}]^\top \cdot [load\_power\_I]
+\end{equation}
+
+\paragraph{Admittance matrix}
+
+\begin{equation}
+[Ysh ]= [C_{shunt,bus}]^\top \cdot [shunt\_power] + [C_{load,bus}]^\top \cdot [load\_power\_Y]
+\end{equation}
+
+
+
+\begin{equation}
+Y_f = diag([BR_{yff}]) \times [C_f] + diag([BR_{yft}]) \times [C_t]
+\end{equation}
+
+\begin{equation}
+Y_t = diag([BR_{ytf}]) \times [C_f] + diag([BR_{ytt}]) \times [C_t]
+\end{equation}
+
+\marginnote{$[BR_{yff}]$, $[BR_{yft}]$, $[BR_{ytf}]$ and $[BR_{ytt}]$ are vectors of length equal to the number of branches, where the branch primitive admittance matrix components are stored. This way we can leverage the connectivity matrices $[C_f]$ and $[C_t]$ to form $[Y_{bus}]$}
+
+\begin{equation}
+Ybus = [C_f]^\top \times [Y_f] + [C_t]^\top \times Y_t + diag([Ysh])
+\end{equation}
+
 %-------------------------------------------------------------------------------
 %    CHAPTER Power flow
 %-------------------------------------------------------------------------------
@@ -3919,7 +4008,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$CN\_T$}
+\caption{$C_{bus,terminal}$}
 \end{table}
 
 
@@ -3939,7 +4028,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$BR\_T\_f$}
+\caption{$C_{branch\_f, terminal}$}
 \end{table}
 
 
@@ -3959,7 +4048,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$BR\_T\_t$}
+\caption{$C_{branch\_t, terminal}$}
 \end{table}
 
 
@@ -3986,7 +4075,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-\caption{$[SW\_T]$}
+\caption{$[C_{switch,terminal}]$}
 \end{table}
 
 
@@ -4000,7 +4089,7 @@ First the topological compilation results:
 %	\bottomrule
 \end{tabular}
 }
-	\caption{$[SW\_states]$}
+	\caption{$[switch\_states]$}
 \end{table}
 
 
@@ -4019,7 +4108,7 @@ First the topological compilation results:
 		L5 &      &      &      &      &    1 \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[LD\_CN]$}
+\caption{$[C_{load, bus}]$}
 \end{table}
 
 
@@ -4047,7 +4136,7 @@ First the topological compilation results:
 		G1 &    1 &      &      &      &      \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[GEN\_CN]$}
+\caption{$[C_{generation, bus}]$}
 \end{table}
 
 
@@ -4058,16 +4147,16 @@ First the topological compilation results:
 %		\toprule
 		{} &  CN1 &  CN2 &  CN3 &  CN4 &  CN5 \\
 %		\midrule
-		BR1 &    1 &      &      &      &   -1 \\
-		BR2 &    1 &      &   -1 &      &      \\
-		BR3 &    1 &   -1 &      &      &      \\
-		BR4 &      &    1 &   -1 &      &      \\
-		BR5 &      &    1 &      &      &   -1 \\
-		BR6 &      &      &    1 &   -1 &      \\
-		BR7 &      &      &      &    1 &   -1 \\
+		BR1 &    1 &      &      &      &    1 \\
+		BR2 &    1 &      &    1 &      &      \\
+		BR3 &    1 &    1 &      &      &      \\
+		BR4 &      &    1 &    1 &      &      \\
+		BR5 &      &    1 &      &      &    1 \\
+		BR6 &      &      &    1 &    1 &      \\
+		BR7 &      &      &      &    1 &    1 \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[BR\_CN]$}
+\caption{$[C]$}
 \end{table}
 
 
@@ -4085,7 +4174,7 @@ First the topological compilation results:
 		CN5 &    1 &    1 &      &    1 &    1 \\
 %		\bottomrule
 	\end{tabular}
-\caption{$[CN\_CN]$}
+\caption{$[C_{bus, bus}]$}
 \end{table}
 
 

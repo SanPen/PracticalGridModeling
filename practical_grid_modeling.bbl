@@ -1,0 +1,82 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arrillaga and Arnold(1990)]{arrillaga1990computer}
+Jos Arrillaga and CP~Arnold.
+\newblock \emph{Computer analysis of power systems}.
+\newblock Wiley Online Library, 1990.
+
+\bibitem[Dorfler and Bullo(2013)]{dorfler2013kron}
+Florian Dorfler and Francesco Bullo.
+\newblock Kron reduction of graphs with applications to electrical networks.
+\newblock \emph{IEEE Transactions on Circuits and Systems I: Regular Papers},
+  60\penalty0 (1):\penalty0 150--163, 2013.
+
+\bibitem[Fortescue(1918)]{fortescue1918method}
+Charles~L Fortescue.
+\newblock Method of symmetrical co-ordinates applied to the solution of
+  polyphase networks.
+\newblock \emph{Transactions of the American Institute of Electrical
+  Engineers}, 37\penalty0 (2):\penalty0 1027--1140, 1918.
+
+\bibitem[Gomez-Exposito and Abur(2004)]{gomez2004power}
+Antonio Gomez-Exposito and Ali Abur.
+\newblock \emph{Power system state estimation: theory and implementation}.
+\newblock CRC press, 2004.
+
+\bibitem[Kersting(2012)]{kersting2012distribution}
+William~H Kersting.
+\newblock \emph{Distribution system modeling and analysis}.
+\newblock CRC press, 2012.
+
+\bibitem[Liu et~al.(2017)Liu, Wang, Hu, Sun, and Bak]{liu2017online}
+Chengxi Liu, Bin Wang, Fengkai Hu, Kai Sun, and Claus~Leth Bak.
+\newblock Online voltage stability assessment for load areas based on the
+  holomorphic embedding method.
+\newblock \emph{IEEE Transactions on Power Systems}, 2017.
+
+\bibitem[Powell(2004)]{powell2004power}
+Lynn Powell.
+\newblock \emph{Power system load flow analysis}.
+\newblock McGraw Hill professional, 2004.
+
+\bibitem[Rossoni et~al.(2016)Rossoni, da~Rosa, and
+  Belati]{rossoni2016linearized}
+Priscila Rossoni, William~Moreti da~Rosa, and Edmarcio~Antonio Belati.
+\newblock Linearized ac load flow applied to analysis in electric power
+  systems.
+\newblock \emph{IEEE Latin America Transactions}, 14\penalty0 (9):\penalty0
+  4048--4053, 2016.
+
+\bibitem[Subramanian(2014)]{subramanian2014application}
+Muthu~Kumar Subramanian.
+\newblock Application of holomorphic embedding to the power-flow problem, 2014.
+
+\bibitem[Taylor(2015)]{taylor2015convex}
+Joshua~Adam Taylor.
+\newblock \emph{Convex optimization of power systems}.
+\newblock Cambridge University Press, 2015.
+
+\bibitem[Trias(2012)]{TriasHELM}
+A.~Trias.
+\newblock The holomorphic embedding load flow method.
+\newblock pages 1--8, July 2012.
+\newblock ISSN 1944-9925.
+\newblock \doi{10.1109/PESGM.2012.6344759}.
+
+\bibitem[Zhao et~al.(2008)Zhao, Chiang, Ju, and Li]{zhao2008pv}
+Jinquan Zhao, Hsiao-Dong Chiang, Ping Ju, and Hua Li.
+\newblock On pv-pq bus type switching logic in power flow computation.
+\newblock In \emph{Power Systems Computation Conference (PSCC), Glasgow,
+  Scotland}, 2008.
+
+\bibitem[Zimmerman(2010)]{zimmerman2010ac}
+Ray~D Zimmerman.
+\newblock Ac power flows, generalized opf costs and their derivatives using
+  complex matrix notation, 2010.
+
+\end{thebibliography}

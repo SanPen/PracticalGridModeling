@@ -1,0 +1,41 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Electrical magnitudes and their units.}}{15}{chapter.4}
+\contentsline {table}{\numberline {4.2}{\ignorespaces Magnitudes and their real and imaginary complex components.}}{15}{chapter.4}
+\contentsline {table}{\numberline {4.3}{\ignorespaces Electrical magnitudes and their per unit base.}}{17}{section.4.2}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Equations of the generalized $\Pi $ model.}}{21}{equation.5.1.1}
+\contentsline {table}{\numberline {5.2}{\ignorespaces Three-phase transformer impedances of the branch model.}}{25}{subsection.5.1.4}
+\contentsline {table}{\numberline {5.3}{\ignorespaces Main properties of the static device object. More properties my be added if needed.}}{29}{subsection.5.2.1}
+\contentsline {table}{\numberline {5.4}{\ignorespaces Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[CN\_T]$}}{32}{section.5.3}
+\contentsline {table}{\numberline {5.5}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "from" side: $[BR\_T\_from]$}}{32}{section.5.3}
+\contentsline {table}{\numberline {5.6}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "to" side: $[BR\_T\_to]$}}{32}{section.5.3}
+\contentsline {table}{\numberline {5.7}{\ignorespaces Connectivity matrix of the switch objects with the terminals: $[SW\_T]$}}{32}{section.5.3}
+\contentsline {table}{\numberline {5.8}{\ignorespaces Switch states (0: open, 1: closed): $[SW\_states]$}}{32}{section.5.3}
+\contentsline {table}{\numberline {5.9}{\ignorespaces Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[BR\_from\_CN]$}}{33}{equation.5.3.32}
+\contentsline {table}{\numberline {5.10}{\ignorespaces Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[BR\_to\_CN]$}}{33}{equation.5.3.32}
+\contentsline {table}{\numberline {5.11}{\ignorespaces Grid adjacency matrix $[CN\_CN]$, also known as $A$. Serves as a graph to detect the islands formed.}}{34}{equation.5.3.33}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Bus types.}}{37}{section.6.1}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {A.1}{\ignorespaces Bus data}}{73}{appendix.A}
+\contentsline {table}{\numberline {A.2}{\ignorespaces Branch data}}{74}{appendix.A}
+\contentsline {table}{\numberline {A.3}{\ignorespaces Load data}}{74}{appendix.A}
+\contentsline {table}{\numberline {A.4}{\ignorespaces Generator data}}{75}{appendix.A}
+\contentsline {table}{\numberline {A.5}{\ignorespaces $CN\_T$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.6}{\ignorespaces $BR\_T\_f$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.7}{\ignorespaces $BR\_T\_t$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.8}{\ignorespaces $[SW\_T]$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.9}{\ignorespaces $[SW\_states]$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.10}{\ignorespaces $[LD\_CN]$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.11}{\ignorespaces $[GEN\_CN]$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.12}{\ignorespaces $[BR\_CN]$}}{75}{section.A.1}
+\contentsline {table}{\numberline {A.13}{\ignorespaces $[CN\_CN]$}}{75}{section.A.1}
+\addvspace {10\p@ }
+\contentsfinish 

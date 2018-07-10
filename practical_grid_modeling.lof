@@ -1,0 +1,36 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Graph with 8 nodes and 7 branches. The graph contains two islands.}}{13}{chapter.3}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Voltage delay.}}{15}{chapter.4}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Voltage delay in phasor representation in the complex plane.}}{15}{chapter.4}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Delta connection scheme.}}{16}{paragraph*.5}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Wye connection scheme.}}{16}{paragraph*.5}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces General branch model.}}{21}{subsection.5.1.1}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces General positive sequence branch model.}}{22}{subsection.5.1.2}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces $YISV$ Bus model.}}{29}{section.5.2}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces $ZIP$ / $YISV$ device model.}}{29}{subsection.5.2.1}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces $\Delta $/Y shunt model.}}{30}{equation.5.2.25}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces $PV$ device model.}}{30}{subsection.5.2.2}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}}{31}{section.5.3}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Graph with two islands.}}{34}{subsection.5.3.1}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Circuit's admittance matrix and vectors reduction. Representation for a six node circuit with two slack nodes.}}{38}{section.6.2}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Jacobian based linear system to compute the voltage increments.}}{40}{section.6.3}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Matrix reduction (VD: Slack, PV: Voltage controlled, PQ: Power controlled)}}{46}{section.6.4}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Structure of the coefficients}}{50}{equation.6.6.59}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces $PQ-PV$ switching algorithm.}}{56}{section.6.8}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {8.1}{\ignorespaces Example of voltage results for a time series simulation.}}{61}{chapter.8}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Example of cumulative distribution function of a load.}}{64}{paragraph*.21}
+\contentsline {figure}{\numberline {9.2}{\ignorespaces Example of cumulative distribution function of the voltage. This is the Result of a probabilistic power flow.}}{64}{paragraph*.21}
+\contentsline {figure}{\numberline {9.3}{\ignorespaces Example of voltage convergence. This is the Result of a probabilistic power flow.}}{64}{section.9.2}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces 5 bus grid with terminals and switches.}}{73}{appendix.A}
+\addvspace {10\p@ }
+\contentsfinish 
