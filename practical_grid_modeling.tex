@@ -1162,6 +1162,169 @@ V_s
 $$
 
 
+\subsection{Definition of an overhead line}
+
+The objective of this process is to compose the series impedance matrix and the shunt admittance matrix. This section is mostly taken from the EMTP theory book \cite{dommel1986electromagnetic}.
+
+The first thing is to define the properties of a wire (the metallic conductors of an overhead line).  
+
+\textbf{Wire properties:}
+\begin{itemize}
+	\item $r$: Internal resistance in $\Omega/km$. It is a value from the catalogue.
+	\item $x$: Internal reactance in $\Omega/km$. This one is usually not provided by catalogue data, so leave it to zero.
+	\item $GMR$: Geometric Mean Radius in $m$. It is a value from the catalogue.
+	\item $xpos$:  horizontal position in $m$.
+	\item $ypos$:  vertical position in $m$.
+	\item $phase$: The phase that the wire belongs to. For simplicity, let's have this property as a number from 0 to 3 matching the following convention:
+	\begin{itemize}
+		\item 0: Neutral
+		\item 1: A
+		\item 2: B
+		\item 3: C
+	\end{itemize}
+\end{itemize}
+
+For the purpose of computing the impedances, a tower is nothing but a collection of wires arranged in a certain disposition. It is fairly common to have more than one conductor per phase in duplex, triplex or cuadruplex arrangement. If carried, the neutral is usually only one wire, but the presented method does not have any limitation on the number of phases or wires per phase.
+
+The first step, is the generation of two primitive matrices of complex type; $Z_{prim}$ and $P_{prim}$ which size is given by the number of wires, if there are $10$ wires the sizes are $10 x 10$. Then those matrices will be reduced by the bundling algorithm that is presented in order to have one dimension per phase instead of one dimension per wire. This leads to the final impedance matrix $Z_{abc}$ and the final Maxwell's potential coefficients matrix $P_{abc}$. 
+ 
+ \vspace{0.5cm}
+  
+\textbf{Primitives composition algorithm:}
+
+\begin{enumerate}
+	
+	
+	\item Initialize variables: \\
+	
+	$n$ = number of wires. \\
+	\vspace{0.1 cm}
+	
+	$\left[Z_{prim} \right]= zeros(n, n)$ \\
+	\vspace{0.1 cm}
+	
+	$\left[P_{prim}\right] = zeros(n, n)$ \\
+	\vspace{0.1 cm}
+	
+	$\left[phases\right] = zeros(n)$ \\
+	\vspace{0.1 cm}
+	
+	$\omega = 2 \cdot \pi \cdot frequency$ in $rad$.
+	\vspace{0.1 cm}
+	
+	$\frac{1}{2 \pi \epsilon_0} = 17.975109x10^{-6}$ in $km/F$. \\
+	\vspace{0.1 cm}
+	
+	$\mu_0 = 4 \cdot \pi \cdot 1x10^{-4}$ in $H/km$. \\
+	\vspace{0.1 cm}
+	
+	$\frac{\mu_0}{2 \cdot \pi} = 2x10^{-4}$  in $H/km$. \\
+	\vspace{0.1 cm}
+	
+	$p = \sqrt{\frac{earth\_resistivity}{j \cdot \omega \cdot \mu_0}}$ \\
+	\vspace{0.1 cm}
+	
+	\item For $i=0$ to $n-1$:
+		
+	\begin{enumerate}
+		
+		\item $\left[Z_{prim}\right]_{(i, i)}= r_i + j \cdot \left(\omega \cdot \frac{ \mu_0}{2 \pi} \cdot Ln \left(\frac{2 \cdot (h_i + p)}{gmr_i} \right) + x_i \right)$
+		
+		\item $\left[P_{prim}\right]_{(i,i)} = \frac{1}{2 \pi \epsilon_0} \cdot Ln \left( \frac{2 \cdot ypos_i}{ gmr_i} \right)$
+		
+		\item For $k=0$ to $n-1$: 
+		
+		\begin{enumerate}
+			\item $d_{ik} = \sqrt{(xpos_i - xpos_k)^2 + (ypos_i - ypos_k)^2}$
+			
+			\item $D_{ik} = \sqrt{(xpos_i - xpos_k)^2 + (ypos_i + ypos_k)^2}$
+			
+			% 1j * w * mu_0_2pi * log(sqrt(pow(h_i + h_j + 2 * p, 2) + pow(x_i - x_j, 2)) / d_ij)
+			
+			\item $\left[Z_{prim}\right]_{(i, k)}= j \cdot \omega \cdot \frac{ \mu_0}{2 \pi} \cdot Ln \left(\frac{ \sqrt{(ypos_i + ypos_k + 2 \cdot p)^2 + (xpos_i - xpos_k)^2} }{d_{ik}} \right)$
+			
+			\item $\left[P_{prim}\right]_{(i,k)} = \frac{1}{2 \pi \epsilon_0} \cdot Ln \left( \frac{D_{ik}}{ d_{ik}} \right)$
+			
+		\end{enumerate}
+	
+		\item Assign the wire phase to the phases vector:\\ $\left[phases\right]_{(i)} = phase_i$
+		
+	\end{enumerate}
+\end{enumerate}
+
+\begin{marginfigure}
+	\includegraphics[width=0.95\linewidth]{img/conductor_images.eps}
+	\caption{Wire images and distances diagram.}
+	\label{wires_images}
+\end{marginfigure}
+
+At this point the primitive matrices $Z_{prim}$ and $P_{prim}$ have been computed. Now we need to bundle the conductors (if more than one per phase) using the phase bundling algorithm.
+ 
+\vspace{0.3cm}
+\textbf{Phase bundling algorithm:}
+
+The phase bundling is used to embed the influence of the extra wires, leaving only one equivalent wire per phase. The algorithm is demonstrated with the matrix $Z_{prim}$ but it is identical for $P_{prim}$.
+
+\begin{enumerate}
+	\item Copy the primitive matrix: \\
+	$\left[Z_{abcn}\right] = copy(\left[Z_{prim}\right])$
+	
+	\item For $phase=0$ to $3$:
+		
+	\begin{enumerate}
+		
+		\item Get the indices where the phases vector is equal to the current phase:\\ 
+		$\left[wires\_indices\right] = where(\left[phases\right] == phase)$
+		
+		\item if $size(\left[wires\_indices\right]) > 1$:
+		
+		\begin{enumerate}
+
+			\item Get the first wire index: \\
+			$i = \left[wires\_indices\right]_{(0)}$
+			
+			\item  Get the indices of the wires to keep (find the indices where the phases vector is different from the current phase): \\
+			$\left[a\right] = join(i, where(\left[phases\right] != phase))$
+			
+			\item Get the indices of the wires to reduce (all except the first): \\
+			$\left[g\right] = \left[wires\_indices\right]_{(1:)}$
+			
+			\item Subtract the column $i$ from the other columns of the indices in $g$:\\
+			$\left[Z_{abcn}\right]_{(:, k)} -= \left[Z_{abcn}\right]_{ (:, i)} \quad \forall k \in g$
+			
+			\item Subtract the row $i$ from the other rows of the indices in $g$:\\
+			$\left[Z_{abcn}\right]_{(k, :)} -= \left[Z_{abcn}\right]_{ (i, :)} \quad \forall k \in g$
+			
+			\item Perform the Kron - reduction to $Z_{abcn}$ to embed the extra wires:\\
+			$\left[Z_{aa}\right] = \left[Z_{abcn}\right]_{(a, a)}$ \\
+			$\left[Z_{ag}\right] = \left[Z_{abcn}\right]_{(a, g)}$ \\
+			$\left[Z_{ga}\right] = \left[Z_{abcn}\right]_{(g, a)}$ \\
+			$\left[Z_{gg}\right] = \left[Z_{abcn}\right]_{(g, g)}$ \\
+			
+			$\left[Z_{abcn}\right] = \left[Z_{aa}\right] - \left[Z_{ag}\right] \times \left[Z_{gg}\right]^{-1} \times \left[Z_{ga}\right]$
+			
+			\item Reduce the phases vector to match the  new size of $Z_{abcn}$:\\
+			$\left[phases\right] = \left[phases\right]_{(a)}$
+			
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+\end{enumerate}
+
+After the phase bundling process the matrix $Z_{abcn}$  will contain the series impedance in $\Omega/km$ for the wire system phases. The matrix $P_{abcn}$ will contain the potential coefficients in $km/F$ for the wire system phases.  Finally to compose the admittance matrix we use the following formula: \\
+
+\marginnote{Note: The capacity is the inverse of the potential matrix $\left[ C_{abcn} \right] = \left[ P_{abcn} \right]^{-1}$ in $F/km$.}
+
+ \vspace{0.3cm}
+$
+\left[Y_{abcn} \right] = j \cdot \omega \cdot \left[ P_{abcn} \right]^{-1}
+$ in $S/km$.\\
+ 
+ \vspace{0.3cm}
+ 
+It is common to perform a Kron reduction to embed the influence of the neutral phase in the same way that it was done for embedding the wire influences in the phase bundling algorithm.
+
 
 \subsection{Transformer}
 
