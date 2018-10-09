@@ -3495,7 +3495,13 @@ The optimal power flow problem consists in finding the generators power injectio
 Minimize the generators dispatch cost, including the cost of the slack generators:
 
 \begin{equation}
-min: \sum_i^{Generators+Slack} cost_i \cdot PG_i 
+\begin{aligned}
+\begin{split}
+minimize: \\
+&\sum_i^{Generators} cost_i \cdot PG_i + \sum_i^{Generators} SG_i + \sum_i^{Loads} SD_i \\
+&+ \sum_k^{Branches} Oftp_k + Oftn_k + Otfp_k + Otfn_k
+\end{split} 
+\end{aligned}
 \end{equation}
 
 ST: 
@@ -3504,11 +3510,33 @@ Generator limits must be within boundaries (include the slack generator as well)
 PG_i^{min} \leq PG_i \leq PG_i^{max}
 \end{equation}
 
+The generation shedding variables:
+\begin{equation}
+0 \leq SG_i \leq \infty
+\end{equation}
+
+The load shedding variables:
+\begin{equation}
+0 \leq SD_i \leq \infty
+\end{equation}
+
+The branch overload slack variables:
+\begin{equation}
+\begin{aligned}
+\begin{split}
+&0 \leq Oftp_k  \leq \infty \\
+&0 \leq Oftn_k  \leq \infty \\
+&0 \leq Otfp_k  \leq \infty \\
+&0 \leq Otfn_k  \leq \infty 
+\end{split} 
+\end{aligned}
+\end{equation}
+
 \marginnote{When traversing the matrix B, try to avoid two for loops, dealing with B as if it was dense because it is not. Ideally B should be in CSC format. Then traversing B in sparse mode is several orders of magnitude faster.}
 
-The voltages must satisfy the power balance in every PQ and PV node.
+The voltages must satisfy the power balance in every PQ and PV node. Note that the shedding variables ($GS$ and $LS$) have the opposite sign that the actual variables ($PG$ and $PD$)
 \begin{equation}
-PG_i - PD_i=\sum_j^{PQPV} B_{ij} \cdot \theta_j  \quad  \forall i \in PQPV
+PG_i - SG_i - PD_i + SD_i =\sum_j^{PQPV} B_{ij} \cdot \theta_j  \quad  \forall i \in PQPV
 \end{equation}
 
 
@@ -3526,28 +3554,34 @@ The branch flows must be within limits.
 \end{equation}
 
 
-This is reformulated as:
+This is reformulated as a restriction for the to-from sense, and another restriction for the from-to sense.
 
 \begin{equation}
- B_{ij}⋅(\theta_i - \theta_j) \leq F_{ij}^{max}
+ B_{ij}⋅(\theta_i - \theta_j) \leq F_{ij}^{max} + Oft\_p_{if} - Oft\_n_{if}
 \end{equation}
 
 \begin{equation}
- B_{ij}⋅(\theta_j - \theta_i) \leq F_{ij}^{max}
+ B_{ij}⋅(\theta_j - \theta_i) \leq F_{ij}^{max} + Otf\_p_{if} - Otf\_n_{if}
 \end{equation}
 
 Set the slack generator power:
 
 \begin{equation}
-PG_i - PD_i=\sum_j^{nodes} B_{ij} \cdot \theta_j  \quad  \forall i \in Slack
+PG_i - SG_i - PD_i + SD_i =\sum_j^{nodes} B_{ij} \cdot \theta_j  \quad  \forall i \in Slack
 \end{equation}
 
 \begin{itemize}
-	\item $P_i$: Active power injection at the node i.
+	\item $PD_i$: Active power demand at the node $i$.
+	\item $PG_i$: Active power generation at the node $i$.
+	\item $SD_i$: Demand shedding demand at the node $i$.
+	\item $SG_i$: Generation shedding at the node $i$.
+	\item $Oftp_k$: Positive overload slack variable in the from-to sense of the current.
+	\item $Oftn_k$: Negative overload slack variable in the from-to sense of the current.
+	\item $Otfp_k$: Positive overload slack variable in the to-from sense of the current.
+	\item $Otfn_k$: Negative overload slack variable in the to-from sense of the current.
 	\item $B$: Susceptance matrix. It is the imaginary part of the circuit admittance matrix.
 	\item $\theta$: Voltage angles in radians.
-	\item $PQPV$: Set of the non-slack nodes.
-	
+	\item $PQPV$: Set of the non-slack nodes.	
 	\item $Slack$: Set of the slack nodes.
 \end{itemize}
 
@@ -3562,7 +3596,7 @@ This section introduces the use of a linear power flow derived from the power fl
 The linear program is:
 
 \begin{equation}
-min: \sum_i^{Generators} cost_i \cdot PG_i   \quad \forall i \in generators
+min: \sum_i^{Generators} cost_i \cdot PG_i  
 \end{equation}
 
 Subjected To:
