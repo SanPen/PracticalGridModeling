@@ -12,66 +12,70 @@
 \contentsline {paragraph}{Example}{18}{paragraph*.8}
 \contentsline {section}{\numberline {4.4}Building $Z_{ABC}$ from the sequence components}{18}{section.4.4}
 \contentsline {paragraph}{Example}{19}{paragraph*.9}
-\contentsline {chapter}{\numberline {5}Topology analysis and consolidation}{21}{chapter.5}
-\contentsline {section}{\numberline {5.1}The branch element}{21}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}$\Pi $ Model}{21}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Positive sequence model}{22}{subsection.5.1.2}
-\contentsline {subsection}{\numberline {5.1.3}Line}{23}{subsection.5.1.3}
-\contentsline {paragraph}{Example}{23}{paragraph*.10}
-\contentsline {subsection}{\numberline {5.1.4}Transformer}{25}{subsection.5.1.4}
-\contentsline {subsection}{\numberline {5.1.5}Transformer definition from the short circuit study}{26}{subsection.5.1.5}
-\contentsline {paragraph}{Example}{27}{paragraph*.11}
-\contentsline {subsection}{\numberline {5.1.6}Voltage regulator}{28}{subsection.5.1.6}
-\contentsline {section}{\numberline {5.2}The bus and it's connected elements}{29}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Static device}{29}{subsection.5.2.1}
-\contentsline {subsection}{\numberline {5.2.2}Voltage controlled device}{30}{subsection.5.2.2}
-\contentsline {section}{\numberline {5.3}Topology processing}{31}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}Islands detection}{34}{subsection.5.3.1}
-\contentsline {section}{\numberline {5.4}Calculation matrices and vectors}{35}{section.5.4}
-\contentsline {chapter}{\numberline {6}Power flow}{37}{chapter.6}
-\contentsline {section}{\numberline {6.1}Types of buses}{37}{section.6.1}
-\contentsline {section}{\numberline {6.2}Z-Matrix}{38}{section.6.2}
-\contentsline {section}{\numberline {6.3}Jacobian based power flow}{40}{section.6.3}
-\contentsline {subsection}{\numberline {6.3.1}Building the Jacobian matrix}{40}{subsection.6.3.1}
-\contentsline {subsection}{\numberline {6.3.2}Newton-Raphson}{42}{subsection.6.3.2}
-\contentsline {subsection}{\numberline {6.3.3}Levenberg-Marquardt}{44}{subsection.6.3.3}
-\contentsline {section}{\numberline {6.4}Linear power flow}{45}{section.6.4}
-\contentsline {section}{\numberline {6.5}A better linear power flow}{46}{section.6.5}
-\contentsline {section}{\numberline {6.6}Holomorphic embedding}{47}{section.6.6}
-\contentsline {subsection}{\numberline {6.6.1}Concepts}{47}{subsection.6.6.1}
-\contentsline {subsection}{\numberline {6.6.2}Fundamentals}{48}{subsection.6.6.2}
-\contentsline {subsection}{\numberline {6.6.3}Holomorphicity check}{49}{subsection.6.6.3}
-\contentsline {subsection}{\numberline {6.6.4}Pad\'e approximation}{50}{subsection.6.6.4}
-\contentsline {paragraph}{Pad\'e approximation algorithm}{51}{paragraph*.12}
-\contentsline {paragraph}{Wynn's Pad\'e approximation algorithm}{52}{paragraph*.13}
-\contentsline {subsection}{\numberline {6.6.5}Formulation with PV nodes}{52}{subsection.6.6.5}
-\contentsline {paragraph}{Embedding}{52}{paragraph*.14}
-\contentsline {paragraph}{Step 1}{53}{paragraph*.15}
-\contentsline {paragraph}{Step 2}{53}{paragraph*.16}
-\contentsline {paragraph}{Step 3}{54}{paragraph*.17}
-\contentsline {section}{\numberline {6.7}Post voltage solution: Compute the power flows}{55}{section.6.7}
-\contentsline {section}{\numberline {6.8}Reactive power control: The outer loop}{56}{section.6.8}
-\contentsline {chapter}{\numberline {7}Optimal power flow (OPF)}{57}{chapter.7}
-\contentsline {section}{\numberline {7.1}Optimal power flow}{57}{section.7.1}
-\contentsline {section}{\numberline {7.2}A better optimal power flow}{59}{section.7.2}
-\contentsline {chapter}{\numberline {8}Time series power flow}{61}{chapter.8}
-\contentsline {paragraph}{Algorithm}{61}{paragraph*.18}
-\contentsline {chapter}{\numberline {9}Stochastic power flow}{63}{chapter.9}
-\contentsline {section}{\numberline {9.1}Cumulative Distribution Function (CDF)}{63}{section.9.1}
-\contentsline {paragraph}{Building a CDF}{63}{paragraph*.19}
-\contentsline {paragraph}{Simple example}{63}{paragraph*.20}
-\contentsline {paragraph}{Sampling the CDF}{64}{paragraph*.21}
-\contentsline {section}{\numberline {9.2}Monte Carlo}{64}{section.9.2}
-\contentsline {paragraph}{Algorithm}{64}{paragraph*.22}
-\contentsline {chapter}{\numberline {10}WLS State estimation}{67}{chapter.10}
-\contentsline {paragraph}{Weights matrix $W$}{67}{paragraph*.23}
-\contentsline {paragraph}{Jacobian matrix $H$}{68}{paragraph*.24}
-\contentsline {paragraph}{Calculated measurements $h$}{70}{paragraph*.25}
-\contentsline {paragraph}{The solution vector $\Delta x$}{71}{paragraph*.26}
-\contentsline {subsection}{\numberline {10.0.1}Augmented Hatchel matrix method}{71}{subsection.10.0.1}
-\contentsline {paragraph}{Conditioning value ($\alpha $)}{72}{paragraph*.27}
-\contentsline {paragraph}{Matrix of standard deviations ($R$)}{72}{paragraph*.28}
-\contentsline {chapter}{\numberline {A}Example grid}{73}{appendix.A}
-\contentsline {section}{\numberline {A.1}Grid compilation results}{74}{section.A.1}
-\contentsline {chapter}{Bibliography}{77}{appendix*.29}
+\contentsline {chapter}{\numberline {5}Device models}{21}{chapter.5}
+\contentsline {section}{\numberline {5.1}The bus and it's connected elements}{21}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Static device}{22}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Voltage controlled device}{23}{subsection.5.1.2}
+\contentsline {section}{\numberline {5.2}The branch element}{24}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}$\Pi $ Model}{24}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Positive sequence model}{24}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Line}{25}{subsection.5.2.3}
+\contentsline {paragraph}{Example}{26}{paragraph*.10}
+\contentsline {subsection}{\numberline {5.2.4}Transformer}{27}{subsection.5.2.4}
+\contentsline {subsection}{\numberline {5.2.5}Transformer definition from the short circuit study}{28}{subsection.5.2.5}
+\contentsline {paragraph}{Example}{29}{paragraph*.11}
+\contentsline {subsection}{\numberline {5.2.6}Voltage regulator}{30}{subsection.5.2.6}
+\contentsline {chapter}{\numberline {6}Topology analysis and consolidation}{31}{chapter.6}
+\contentsline {section}{\numberline {6.1}Topology processing}{31}{section.6.1}
+\contentsline {section}{\numberline {6.2}Islands detection}{34}{section.6.2}
+\contentsline {section}{\numberline {6.3}Finding the branch indices that correspond to an island}{35}{section.6.3}
+\contentsline {section}{\numberline {6.4}Putting it all together: Composing calculation matrices and vectors}{36}{section.6.4}
+\contentsline {paragraph}{Power, current and voltage vectors}{37}{paragraph*.12}
+\contentsline {paragraph}{Admittance matrix}{37}{paragraph*.13}
+\contentsline {chapter}{\numberline {7}Power flow}{39}{chapter.7}
+\contentsline {section}{\numberline {7.1}Types of buses}{39}{section.7.1}
+\contentsline {section}{\numberline {7.2}Z-Matrix}{40}{section.7.2}
+\contentsline {section}{\numberline {7.3}Jacobian based power flow}{42}{section.7.3}
+\contentsline {subsection}{\numberline {7.3.1}Building the Jacobian matrix}{42}{subsection.7.3.1}
+\contentsline {subsection}{\numberline {7.3.2}Newton-Raphson}{44}{subsection.7.3.2}
+\contentsline {subsection}{\numberline {7.3.3}Levenberg-Marquardt}{46}{subsection.7.3.3}
+\contentsline {section}{\numberline {7.4}Linear power flow}{47}{section.7.4}
+\contentsline {section}{\numberline {7.5}A better linear power flow}{48}{section.7.5}
+\contentsline {section}{\numberline {7.6}Holomorphic embedding}{49}{section.7.6}
+\contentsline {subsection}{\numberline {7.6.1}Concepts}{49}{subsection.7.6.1}
+\contentsline {subsection}{\numberline {7.6.2}Fundamentals}{50}{subsection.7.6.2}
+\contentsline {subsection}{\numberline {7.6.3}Holomorphicity check}{51}{subsection.7.6.3}
+\contentsline {subsection}{\numberline {7.6.4}Pad\'e approximation}{52}{subsection.7.6.4}
+\contentsline {paragraph}{Pad\'e approximation algorithm}{53}{paragraph*.14}
+\contentsline {paragraph}{Wynn's Pad\'e approximation algorithm}{54}{paragraph*.15}
+\contentsline {subsection}{\numberline {7.6.5}Formulation with PV nodes}{54}{subsection.7.6.5}
+\contentsline {paragraph}{Embedding}{54}{paragraph*.16}
+\contentsline {paragraph}{Step 1}{55}{paragraph*.17}
+\contentsline {paragraph}{Step 2}{55}{paragraph*.18}
+\contentsline {paragraph}{Step 3}{56}{paragraph*.19}
+\contentsline {section}{\numberline {7.7}Post voltage solution: Compute the power flows}{57}{section.7.7}
+\contentsline {section}{\numberline {7.8}Reactive power control: The outer loop}{58}{section.7.8}
+\contentsline {chapter}{\numberline {8}Optimal power flow (OPF)}{59}{chapter.8}
+\contentsline {section}{\numberline {8.1}Optimal power flow}{59}{section.8.1}
+\contentsline {section}{\numberline {8.2}A better optimal power flow}{61}{section.8.2}
+\contentsline {chapter}{\numberline {9}Time series power flow}{63}{chapter.9}
+\contentsline {paragraph}{Algorithm}{63}{paragraph*.20}
+\contentsline {chapter}{\numberline {10}Stochastic power flow}{65}{chapter.10}
+\contentsline {section}{\numberline {10.1}Cumulative Distribution Function (CDF)}{65}{section.10.1}
+\contentsline {paragraph}{Building a CDF}{65}{paragraph*.21}
+\contentsline {paragraph}{Simple example}{65}{paragraph*.22}
+\contentsline {paragraph}{Sampling the CDF}{66}{paragraph*.23}
+\contentsline {section}{\numberline {10.2}Monte Carlo}{66}{section.10.2}
+\contentsline {paragraph}{Algorithm}{66}{paragraph*.24}
+\contentsline {chapter}{\numberline {11}WLS State estimation}{69}{chapter.11}
+\contentsline {paragraph}{Weights matrix $W$}{69}{paragraph*.25}
+\contentsline {paragraph}{Jacobian matrix $H$}{70}{paragraph*.26}
+\contentsline {paragraph}{Calculated measurements $h$}{72}{paragraph*.27}
+\contentsline {paragraph}{The solution vector $\Delta x$}{73}{paragraph*.28}
+\contentsline {subsection}{\numberline {11.0.1}Augmented Hatchel matrix method}{73}{subsection.11.0.1}
+\contentsline {paragraph}{Conditioning value ($\alpha $)}{74}{paragraph*.29}
+\contentsline {paragraph}{Matrix of standard deviations ($R$)}{74}{paragraph*.30}
+\contentsline {chapter}{\numberline {A}Example grid}{75}{appendix.A}
+\contentsline {section}{\numberline {A.1}Grid compilation results}{76}{section.A.1}
+\contentsline {chapter}{Bibliography}{79}{appendix*.31}
 \contentsfinish 

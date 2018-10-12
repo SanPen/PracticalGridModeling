@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.5)  10 JUL 2018 15:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.5)  10 JUL 2018 18:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -100,6 +100,8 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \hw@maxprintline=\count85
 
 (|kpsewhich -var-value=max_print_line))
+Class tufte-book Info: Passing the `twoside' option to the `book' class
+Class tufte-book Info: The `symmetric' option implies `twoside'
 Class tufte-book Info: Passing the `twoside' option to the `book' class
 Class tufte-book Info: Passing fleqn to the `book' class.
 Class tufte-book Info: Loading the base class `book'
@@ -1334,7 +1336,7 @@ LaTeX Info: Redefining \selectfont on input line 237.
 * paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: twoside asymmetric 
+* modes: twoside 
 * h-part:(L,W,R)=(70.56284pt, 304.44447pt, 222.50056pt)
 * v-part:(T,H,B)=(77.96053pt, 686.0pt, 81.08632pt)
 * \paperwidth=597.50787pt
@@ -1342,7 +1344,7 @@ LaTeX Info: Redefining \selectfont on input line 237.
 * \textwidth=304.44447pt
 * \textheight=686.0pt
 * \oddsidemargin=-1.70715pt
-* \evensidemargin=-1.70715pt
+* \evensidemargin=150.23058pt
 * \topmargin=-36.30946pt
 * \headheight=14.0pt
 * \headsep=28.0pt
@@ -1357,7 +1359,7 @@ LaTeX Info: Redefining \selectfont on input line 237.
 * \mag=1000
 * \@twocolumnfalse
 * \@twosidetrue
-* \@mparswitchfalse
+* \@mparswitchtrue
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
@@ -1442,7 +1444,7 @@ LaTeX Font Info:    Try loading font information for OT1+zplm on input line 293
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
-<doclicense-CC-by-sa.pdf, id=147, 121.45375pt x 43.16125pt>
+<doclicense-CC-by-sa.pdf, id=159, 121.45375pt x 43.16125pt>
 File: doclicense-CC-by-sa.pdf Graphic file (type pdf)
 <use doclicense-CC-by-sa.pdf>
 Package pdftex.def Info: doclicense-CC-by-sa.pdf  used on input line 293.
@@ -1467,6 +1469,12 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 8.99994pt on input line 1.
+
+Overfull \hbox (5.29597pt too wide) in paragraph at lines 32--32
+ [][] [][]\T1/phv/m/n/10 Putting it all to-gether: Com-pos-ing cal-cu-la-tion m
+a-tri-ces and 
+ []
+
 )
 \tf@toc=\write7
 \openout7 = `practical_grid_modeling.toc'.
@@ -1485,43 +1493,43 @@ Overfull \hbox (15.57153pt too wide) in paragraph at lines 4--4
  []
 
 
-Overfull \hbox (17.40692pt too wide) in paragraph at lines 17--17
+Overfull \hbox (17.40692pt too wide) in paragraph at lines 18--18
  [][] [][]\T1/phv/m/n/10 Substation ex-am-ple with all the con-nec-tiv-ity rep-
 re-sen-ta-tion in the CIM / EMS
  []
 
 
-Overfull \hbox (1.2968pt too wide) in paragraph at lines 17--17
+Overfull \hbox (1.2968pt too wide) in paragraph at lines 18--18
  \T1/phv/m/n/10 sense. On the right side there is the re-duc-tion of the topol-
 ogy to a cal-cu-
  []
 
 
-Overfull \hbox (7.43524pt too wide) in paragraph at lines 20--20
+Overfull \hbox (7.43524pt too wide) in paragraph at lines 22--22
  [][] [][]\T1/phv/m/n/10 Circuit's ad-mit-tance ma-trix and vec-tors re-duc-tio
 n. Rep-re-sen-ta-tion for a six
  []
 
 
-Overfull \hbox (2.13501pt too wide) in paragraph at lines 21--21
+Overfull \hbox (2.13501pt too wide) in paragraph at lines 23--23
  [][] [][]\T1/phv/m/n/10 Jacobian based lin-ear sys-tem to com-pute the volt-ag
-e in-cre-ments.[] 40 
+e in-cre-ments.[] 42 
  []
 
 
-Overfull \hbox (35.86583pt too wide) in paragraph at lines 22--22
+Overfull \hbox (35.86583pt too wide) in paragraph at lines 24--24
  [][] [][]\T1/phv/m/n/10 Matrix re-duc-tion (VD: Slack, PV: Volt-age con-trolle
-d, PQ: Power con-trolled)[] 46 
+d, PQ: Power con-trolled)[] 48 
  []
 
 
-Overfull \hbox (3.54707pt too wide) in paragraph at lines 30--30
+Overfull \hbox (3.54707pt too wide) in paragraph at lines 32--32
  [][] [][]\T1/phv/m/n/10 Example of cu-mu-la-tive dis-tri-bu-tion func-tion of 
 the volt-age. This is the Re-
  []
 
 
-Overfull \hbox (12.27744pt too wide) in paragraph at lines 31--31
+Overfull \hbox (12.27744pt too wide) in paragraph at lines 33--33
  [][] [][]\T1/phv/m/n/10 Example of volt-age con-ver-gence. This is the Re-sult
  of a prob-a-bilis-tic power
  []
@@ -1535,70 +1543,85 @@ Overfull \hbox (12.27744pt too wide) in paragraph at lines 31--31
 ] [6
 
 ] (./practical_grid_modeling.lot
-Overfull \hbox (2.58418pt too wide) in paragraph at lines 11--11
+Overfull \hbox (2.58418pt too wide) in paragraph at lines 9--9
  [][] [][]\T1/phv/m/n/10 Main prop-er-ties of the static de-vice ob-ject. More 
 prop-er-ties my be added
  []
 
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 6.83995pt on input line 12.
+(Font)              scaled to size 6.83995pt on input line 14.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 5.39996pt on input line 12.
+(Font)              scaled to size 5.39996pt on input line 14.
 
-Overfull \hbox (0.31601pt too wide) in paragraph at lines 13--13
+Overfull \hbox (0.31601pt too wide) in paragraph at lines 14--14
  [][] [][]\T1/phv/m/n/10 Connectivity ma-trix of the branch ob-jects with the t
 er-mi-nals at the "from"
  []
 
 
-Overfull \hbox (11.3317pt too wide) in paragraph at lines 14--14
+Overfull \hbox (11.3317pt too wide) in paragraph at lines 15--15
  [][] [][]\T1/phv/m/n/10 Connectivity ma-trix of the branch ob-jects with the t
 er-mi-nals at the "to" side:
  []
 
 
-Overfull \hbox (13.09358pt too wide) in paragraph at lines 15--15
+Overfull \hbox (43.83156pt too wide) in paragraph at lines 16--16
  [][] [][]\T1/phv/m/n/10 Connectivity ma-trix of the switch ob-jects with the t
-er-mi-nals: $\OT1/zplm/m/n/10 [\OML/zplm/m/it/10 SW[]T\OT1/zplm/m/n/10 ]$[] \T1
-/phv/m/n/10 32 
+er-mi-nals: $\OT1/zplm/m/n/10 [\OML/zplm/m/it/10 C[]\OT1/zplm/m/n/10 ]$[] \T1/p
+hv/m/n/10 32 
  []
 
 
-Overfull \hbox (8.59604pt too wide) in paragraph at lines 17--17
+Overfull \hbox (8.59604pt too wide) in paragraph at lines 18--18
  [][] [][]\T1/phv/m/n/10 Calculated con-nec-tiv-ity ma-trix of branches at the 
 "from" side with the Con-
  []
 
 
-Overfull \hbox (12.60999pt too wide) in paragraph at lines 18--18
+Overfull \hbox (12.60999pt too wide) in paragraph at lines 19--19
  [][] [][]\T1/phv/m/n/10 Calculated con-nec-tiv-ity ma-trix of branches at the 
 "to" side with the Con-nec-
  []
 
 
-Overfull \hbox (6.838pt too wide) in paragraph at lines 19--19
+Overfull \hbox (2.06558pt too wide) in paragraph at lines 20--20
  [][] [][]\T1/phv/m/n/10 Grid ad-ja-cency ma-trix $\OT1/zplm/m/n/10 [\OML/zplm/
-m/it/10 CN[]CN\OT1/zplm/m/n/10 ]$\T1/phv/m/n/10 , also known as $\OML/zplm/m/it
-/10 A$\T1/phv/m/n/10 . Serves as a graph to
+m/it/10 C[]\OT1/zplm/m/n/10 ]$\T1/phv/m/n/10 , also known as $\OML/zplm/m/it/10
+ A$\T1/phv/m/n/10 . Serves as a graph to
  []
 
 
-Overfull \hbox (0.51271pt too wide) detected at line 36
-\T1/phv/m/n/10 A.10 
+Overfull \hbox (30.21405pt too wide) in paragraph at lines 21--21
+ [][] [][]\T1/phv/m/n/10 Calculated con-nec-tiv-ity ma-trix of branches with th
+e Con-nec-tiv-ity nodes (Buses):
  []
 
 
-Overfull \hbox (0.51271pt too wide) detected at line 37
-\T1/phv/m/n/10 A.11 
- []
-
-
-Overfull \hbox (0.51271pt too wide) detected at line 38
-\T1/phv/m/n/10 A.12 
+Overfull \hbox (30.21405pt too wide) in paragraph at lines 22--22
+ [][] [][]\T1/phv/m/n/10 Calculated con-nec-tiv-ity ma-trix of branches with th
+e Con-nec-tiv-ity nodes (Buses):
  []
 
 
 Overfull \hbox (0.51271pt too wide) detected at line 39
+\T1/phv/m/n/10 A.10 
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
+Overfull \hbox (0.51271pt too wide) detected at line 40
+\T1/phv/m/n/10 A.11 
+ []
+
+
+Overfull \hbox (0.51271pt too wide) detected at line 41
+\T1/phv/m/n/10 A.12 
+ []
+
+
+Overfull \hbox (0.51271pt too wide) detected at line 42
 \T1/phv/m/n/10 A.13 
  []
 
@@ -1606,11 +1629,16 @@ Overfull \hbox (0.51271pt too wide) detected at line 39
 \tf@lot=\write9
 \openout9 = `practical_grid_modeling.lot'.
 
- [7] [8
 
-]
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 333.
+
+[8]
 Chapter 1.
 [9
+
 
 ] [10
 
@@ -1645,17 +1673,17 @@ LaTeX Warning: Marginpar on page 13 moved.
 LaTeX Warning: Marginpar on page 13 moved.
 
 Package epstopdf Info: Source file: <img/simple_two_island_graph.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 6124 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 5923 bytes
 (epstopdf)             Output file: <img/simple_two_island_graph-eps-converted-
 to.pdf>
-(epstopdf)                    date: 2017-11-30 17:43:53
-(epstopdf)                    size: 3355 bytes
+(epstopdf)                    date: 2018-07-10 18:19:26
+(epstopdf)                    size: 3076 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/simple_two_island_grap
 h-eps-converted-to.pdf img/simple_two_island_graph.eps>
 (epstopdf)             \includegraphics on input line 426.
 Package epstopdf Info: Output file is already uptodate.
-<img/simple_two_island_graph-eps-converted-to.pdf, id=318, 558.085pt x 415.5525
+<img/simple_two_island_graph-eps-converted-to.pdf, id=340, 558.085pt x 415.5525
 pt>
 File: img/simple_two_island_graph-eps-converted-to.pdf Graphic file (type pdf)
 <use img/simple_two_island_graph-eps-converted-to.pdf>
@@ -1667,32 +1695,32 @@ Package pdftex.def Info: img/simple_two_island_graph-eps-converted-to.pdf  used
 ]
 Chapter 4.
 Package epstopdf Info: Source file: <img/VoltageDelay.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 12059 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 11618 bytes
 (epstopdf)             Output file: <img/VoltageDelay-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:01
-(epstopdf)                    size: 6002 bytes
+(epstopdf)                    date: 2018-07-10 18:19:26
+(epstopdf)                    size: 5793 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/VoltageDelay-eps-conve
 rted-to.pdf img/VoltageDelay.eps>
 (epstopdf)             \includegraphics on input line 457.
 Package epstopdf Info: Output file is already uptodate.
-<img/VoltageDelay-eps-converted-to.pdf, id=332, 757.83125pt x 274.02374pt>
+<img/VoltageDelay-eps-converted-to.pdf, id=354, 757.83125pt x 274.02374pt>
 File: img/VoltageDelay-eps-converted-to.pdf Graphic file (type pdf)
 <use img/VoltageDelay-eps-converted-to.pdf>
 Package pdftex.def Info: img/VoltageDelay-eps-converted-to.pdf  used on input l
 ine 457.
 (pdftex.def)             Requested size: 140.55505pt x 50.82321pt.
 Package epstopdf Info: Source file: <img/VoltagePhasors.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 7719 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 7446 bytes
 (epstopdf)             Output file: <img/VoltagePhasors-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:04
-(epstopdf)                    size: 3791 bytes
+(epstopdf)                    date: 2018-07-10 18:19:26
+(epstopdf)                    size: 3570 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/VoltagePhasors-eps-con
 verted-to.pdf img/VoltagePhasors.eps>
 (epstopdf)             \includegraphics on input line 489.
 Package epstopdf Info: Output file is already uptodate.
-<img/VoltagePhasors-eps-converted-to.pdf, id=335, 257.96375pt x 259.97125pt>
+<img/VoltagePhasors-eps-converted-to.pdf, id=357, 257.96375pt x 259.97125pt>
 File: img/VoltagePhasors-eps-converted-to.pdf Graphic file (type pdf)
 <use img/VoltagePhasors-eps-converted-to.pdf>
 Package pdftex.def Info: img/VoltagePhasors-eps-converted-to.pdf  used on input
@@ -1711,32 +1739,32 @@ LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 [15 <./img/VoltageDelay-eps-converted-to.pdf> <./img/VoltagePhasors-eps-convert
 ed-to.pdf>]
 Package epstopdf Info: Source file: <img/Delta.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 17166 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 16482 bytes
 (epstopdf)             Output file: <img/Delta-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:08
-(epstopdf)                    size: 7496 bytes
+(epstopdf)                    date: 2018-07-10 18:19:26
+(epstopdf)                    size: 7253 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Delta-eps-converted-to
 .pdf img/Delta.eps>
 (epstopdf)             \includegraphics on input line 537.
 Package epstopdf Info: Output file is already uptodate.
-<img/Delta-eps-converted-to.pdf, id=351, 508.90125pt x 354.32375pt>
+<img/Delta-eps-converted-to.pdf, id=373, 508.90125pt x 354.32375pt>
 File: img/Delta-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Delta-eps-converted-to.pdf>
 Package pdftex.def Info: img/Delta-eps-converted-to.pdf  used on input line 537
 .
 (pdftex.def)             Requested size: 126.49507pt x 88.0725pt.
 Package epstopdf Info: Source file: <img/Star.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 14297 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 13736 bytes
 (epstopdf)             Output file: <img/Star-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:12
-(epstopdf)                    size: 6185 bytes
+(epstopdf)                    date: 2018-07-10 18:19:26
+(epstopdf)                    size: 5944 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Star-eps-converted-to.
 pdf img/Star.eps>
 (epstopdf)             \includegraphics on input line 543.
 Package epstopdf Info: Output file is already uptodate.
-<img/Star-eps-converted-to.pdf, id=352, 394.47375pt x 291.0875pt>
+<img/Star-eps-converted-to.pdf, id=374, 394.47375pt x 291.0875pt>
 File: img/Star-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Star-eps-converted-to.pdf>
 Package pdftex.def Info: img/Star-eps-converted-to.pdf  used on input line 543.
@@ -1835,159 +1863,35 @@ Overfull \hbox (7.46367pt too wide) detected at line 773
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 784.
+This message occurred on input line 785.
 
 [19] [20
 
 ]
 Chapter 5.
+Package epstopdf Info: Source file: <img/CircuitEquation.eps>
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 60939 bytes
+(epstopdf)             Output file: <img/CircuitEquation-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-07-10 18:19:27
+(epstopdf)                    size: 23428 bytes
+(epstopdf)             Command: <repstopdf --outfile=img/CircuitEquation-eps-co
+nverted-to.pdf img/CircuitEquation.eps>
+(epstopdf)             \includegraphics on input line 790.
+Package epstopdf Info: Output file is already uptodate.
+<img/CircuitEquation-eps-converted-to.pdf, id=426, 1150.2975pt x 1052.93375pt>
+File: img/CircuitEquation-eps-converted-to.pdf Graphic file (type pdf)
+<use img/CircuitEquation-eps-converted-to.pdf>
+Package pdftex.def Info: img/CircuitEquation-eps-converted-to.pdf  used on inpu
+t line 790.
+(pdftex.def)             Requested size: 273.98834pt x 250.79735pt.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 795.
+(Font)              scaled to size 9.85492pt on input line 811.
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10.95> not available
-(Font)              Font shape `T1/phv/m/sl' tried instead on input line 795.
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 811.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
-(Font)              scaled to size 9.85492pt on input line 795.
-
-LaTeX Warning: Marginpar on page 21 moved.
-
-Package epstopdf Info: Source file: <img/Branch.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 105494 bytes
-(epstopdf)             Output file: <img/Branch-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:16
-(epstopdf)                    size: 45483 bytes
-(epstopdf)             Command: <repstopdf --outfile=img/Branch-eps-converted-t
-o.pdf img/Branch.eps>
-(epstopdf)             \includegraphics on input line 804.
-Package epstopdf Info: Output file is already uptodate.
-<img/Branch-eps-converted-to.pdf, id=403, 1118.1775pt x 404.51125pt>
-File: img/Branch-eps-converted-to.pdf Graphic file (type pdf)
-<use img/Branch-eps-converted-to.pdf>
-Package pdftex.def Info: img/Branch-eps-converted-to.pdf  used on input line 80
-4.
-(pdftex.def)             Requested size: 280.99396pt x 101.6522pt.
-[21 <./img/Branch-eps-converted-to.pdf>]
-Package epstopdf Info: Source file: <img/pi-trafo.eps>
-(epstopdf)                    date: 2018-04-05 11:16:52
-(epstopdf)                    size: 17707 bytes
-(epstopdf)             Output file: <img/pi-trafo-eps-converted-to.pdf>
-(epstopdf)                    date: 2018-04-05 11:16:58
-(epstopdf)                    size: 3962 bytes
-(epstopdf)             Command: <repstopdf --outfile=img/pi-trafo-eps-converted
--to.pdf img/pi-trafo.eps>
-(epstopdf)             \includegraphics on input line 854.
-Package epstopdf Info: Output file is already uptodate.
-<img/pi-trafo-eps-converted-to.pdf, id=411, 724.7075pt x 344.28625pt>
-File: img/pi-trafo-eps-converted-to.pdf Graphic file (type pdf)
-<use img/pi-trafo-eps-converted-to.pdf>
-Package pdftex.def Info: img/pi-trafo-eps-converted-to.pdf  used on input line 
-854.
-(pdftex.def)             Requested size: 213.10126pt x 101.23784pt.
-
-
-LaTeX Warning: Marginpar on page 22 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 924.
-
-[22 <./img/pi-trafo-eps-converted-to.pdf>]
-Overfull \hbox (8.37262pt too wide) in paragraph at lines 926--927
-[] []\T1/phv/m/sl/10 Ex-am-ple[] \T1/phv/m/n/10 Let's as-sume that we have al-r
-eady com-puted the se-ries impedance 
- []
-
-
-Overfull \hbox (41.81717pt too wide) detected at line 964
-\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []  \OML/zplm/m/it/10 p\OT1/pplx/m/n/1
-0 .\OML/zplm/m/it/10 u\OT1/pplx/m/n/10 .
- []
-
-
-Overfull \hbox (3.5573pt too wide) detected at line 985
- $[][]$  
- []
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 993.
-
-[23]
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1021.
-
-[24]
-
-LaTeX Warning: Marginpar on page 25 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1097.
-
-[25]
-Overfull \vbox (10.87376pt too high) has occurred while \output is active []
-
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1202.
-
-[26]
-
-LaTeX Warning: Marginpar on page 27 moved.
-
-
-Overfull \hbox (3.3309pt too wide) detected at line 1267
-\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
- []
-
-
-Overfull \hbox (6.74329pt too wide) detected at line 1275
-\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
- []
-
-
-Overfull \hbox (5.32199pt too wide) detected at line 1286
-\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
- []
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1295.
-
-[27]
-
-LaTeX Warning: Marginpar on page 28 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1444.
-
-[28]
-Package epstopdf Info: Source file: <img/NodeElements.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 24615 bytes
-(epstopdf)             Output file: <img/NodeElements-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:25
-(epstopdf)                    size: 9946 bytes
-(epstopdf)             Command: <repstopdf --outfile=img/NodeElements-eps-conve
-rted-to.pdf img/NodeElements.eps>
-(epstopdf)             \includegraphics on input line 1451.
-Package epstopdf Info: Output file is already uptodate.
-<img/NodeElements-eps-converted-to.pdf, id=476, 804.00375pt x 589.20125pt>
-File: img/NodeElements-eps-converted-to.pdf Graphic file (type pdf)
-<use img/NodeElements-eps-converted-to.pdf>
-Package pdftex.def Info: img/NodeElements-eps-converted-to.pdf  used on input l
-ine 1451.
-(pdftex.def)             Requested size: 139.14471pt x 101.96997pt.
+(Font)              scaled to size 9.85492pt on input line 811.
+[21 <./img/CircuitEquation-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <img/ZIP_model.eps>
 (epstopdf)                    date: 2018-06-08 11:35:45
 (epstopdf)                    size: 17198 bytes
@@ -1996,84 +1900,77 @@ Package epstopdf Info: Source file: <img/ZIP_model.eps>
 (epstopdf)                    size: 3542 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/ZIP_model-eps-converte
 d-to.pdf img/ZIP_model.eps>
-(epstopdf)             \includegraphics on input line 1464.
+(epstopdf)             \includegraphics on input line 816.
 Package epstopdf Info: Output file is already uptodate.
-<img/ZIP_model-eps-converted-to.pdf, id=477, 656.4525pt x 461.725pt>
+<img/ZIP_model-eps-converted-to.pdf, id=433, 656.4525pt x 461.725pt>
 File: img/ZIP_model-eps-converted-to.pdf Graphic file (type pdf)
 <use img/ZIP_model-eps-converted-to.pdf>
 Package pdftex.def Info: img/ZIP_model-eps-converted-to.pdf  used on input line
- 1464.
+ 816.
 (pdftex.def)             Requested size: 139.15123pt x 97.87396pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1478--1478
+Underfull \hbox (badness 10000) in paragraph at lines 830--830
 []|\T1/phv/m/n/10 Name of the de-vice
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1480--1480
+Underfull \hbox (badness 10000) in paragraph at lines 832--832
 []|\T1/phv/m/n/10 number of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1480--1480
+Underfull \hbox (badness 10000) in paragraph at lines 832--832
 []|\T1/phv/m/n/10 Number of phases of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1482--1482
+Underfull \hbox (badness 10000) in paragraph at lines 834--834
 []|\T1/phv/m/n/10 Phases vec-tor (i.e.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1482--1482
+Underfull \hbox (badness 10000) in paragraph at lines 834--834
 \T1/phv/m/n/10 [0, 1, 2] for ABC,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1484--1484
+Underfull \hbox (badness 10000) in paragraph at lines 836--836
 []|\T1/phv/m/n/10 Connectivity mode
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1486--1486
+Underfull \hbox (badness 10000) in paragraph at lines 838--838
 []|\T1/phv/m/n/10 Impedance (com-plex
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1486--1487
+Underfull \hbox (badness 10000) in paragraph at lines 838--839
 []|\T1/phv/m/n/10 MW, MVAr at the bus nom-i-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1488--1488
+Underfull \hbox (badness 10000) in paragraph at lines 840--840
 []|\T1/phv/m/n/10 Current (com-plex
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1488--1489
+Underfull \hbox (badness 10000) in paragraph at lines 840--841
 []|\T1/phv/m/n/10 MW, MVAr at the bus nom-i-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1490--1490
+Underfull \hbox (badness 10000) in paragraph at lines 842--842
 []|\T1/phv/m/n/10 Power (com-plex
  []
 
 
-LaTeX Warning: Reference `fig:CircuitEquation' on page 29 undefined on input li
-ne 1500.
+LaTeX Warning: Reference `fig:CircuitEquation' on page 22 undefined on input li
+ne 852.
 
 
-LaTeX Warning: Reference `fig:CircuitEquation' on page 29 undefined on input li
-ne 1503.
+LaTeX Warning: Reference `fig:CircuitEquation' on page 22 undefined on input li
+ne 855.
 
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1505.
-
-[29 <./img/NodeElements-eps-converted-to.pdf> <./img/ZIP_model-eps-converted-to
-.pdf>]
 Package epstopdf Info: Source file: <img/DeltaShuntDevice.eps>
 (epstopdf)                    date: 2018-06-13 17:35:20
 (epstopdf)                    size: 16262 bytes
@@ -2083,14 +1980,21 @@ Package epstopdf Info: Source file: <img/DeltaShuntDevice.eps>
 (epstopdf)                    size: 3732 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/DeltaShuntDevice-eps-c
 onverted-to.pdf img/DeltaShuntDevice.eps>
-(epstopdf)             \includegraphics on input line 1517.
+(epstopdf)             \includegraphics on input line 869.
 Package epstopdf Info: Output file is already uptodate.
-<img/DeltaShuntDevice-eps-converted-to.pdf, id=488, 406.51875pt x 336.25626pt>
+<img/DeltaShuntDevice-eps-converted-to.pdf, id=435, 406.51875pt x 336.25626pt>
 File: img/DeltaShuntDevice-eps-converted-to.pdf Graphic file (type pdf)
 <use img/DeltaShuntDevice-eps-converted-to.pdf>
 Package pdftex.def Info: img/DeltaShuntDevice-eps-converted-to.pdf  used on inp
-ut line 1517.
+ut line 869.
 (pdftex.def)             Requested size: 139.15118pt x 115.10037pt.
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 877.
+
+[22 <./img/ZIP_model-eps-converted-to.pdf> <./img/DeltaShuntDevice-eps-converte
+d-to.pdf>]
 Package epstopdf Info: Source file: <img/PV_model.eps>
 (epstopdf)                    date: 2018-06-08 11:39:11
 (epstopdf)                    size: 12215 bytes
@@ -2099,46 +2003,168 @@ Package epstopdf Info: Source file: <img/PV_model.eps>
 (epstopdf)                    size: 3165 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/PV_model-eps-converted
 -to.pdf img/PV_model.eps>
-(epstopdf)             \includegraphics on input line 1546.
+(epstopdf)             \includegraphics on input line 898.
 Package epstopdf Info: Output file is already uptodate.
-<img/PV_model-eps-converted-to.pdf, id=489, 156.585pt x 289.08pt>
+<img/PV_model-eps-converted-to.pdf, id=446, 156.585pt x 289.08pt>
 File: img/PV_model-eps-converted-to.pdf Graphic file (type pdf)
 <use img/PV_model-eps-converted-to.pdf>
 Package pdftex.def Info: img/PV_model-eps-converted-to.pdf  used on input line 
-1546.
+898.
 (pdftex.def)             Requested size: 56.22241pt x 103.79523pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1560--1560
+Underfull \hbox (badness 10000) in paragraph at lines 912--912
 []|\T1/phv/m/n/10 number of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1560--1560
+Underfull \hbox (badness 10000) in paragraph at lines 912--912
 []|\T1/phv/m/n/10 Number of phases of the de-vice
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1562--1562
+Underfull \hbox (badness 10000) in paragraph at lines 914--914
 []|\T1/phv/m/n/10 Phases vec-tor (i.e. [0, 1, 2] for
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1570--1570
+Underfull \hbox (badness 10000) in paragraph at lines 922--922
 []|\T1/phv/m/n/10 Reactive power lower limit (num-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1572--1572
+Underfull \hbox (badness 10000) in paragraph at lines 924--924
 []|\T1/phv/m/n/10 Reactive power up-per limit (num-
  []
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 1588.
+This message occurred on input line 933.
 
-[30 <./img/DeltaShuntDevice-eps-converted-to.pdf> <./img/PV_model-eps-converted
--to.pdf>]
+[23 <./img/PV_model-eps-converted-to.pdf>]
+
+LaTeX Warning: Marginpar on page 24 moved.
+
+Package epstopdf Info: Source file: <img/Branch.eps>
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 101053 bytes
+(epstopdf)             Output file: <img/Branch-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-07-10 18:19:27
+(epstopdf)                    size: 45238 bytes
+(epstopdf)             Command: <repstopdf --outfile=img/Branch-eps-converted-t
+o.pdf img/Branch.eps>
+(epstopdf)             \includegraphics on input line 949.
+Package epstopdf Info: Output file is already uptodate.
+<img/Branch-eps-converted-to.pdf, id=456, 1118.1775pt x 404.51125pt>
+File: img/Branch-eps-converted-to.pdf Graphic file (type pdf)
+<use img/Branch-eps-converted-to.pdf>
+Package pdftex.def Info: img/Branch-eps-converted-to.pdf  used on input line 94
+9.
+(pdftex.def)             Requested size: 280.99396pt x 101.6522pt.
+Package epstopdf Info: Source file: <img/pi-trafo.eps>
+(epstopdf)                    date: 2018-04-05 11:16:52
+(epstopdf)                    size: 17707 bytes
+(epstopdf)             Output file: <img/pi-trafo-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-04-05 11:16:58
+(epstopdf)                    size: 3962 bytes
+(epstopdf)             Command: <repstopdf --outfile=img/pi-trafo-eps-converted
+-to.pdf img/pi-trafo.eps>
+(epstopdf)             \includegraphics on input line 999.
+Package epstopdf Info: Output file is already uptodate.
+<img/pi-trafo-eps-converted-to.pdf, id=458, 724.7075pt x 344.28625pt>
+File: img/pi-trafo-eps-converted-to.pdf Graphic file (type pdf)
+<use img/pi-trafo-eps-converted-to.pdf>
+Package pdftex.def Info: img/pi-trafo-eps-converted-to.pdf  used on input line 
+999.
+(pdftex.def)             Requested size: 213.10126pt x 101.23784pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1015.
+
+[24 <./img/Branch-eps-converted-to.pdf>]
+
+LaTeX Warning: Marginpar on page 25 moved.
+
+
+Overfull \hbox (8.37262pt too wide) in paragraph at lines 1071--1072
+[] []\T1/phv/m/sl/10 Ex-am-ple[] \T1/phv/m/n/10 Let's as-sume that we have al-r
+eady com-puted the se-ries impedance 
+ []
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1079.
+
+[25 <./img/pi-trafo-eps-converted-to.pdf>]
+Overfull \hbox (41.81717pt too wide) detected at line 1109
+\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []  \OML/zplm/m/it/10 p\OT1/pplx/m/n/1
+0 .\OML/zplm/m/it/10 u\OT1/pplx/m/n/10 .
+ []
+
+
+Overfull \hbox (3.5573pt too wide) detected at line 1130
+ $[][]$  
+ []
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1141.
+
+[26]
+
+LaTeX Warning: Marginpar on page 27 moved.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1228.
+
+[27]
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1320.
+
+[28]
+
+LaTeX Warning: Marginpar on page 29 moved.
+
+
+Overfull \hbox (3.3309pt too wide) detected at line 1411
+\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
+ []
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1411.
+
+[29]
+Overfull \hbox (6.74329pt too wide) detected at line 1419
+\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
+ []
+
+
+Overfull \hbox (5.32199pt too wide) detected at line 1430
+\OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = []
+ []
+
+
+LaTeX Warning: Marginpar on page 30 moved.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1592.
+
+[30]
+Chapter 6.
 Package epstopdf Info: Source file: <img/Substation.eps>
 (epstopdf)                    date: 2018-06-18 22:23:01
 (epstopdf)                    size: 25674 bytes
@@ -2147,34 +2173,39 @@ Package epstopdf Info: Source file: <img/Substation.eps>
 (epstopdf)                    size: 9736 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Substation-eps-convert
 ed-to.pdf img/Substation.eps>
-(epstopdf)             \includegraphics on input line 1594.
+(epstopdf)             \includegraphics on input line 1602.
 Package epstopdf Info: Output file is already uptodate.
-<img/Substation-eps-converted-to.pdf, id=502, 662.475pt x 1168.365pt>
+<img/Substation-eps-converted-to.pdf, id=524, 662.475pt x 1168.365pt>
 File: img/Substation-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Substation-eps-converted-to.pdf>
 Package pdftex.def Info: img/Substation-eps-converted-to.pdf  used on input lin
-e 1594.
+e 1602.
 (pdftex.def)             Requested size: 213.10826pt x 375.84549pt.
 
+Underfull \vbox (badness 1142) has occurred while \output is active []
 
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1610.
+ [31
 
-[31 <./img/Substation-eps-converted-to.pdf>]
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 1716.
-
-[32]
+ <./img/Substation-eps-converted-to.pdf>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 1801.
+This message occurred on input line 1717.
+
+[32]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1808.
 
 [33]
 Package epstopdf Info: Source file: <img/general_graph.eps>
@@ -2185,27 +2216,40 @@ Package epstopdf Info: Source file: <img/general_graph.eps>
 (epstopdf)                    size: 3556 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/general_graph-eps-conv
 erted-to.pdf img/general_graph.eps>
-(epstopdf)             \includegraphics on input line 1804.
+(epstopdf)             \includegraphics on input line 1815.
 Package epstopdf Info: Output file is already uptodate.
-<img/general_graph-eps-converted-to.pdf, id=527, 371.3875pt x 456.70625pt>
+<img/general_graph-eps-converted-to.pdf, id=550, 371.3875pt x 456.70625pt>
 File: img/general_graph-eps-converted-to.pdf Graphic file (type pdf)
 <use img/general_graph-eps-converted-to.pdf>
 Package pdftex.def Info: img/general_graph-eps-converted-to.pdf  used on input 
-line 1804.
+line 1815.
 (pdftex.def)             Requested size: 106.55489pt x 131.03372pt.
+LaTeX Font Info:    Try loading font information for T1+fvm on input line 1821.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
+File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
+)
+LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
+(Font)              scaled to size 6.80005pt on input line 1821.
 
 
 LaTeX Warning: Marginpar on page 34 moved.
 
-LaTeX Font Info:    Try loading font information for T1+fvm on input line 1816.
 
-(/usr/share/texlive/texmf-dist/tex/latex/bera/t1fvm.fd
-File: t1fvm.fd 2004/09/07 scalable font definitions for T1/fvm.
-)
+LaTeX Warning: Marginpar on page 34 moved.
+
+
+LaTeX Warning: Marginpar on page 34 moved.
+
 LaTeX Font Info:    Font shape `T1/fvm/m/n' will be
-(Font)              scaled to size 8.50006pt on input line 1816.
+(Font)              scaled to size 8.50006pt on input line 1829.
 
-Overfull \hbox (75.09831pt too wide) in paragraph at lines 1837--1838
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 1843.
+
+[34 <./img/general_graph-eps-converted-to.pdf>]
+Overfull \hbox (75.09831pt too wide) in paragraph at lines 1850--1851
 []\T1/phv/m/n/10 Add the picked el-e-ment to the cur-rent is-land: [][]\T1/fvm/
 m/n/10 islands[island_idx].append(v)  
  []
@@ -2213,115 +2257,132 @@ m/n/10 islands[island_idx].append(v)
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 1849.
+This message occurred on input line 1929.
 
-[34 <./img/general_graph-eps-converted-to.pdf>]
+[35]
+Overfull \hbox (8.59769pt too wide) in paragraph at lines 1938--1938
+|[]\T1/phv/m/sl/12 Putting it all to-gether: Com-pos-ing cal-cu-la-tion ma-tri-
+ces and vec-
+ []
+
+
+Overfull \hbox (2.33534pt too wide) in paragraph at lines 1942--1943
+[]\T1/phv/m/n/10 For the com-pu-ta-tions ahead we will need to have a num-ber o
+f admittance- 
+ []
+
+Package epstopdf Info: Source file: <img/ElementBusAgregation.eps>
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 80296 bytes
+(epstopdf)             Output file: <img/ElementBusAgregation-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-07-10 18:19:27
+(epstopdf)                    size: 36480 bytes
+(epstopdf)             Command: <repstopdf --outfile=img/ElementBusAgregation-e
+ps-converted-to.pdf img/ElementBusAgregation.eps>
+(epstopdf)             \includegraphics on input line 1946.
+Package epstopdf Info: Output file is already uptodate.
+<img/ElementBusAgregation-eps-converted-to.pdf, id=586, 950.55125pt x 591.20876
+pt>
+File: img/ElementBusAgregation-eps-converted-to.pdf Graphic file (type pdf)
+<use img/ElementBusAgregation-eps-converted-to.pdf>
+Package pdftex.def Info: img/ElementBusAgregation-eps-converted-to.pdf  used on
+ input line 1946.
+(pdftex.def)             Requested size: 243.55495pt x 151.48244pt.
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 1934.
+This message occurred on input line 1983.
 
-[35] [36
-
-]
-Chapter 6.
+[36 <./img/ElementBusAgregation-eps-converted-to.pdf>]
 
 LaTeX Warning: Marginpar on page 37 moved.
 
-[37]
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 2023.
+
+[37] [38
+
+]
+Chapter 7.
+
+LaTeX Warning: Marginpar on page 39 moved.
+
+[39]
 Package epstopdf Info: Source file: <img/Matrix_reduction.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 90198 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 86485 bytes
 (epstopdf)             Output file: <img/Matrix_reduction-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2017-11-30 17:44:36
-(epstopdf)                    size: 32747 bytes
+(epstopdf)                    date: 2018-07-10 18:19:27
+(epstopdf)                    size: 32472 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Matrix_reduction-eps-c
 onverted-to.pdf img/Matrix_reduction.eps>
-(epstopdf)             \includegraphics on input line 1999.
+(epstopdf)             \includegraphics on input line 2088.
 Package epstopdf Info: Output file is already uptodate.
-<img/Matrix_reduction-eps-converted-to.pdf, id=571, 1487.5575pt x 1101.11375pt>
+<img/Matrix_reduction-eps-converted-to.pdf, id=618, 1487.5575pt x 1101.11375pt>
 
 File: img/Matrix_reduction-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Matrix_reduction-eps-converted-to.pdf>
 Package pdftex.def Info: img/Matrix_reduction-eps-converted-to.pdf  used on inp
-ut line 1999.
+ut line 2088.
 (pdftex.def)             Requested size: 304.4292pt x 225.34334pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1999--2002
+Underfull \hbox (badness 10000) in paragraph at lines 2088--2091
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1999--2002
+Underfull \hbox (badness 10000) in paragraph at lines 2088--2091
 
  []
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2036.
+This message occurred on input line 2125.
 
-[38 <./img/Matrix_reduction-eps-converted-to.pdf>]
+[40 <./img/Matrix_reduction-eps-converted-to.pdf>]
 
-LaTeX Warning: Marginpar on page 39 moved.
+LaTeX Warning: Marginpar on page 41 moved.
 
 
-LaTeX Warning: Marginpar on page 39 moved.
+LaTeX Warning: Marginpar on page 41 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2098.
+This message occurred on input line 2187.
 
-[39]
+[41]
 Package epstopdf Info: Source file: <img/JacobianBased.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 89051 bytes
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 85686 bytes
 (epstopdf)             Output file: <img/JacobianBased-eps-converted-to.pdf>
-(epstopdf)                    date: 2017-11-30 17:44:40
-(epstopdf)                    size: 29746 bytes
+(epstopdf)                    date: 2018-07-10 18:19:28
+(epstopdf)                    size: 29570 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/JacobianBased-eps-conv
 erted-to.pdf img/JacobianBased.eps>
-(epstopdf)             \includegraphics on input line 2101.
+(epstopdf)             \includegraphics on input line 2190.
 Package epstopdf Info: Output file is already uptodate.
-<img/JacobianBased-eps-converted-to.pdf, id=600, 817.0525pt x 349.305pt>
+<img/JacobianBased-eps-converted-to.pdf, id=648, 817.0525pt x 349.305pt>
 File: img/JacobianBased-eps-converted-to.pdf Graphic file (type pdf)
 <use img/JacobianBased-eps-converted-to.pdf>
 Package pdftex.def Info: img/JacobianBased-eps-converted-to.pdf  used on input 
-line 2101.
+line 2190.
 (pdftex.def)             Requested size: 274.00415pt x 117.14182pt.
 
-
-LaTeX Warning: Marginpar on page 40 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 2127.
-
-[40 <./img/JacobianBased-eps-converted-to.pdf>]
-
-LaTeX Warning: Marginpar on page 41 moved.
-
-
-LaTeX Warning: Marginpar on page 41 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 2166.
-
-[41]
 
 LaTeX Warning: Marginpar on page 42 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2230.
+This message occurred on input line 2216.
 
-[42]
+[42 <./img/JacobianBased-eps-converted-to.pdf>]
 
 LaTeX Warning: Marginpar on page 43 moved.
 
@@ -2331,51 +2392,28 @@ LaTeX Warning: Marginpar on page 43 moved.
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2294.
+This message occurred on input line 2255.
 
 [43]
 
 LaTeX Warning: Marginpar on page 44 moved.
 
 
-LaTeX Warning: Marginpar on page 44 moved.
-
-
-LaTeX Warning: Marginpar on page 44 moved.
-
-
-LaTeX Warning: Marginpar on page 44 moved.
-
-
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2390.
+This message occurred on input line 2319.
 
 [44]
-Package epstopdf Info: Source file: <img/Matrix_reduction.eps>
-(epstopdf)                    date: 2017-11-22 09:09:25
-(epstopdf)                    size: 90198 bytes
-(epstopdf)             Output file: <img/Matrix_reduction-eps-converted-to.pdf>
 
-(epstopdf)                    date: 2017-11-30 17:44:36
-(epstopdf)                    size: 32747 bytes
-(epstopdf)             Command: <repstopdf --outfile=img/Matrix_reduction-eps-c
-onverted-to.pdf img/Matrix_reduction.eps>
-(epstopdf)             \includegraphics on input line 2446.
-Package epstopdf Info: Output file is already uptodate.
-File: img/Matrix_reduction-eps-converted-to.pdf Graphic file (type pdf)
-<use img/Matrix_reduction-eps-converted-to.pdf>
-Package pdftex.def Info: img/Matrix_reduction-eps-converted-to.pdf  used on inp
-ut line 2446.
-(pdftex.def)             Requested size: 258.78297pt x 191.55528pt.
+LaTeX Warning: Marginpar on page 45 moved.
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+LaTeX Warning: Marginpar on page 45 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2496.
+This message occurred on input line 2383.
 
 [45]
 
@@ -2388,41 +2426,85 @@ LaTeX Warning: Marginpar on page 46 moved.
 LaTeX Warning: Marginpar on page 46 moved.
 
 
+LaTeX Warning: Marginpar on page 46 moved.
+
+
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2546.
+This message occurred on input line 2479.
 
 [46]
-LaTeX Font Info:    Font shape `T1/phv/m/sc' will be
-(Font)              scaled to size 7.19995pt on input line 2575.
+Package epstopdf Info: Source file: <img/Matrix_reduction.eps>
+(epstopdf)                    date: 2018-07-10 18:17:47
+(epstopdf)                    size: 86485 bytes
+(epstopdf)             Output file: <img/Matrix_reduction-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2018-07-10 18:19:27
+(epstopdf)                    size: 32472 bytes
+(epstopdf)             Command: <repstopdf --outfile=img/Matrix_reduction-eps-c
+onverted-to.pdf img/Matrix_reduction.eps>
+(epstopdf)             \includegraphics on input line 2535.
+Package epstopdf Info: Output file is already uptodate.
+File: img/Matrix_reduction-eps-converted-to.pdf Graphic file (type pdf)
+<use img/Matrix_reduction-eps-converted-to.pdf>
+Package pdftex.def Info: img/Matrix_reduction-eps-converted-to.pdf  used on inp
+ut line 2535.
+(pdftex.def)             Requested size: 258.78297pt x 191.55528pt.
 
 
-LaTeX Warning: Marginpar on page 47 moved.
-
-
-LaTeX Warning: Marginpar on page 47 moved.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2586.
+This message occurred on input line 2585.
 
 [47]
 
+LaTeX Warning: Marginpar on page 48 moved.
+
+
+LaTeX Warning: Marginpar on page 48 moved.
+
+
+LaTeX Warning: Marginpar on page 48 moved.
+
+
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2626.
+This message occurred on input line 2635.
 
 [48]
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 12.9599pt on input line 2680.
+LaTeX Font Info:    Font shape `T1/phv/m/sc' will be
+(Font)              scaled to size 7.19995pt on input line 2664.
+
+
+LaTeX Warning: Marginpar on page 49 moved.
+
+
+LaTeX Warning: Marginpar on page 49 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2683.
+This message occurred on input line 2675.
 
 [49]
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 2715.
+
+[50]
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 12.9599pt on input line 2769.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 2772.
+
+[51]
 Package epstopdf Info: Source file: <img/CoefficientsStructure.eps>
 (epstopdf)                    date: 2017-12-11 08:29:29
 (epstopdf)                    size: 21539 bytes
@@ -2432,29 +2514,29 @@ Package epstopdf Info: Source file: <img/CoefficientsStructure.eps>
 (epstopdf)                    size: 3406 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/CoefficientsStructure-
 eps-converted-to.pdf img/CoefficientsStructure.eps>
-(epstopdf)             \includegraphics on input line 2720.
+(epstopdf)             \includegraphics on input line 2809.
 Package epstopdf Info: Output file is already uptodate.
-<img/CoefficientsStructure-eps-converted-to.pdf, id=768, 350.30875pt x 318.1887
+<img/CoefficientsStructure-eps-converted-to.pdf, id=815, 350.30875pt x 318.1887
 5pt>
 File: img/CoefficientsStructure-eps-converted-to.pdf Graphic file (type pdf)
 <use img/CoefficientsStructure-eps-converted-to.pdf>
 Package pdftex.def Info: img/CoefficientsStructure-eps-converted-to.pdf  used o
-n input line 2720.
+n input line 2809.
 (pdftex.def)             Requested size: 121.77603pt x 110.61032pt.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2730.
+This message occurred on input line 2819.
 
-[50 <./img/CoefficientsStructure-eps-converted-to.pdf>]
+[52 <./img/CoefficientsStructure-eps-converted-to.pdf>]
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2781.
+This message occurred on input line 2870.
 
-[51]
-Overfull \hbox (32.80124pt too wide) in paragraph at lines 2781--2782
+[53]
+Overfull \hbox (32.80124pt too wide) in paragraph at lines 2870--2871
 []\T1/phv/m/n/10 This pro-cess is done for ev-ery col-umn of co-ef-fi-cients $\
 OML/zplm/m/it/10 V \OT1/zplm/m/n/10 = \OMS/zplm/m/n/10 f\OML/zplm/m/it/10 V[]\O
 T1/pplx/m/n/10 , \OML/zplm/m/it/10 V[]\OT1/pplx/m/n/10 , \OML/zplm/m/it/10 V[]\
@@ -2463,30 +2545,30 @@ OT1/pplx/m/n/10 , \OML/zplm/m/it/10 V[]\OT1/pplx/m/n/10 , ..., \OML/zplm/m/it/1
  []
 
 
-LaTeX Warning: Marginpar on page 52 moved.
+LaTeX Warning: Marginpar on page 54 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2848.
+This message occurred on input line 2937.
 
-[52]pdfTeX warning (ext4): destination with the same identifier (name{cite.liu2
+[54]pdfTeX warning (ext4): destination with the same identifier (name{cite.liu2
 017online}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2850 ...f the Appendix A of \cite{liu2017online}
+l.2939 ...f the Appendix A of \cite{liu2017online}
                                                   .
 
-LaTeX Warning: Marginpar on page 53 moved.
+LaTeX Warning: Marginpar on page 55 moved.
 
 
-Overfull \hbox (23.31078pt too wide) detected at line 2884
+Overfull \hbox (23.31078pt too wide) detected at line 2973
  $[] \OMS/zplm/m/n/10 ^^B [] \OT1/zplm/m/n/10 = []  \OMS/zplm/m/n/10 8\OML/zplm
 /m/it/10 n \OT1/zplm/m/n/10 = \OT1/pplx/m/n/10 0$  
  []
 
 
-Overfull \hbox (77.72763pt too wide) detected at line 2941
+Overfull \hbox (77.72763pt too wide) detected at line 3030
  $[] \OMS/zplm/m/n/10 ^^B [] \OT1/zplm/m/n/10 = []  \OMS/zplm/m/n/10 8\OML/zplm
 /m/it/10 n > \OT1/pplx/m/n/10 0$  
  []
@@ -2494,38 +2576,46 @@ Overfull \hbox (77.72763pt too wide) detected at line 2941
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 2951.
-
-[53]
-
-LaTeX Warning: Marginpar on page 54 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 2990.
-
-[54]
-LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
-(Font)              scaled to size 7.19995pt on input line 3010.
-
-
-LaTeX Warning: Marginpar on page 55 moved.
-
-
-LaTeX Warning: Marginpar on page 55 moved.
-
-
-LaTeX Warning: Marginpar on page 55 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 3074.
+This message occurred on input line 3040.
 
 [55]
 
 LaTeX Warning: Marginpar on page 56 moved.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 3079.
+
+[56]
+LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
+(Font)              scaled to size 7.19995pt on input line 3099.
+LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <8> not available
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 3099.
+LaTeX Font Info:    Font shape `T1/phv/b/n' will be
+(Font)              scaled to size 7.19995pt on input line 3099.
+
+
+LaTeX Warning: Reference `Y_calculation' on page 57 undefined on input line 309
+9.
+
+
+LaTeX Warning: Marginpar on page 57 moved.
+
+
+LaTeX Warning: Marginpar on page 57 moved.
+
+
+LaTeX Warning: Marginpar on page 57 moved.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 3163.
+
+[57]
+
+LaTeX Warning: Marginpar on page 58 moved.
 
 Package epstopdf Info: Source file: <img/PQ_PV_switching.eps>
 (epstopdf)                    date: 2018-06-08 12:40:38
@@ -2535,31 +2625,31 @@ Package epstopdf Info: Source file: <img/PQ_PV_switching.eps>
 (epstopdf)                    size: 3466 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/PQ_PV_switching-eps-co
 nverted-to.pdf img/PQ_PV_switching.eps>
-(epstopdf)             \includegraphics on input line 3085.
+(epstopdf)             \includegraphics on input line 3174.
 Package epstopdf Info: Output file is already uptodate.
-<img/PQ_PV_switching-eps-converted-to.pdf, id=850, 374.39874pt x 606.265pt>
+<img/PQ_PV_switching-eps-converted-to.pdf, id=897, 374.39874pt x 606.265pt>
 File: img/PQ_PV_switching-eps-converted-to.pdf Graphic file (type pdf)
 <use img/PQ_PV_switching-eps-converted-to.pdf>
 Package pdftex.def Info: img/PQ_PV_switching-eps-converted-to.pdf  used on inpu
-t line 3085.
+t line 3174.
 (pdftex.def)             Requested size: 126.4998pt x 204.8415pt.
 
-LaTeX Warning: Marginpar on page 56 moved.
+LaTeX Warning: Marginpar on page 58 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3141.
+This message occurred on input line 3230.
 
-[56 <./img/PQ_PV_switching-eps-converted-to.pdf>]
-Chapter 7.
+[58 <./img/PQ_PV_switching-eps-converted-to.pdf>]
+Chapter 8.
 
-LaTeX Warning: Marginpar on page 57 moved.
+LaTeX Warning: Marginpar on page 59 moved.
 
 Missing character: There is no â in font pplr9t!
 Missing character: There is no ‹ in font pplr9t!
 Missing character: There is no … in font pplr9t!
-[57
+[59
 
 ]
 Missing character: There is no â in font pplr9t!
@@ -2570,15 +2660,15 @@ Missing character: There is no ‹ in font pplr9t!
 Missing character: There is no … in font pplr9t!
 
 
-LaTeX Warning: Marginpar on page 58 moved.
+LaTeX Warning: Marginpar on page 60 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3220.
+This message occurred on input line 3309.
 
-[58]
-Overfull \hbox (7.21265pt too wide) detected at line 3249
+[60]
+Overfull \hbox (7.21265pt too wide) detected at line 3338
  $\OMS/zplm/m/n/10 ^^@ [] \OML/zplm/m/it/10 Bs[] \OMS/zplm/m/n/10 ^^A \OT1/zplm
 /m/n/10 ^^A\OML/zplm/m/it/10 ^^R[] \OT1/zplm/m/n/10 + [] \OML/zplm/m/it/10 G[] 
 \OMS/zplm/m/n/10 ^^A \OT1/zplm/m/n/10 ^^A\OML/zplm/m/it/10 Vm[] \OT1/zplm/m/n/1
@@ -2590,12 +2680,12 @@ MS/zplm/m/n/10 8\OML/zplm/m/it/10 i \OMS/zplm/m/n/10 2 \OML/zplm/m/it/10 pvpq$
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3266.
+This message occurred on input line 3355.
 
-[59] [60
+[61] [62
 
 ]
-Chapter 8.
+Chapter 9.
 Package epstopdf Info: Source file: <img/Time_series.eps>
 (epstopdf)                    date: 2018-04-02 15:06:19
 (epstopdf)                    size: 91500 bytes
@@ -2604,19 +2694,19 @@ Package epstopdf Info: Source file: <img/Time_series.eps>
 (epstopdf)                    size: 28443 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Time_series-eps-conver
 ted-to.pdf img/Time_series.eps>
-(epstopdf)             \includegraphics on input line 3271.
+(epstopdf)             \includegraphics on input line 3360.
 Package epstopdf Info: Output file is already uptodate.
-<img/Time_series-eps-converted-to.pdf, id=900, 638.385pt x 392.46625pt>
+<img/Time_series-eps-converted-to.pdf, id=947, 638.385pt x 392.46625pt>
 File: img/Time_series-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Time_series-eps-converted-to.pdf>
 Package pdftex.def Info: img/Time_series-eps-converted-to.pdf  used on input li
-ne 3271.
+ne 3360.
 (pdftex.def)             Requested size: 140.55228pt x 86.4087pt.
-[61 <./img/Time_series-eps-converted-to.pdf>] [62
+[63 <./img/Time_series-eps-converted-to.pdf>] [64
 
 ]
-Chapter 9.
-[63]
+Chapter 10.
+[65]
 Package epstopdf Info: Source file: <img/Load_CDF.eps>
 (epstopdf)                    date: 2018-04-02 11:19:00
 (epstopdf)                    size: 57590 bytes
@@ -2625,13 +2715,13 @@ Package epstopdf Info: Source file: <img/Load_CDF.eps>
 (epstopdf)                    size: 17663 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Load_CDF-eps-converted
 -to.pdf img/Load_CDF.eps>
-(epstopdf)             \includegraphics on input line 3364.
+(epstopdf)             \includegraphics on input line 3453.
 Package epstopdf Info: Output file is already uptodate.
-<img/Load_CDF-eps-converted-to.pdf, id=927, 496.85625pt x 354.32375pt>
+<img/Load_CDF-eps-converted-to.pdf, id=974, 496.85625pt x 354.32375pt>
 File: img/Load_CDF-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Load_CDF-eps-converted-to.pdf>
 Package pdftex.def Info: img/Load_CDF-eps-converted-to.pdf  used on input line 
-3364.
+3453.
 (pdftex.def)             Requested size: 140.55927pt x 100.23721pt.
 Package epstopdf Info: Source file: <img/Voltage_CDF.eps>
 (epstopdf)                    date: 2018-04-02 11:19:30
@@ -2641,17 +2731,17 @@ Package epstopdf Info: Source file: <img/Voltage_CDF.eps>
 (epstopdf)                    size: 18839 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Voltage_CDF-eps-conver
 ted-to.pdf img/Voltage_CDF.eps>
-(epstopdf)             \includegraphics on input line 3370.
+(epstopdf)             \includegraphics on input line 3459.
 Package epstopdf Info: Output file is already uptodate.
-<img/Voltage_CDF-eps-converted-to.pdf, id=928, 430.60875pt x 304.13625pt>
+<img/Voltage_CDF-eps-converted-to.pdf, id=975, 430.60875pt x 304.13625pt>
 File: img/Voltage_CDF-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Voltage_CDF-eps-converted-to.pdf>
 Package pdftex.def Info: img/Voltage_CDF-eps-converted-to.pdf  used on input li
-ne 3370.
+ne 3459.
 (pdftex.def)             Requested size: 140.55724pt x 99.27469pt.
 
 
-LaTeX Warning: Marginpar on page 64 moved.
+LaTeX Warning: Marginpar on page 66 moved.
 
 Package epstopdf Info: Source file: <img/Voltage_convergence.eps>
 (epstopdf)                    date: 2018-04-02 11:30:51
@@ -2662,60 +2752,60 @@ df>
 (epstopdf)                    size: 65663 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Voltage_convergence-ep
 s-converted-to.pdf img/Voltage_convergence.eps>
-(epstopdf)             \includegraphics on input line 3388.
+(epstopdf)             \includegraphics on input line 3477.
 Package epstopdf Info: Output file is already uptodate.
-<img/Voltage_convergence-eps-converted-to.pdf, id=930, 474.77374pt x 304.13625p
+<img/Voltage_convergence-eps-converted-to.pdf, id=977, 474.77374pt x 304.13625p
 t>
 File: img/Voltage_convergence-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Voltage_convergence-eps-converted-to.pdf>
 Package pdftex.def Info: img/Voltage_convergence-eps-converted-to.pdf  used on 
-input line 3388.
+input line 3477.
 (pdftex.def)             Requested size: 140.5569pt x 90.03961pt.
 
-LaTeX Warning: Marginpar on page 64 moved.
+LaTeX Warning: Marginpar on page 66 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3418.
+This message occurred on input line 3505.
 
-[64 <./img/Load_CDF-eps-converted-to.pdf> <./img/Voltage_CDF-eps-converted-to.p
+[66 <./img/Load_CDF-eps-converted-to.pdf> <./img/Voltage_CDF-eps-converted-to.p
 df> <./img/Voltage_convergence-eps-converted-to.pdf>]
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3437.
+This message occurred on input line 3526.
 
-[65] [66
+[67] [68
 
 ]
-Chapter 10.
+Chapter 11.
 
-LaTeX Warning: Marginpar on page 67 moved.
+LaTeX Warning: Marginpar on page 69 moved.
 
 
-Overfull \hbox (11.47937pt too wide) in paragraph at lines 3460--3461
-[]\T1/phv/m/n/10 The lin-ear sys-tem pre-sented in equa-tion []10.1[] is solved
+Overfull \hbox (11.47937pt too wide) in paragraph at lines 3549--3550
+[]\T1/phv/m/n/10 The lin-ear sys-tem pre-sented in equa-tion []11.1[] is solved
  us-ing the Levenberg- 
  []
 
 
 Underfull \vbox (badness 2158) has occurred while \output is active []
 
- [67]pdfTeX warning (ext4): destination with the same identifier (name{cite.zim
+ [69]pdfTeX warning (ext4): destination with the same identifier (name{cite.zim
 merman2010ac}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.3500 ...been taken from \cite{zimmerman2010ac}.}
+l.3589 ...been taken from \cite{zimmerman2010ac}.}
                                                   
 
-LaTeX Warning: Marginpar on page 68 moved.
+LaTeX Warning: Marginpar on page 70 moved.
 
 
-LaTeX Warning: Marginpar on page 68 moved.
+LaTeX Warning: Marginpar on page 70 moved.
 
 
-Overfull \hbox (27.80855pt too wide) detected at line 3516
+Overfull \hbox (27.80855pt too wide) detected at line 3605
  $[] \OT1/zplm/m/n/10 = \OML/zplm/m/it/10 j \OMS/zplm/m/n/10 ^^A \OT1/zplm/m/n/
 10 ([\OML/zplm/m/it/10 I[]\OT1/zplm/m/n/10 ][] \OMS/zplm/m/n/10 ^^B \OT1/zplm/m
 /n/10 [\OML/zplm/m/it/10 C[]\OT1/zplm/m/n/10 ] \OMS/zplm/m/n/10 ^^B \OT1/zplm/m
@@ -2727,7 +2817,7 @@ m/m/n/10 ^^B \OT1/zplm/m/n/10 [\OML/zplm/m/it/10 V[]\OT1/zplm/m/n/10 ][])$
  []
 
 
-Overfull \hbox (10.01077pt too wide) detected at line 3520
+Overfull \hbox (10.01077pt too wide) detected at line 3609
  $[] \OT1/zplm/m/n/10 = [\OML/zplm/m/it/10 I[]\OT1/zplm/m/n/10 ][] \OMS/zplm/m/
 n/10 ^^B \OT1/zplm/m/n/10 [\OML/zplm/m/it/10 C[]\OT1/zplm/m/n/10 ] \OMS/zplm/m/
 n/10 ^^B \OT1/zplm/m/n/10 [\OML/zplm/m/it/10 E[]\OT1/zplm/m/n/10 ] \OMS/zplm/m/
@@ -2739,80 +2829,80 @@ lm/m/n/10 ][]$
  []
 
 
-LaTeX Warning: Marginpar on page 68 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 3557.
-
-[68]
-
-LaTeX Warning: Marginpar on page 69 moved.
-
-
-LaTeX Warning: Marginpar on page 69 moved.
-
-
-LaTeX Warning: Marginpar on page 69 moved.
-
-
-LaTeX Warning: Marginpar on page 69 moved.
-
-
-LaTeX Warning: Marginpar on page 69 moved.
-
-
-Class tufte-book Warning: Proper spacing of small-caps letters has not been set
- up.
-This message occurred on input line 3626.
-
-[69]
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
-LaTeX Warning: Marginpar on page 70 moved.
-
-
 LaTeX Warning: Marginpar on page 70 moved.
 
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3710.
+This message occurred on input line 3646.
 
 [70]
 
 LaTeX Warning: Marginpar on page 71 moved.
 
 
+LaTeX Warning: Marginpar on page 71 moved.
+
+
+LaTeX Warning: Marginpar on page 71 moved.
+
+
+LaTeX Warning: Marginpar on page 71 moved.
+
+
+LaTeX Warning: Marginpar on page 71 moved.
+
+
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3772.
+This message occurred on input line 3715.
 
 [71]
 
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
+LaTeX Warning: Marginpar on page 72 moved.
+
+
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 3811.
+This message occurred on input line 3799.
 
 [72]
-Appendix A.
 
 LaTeX Warning: Marginpar on page 73 moved.
+
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 3861.
+
+[73]
+
+Class tufte-book Warning: Proper spacing of small-caps letters has not been set
+ up.
+This message occurred on input line 3900.
+
+[74]
+Appendix A.
+
+LaTeX Warning: Marginpar on page 75 moved.
 
 Package epstopdf Info: Source file: <img/Lynn5Bus.eps>
 (epstopdf)                    date: 2018-06-22 08:37:27
@@ -2822,23 +2912,23 @@ Package epstopdf Info: Source file: <img/Lynn5Bus.eps>
 (epstopdf)                    size: 10019 bytes
 (epstopdf)             Command: <repstopdf --outfile=img/Lynn5Bus-eps-converted
 -to.pdf img/Lynn5Bus.eps>
-(epstopdf)             \includegraphics on input line 3817.
+(epstopdf)             \includegraphics on input line 3906.
 Package epstopdf Info: Output file is already uptodate.
-<img/Lynn5Bus-eps-converted-to.pdf, id=1058, 867.24pt x 1269.74374pt>
+<img/Lynn5Bus-eps-converted-to.pdf, id=1106, 867.24pt x 1269.74374pt>
 File: img/Lynn5Bus-eps-converted-to.pdf Graphic file (type pdf)
 <use img/Lynn5Bus-eps-converted-to.pdf>
 Package pdftex.def Info: img/Lynn5Bus-eps-converted-to.pdf  used on input line 
-3817.
+3906.
 (pdftex.def)             Requested size: 213.10423pt x 312.01024pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 3844--3860
+Underfull \hbox (badness 10000) in paragraph at lines 3933--3949
 
  []
 
-[73
+[75
 
  <./img/Lynn5Bus-eps-converted-to.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 3909--3923
+Underfull \hbox (badness 10000) in paragraph at lines 3998--4012
 
  []
 
@@ -2846,12 +2936,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3909--3923
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3927--3943
+Underfull \hbox (badness 10000) in paragraph at lines 4016--4032
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3927--3943
+Underfull \hbox (badness 10000) in paragraph at lines 4016--4032
 
  []
 
@@ -2859,12 +2949,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3927--3943
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3947--3963
+Underfull \hbox (badness 10000) in paragraph at lines 4036--4052
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3947--3963
+Underfull \hbox (badness 10000) in paragraph at lines 4036--4052
 
  []
 
@@ -2872,12 +2962,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3947--3963
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3967--3990
+Underfull \hbox (badness 10000) in paragraph at lines 4056--4079
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3967--3990
+Underfull \hbox (badness 10000) in paragraph at lines 4056--4079
 
  []
 
@@ -2885,7 +2975,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3967--3990
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3994--4004
+Underfull \hbox (badness 10000) in paragraph at lines 4083--4093
 
  []
 
@@ -2905,13 +2995,13 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (54.85037pt too wide) detected at line 4118
+Overfull \hbox (54.85037pt too wide) detected at line 4207
 \OML/zplm/m/it/10 S[] \OT1/zplm/m/n/10 = [] \OML/zplm/m/it/10 p\OT1/pplx/m/n/10
  .\OML/zplm/m/it/10 u\OT1/pplx/m/n/10 .
  []
 
 
-Overfull \hbox (166.29073pt too wide) detected at line 4158
+Overfull \hbox (166.29073pt too wide) detected at line 4247
 \OML/zplm/m/it/10 Y[] \OT1/zplm/m/n/10 = [] \OML/zplm/m/it/10 p\OT1/pplx/m/n/10
  .\OML/zplm/m/it/10 u\OT1/pplx/m/n/10 .
  []
@@ -2919,124 +3009,129 @@ Overfull \hbox (166.29073pt too wide) detected at line 4158
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 4162.
+This message occurred on input line 4251.
 
-[74]
+[76]
 
 Class tufte-book Warning: Proper spacing of small-caps letters has not been set
  up.
-This message occurred on input line 4162.
+This message occurred on input line 4251.
 
-[75] [76
+[77] [78
 
 ] (./practical_grid_modeling.bblpdfTeX warning (ext4): destination with the sam
-e identifier (name{cite.arrillaga1990computer}) has been already used, duplicat
-e ignored
+e identifier (name{cite.CSC_matrix}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.8 ...ga and Arnold(1990)]{arrillaga1990computer}
+l.8 \bibitem[CSC()]{CSC_matrix}
+                               pdfTeX warning (ext4): destination with the same
+ identifier (name{cite.arrillaga1990computer}) has been already used, duplicate
+ ignored
+<to be read again> 
+                   \relax 
+l.12 ...a and Arnold(1990)]{arrillaga1990computer}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.dorfler2013kron}) has been already us
 ed, duplicate ignored
 <to be read again> 
                    \relax 
-l.13 ...[Dorfler and Bullo(2013)]{dorfler2013kron}
+l.17 ...[Dorfler and Bullo(2013)]{dorfler2013kron}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.fortescue1918method}) has been alread
 y used, duplicate ignored
 <to be read again> 
                    \relax 
-l.19 ...item[Fortescue(1918)]{fortescue1918method}
+l.23 ...item[Fortescue(1918)]{fortescue1918method}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.gomez2004power}) has been already use
 d, duplicate ignored
 <to be read again> 
                    \relax 
-l.26 ...z-Exposito and Abur(2004)]{gomez2004power}
+l.30 ...z-Exposito and Abur(2004)]{gomez2004power}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.kersting2012distribution}) has been a
 lready used, duplicate ignored
 <to be read again> 
                    \relax 
-l.31 ...[Kersting(2012)]{kersting2012distribution}
+l.35 ...[Kersting(2012)]{kersting2012distribution}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.liu2017online}) has been already used
 , duplicate ignored
 <to be read again> 
                    \relax 
-l.36 ...iu, Wang, Hu, Sun, and Bak]{liu2017online}
+l.40 ...iu, Wang, Hu, Sun, and Bak]{liu2017online}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.powell2004power}) has been already us
 ed, duplicate ignored
 <to be read again> 
                    \relax 
-l.42 \bibitem[Powell(2004)]{powell2004power}
+l.46 \bibitem[Powell(2004)]{powell2004power}
                                             pdfTeX warning (ext4): destination 
 with the same identifier (name{cite.rossoni2016linearized}) has been already us
 ed, duplicate ignored
 <to be read again> 
                    \relax 
-l.48   Belati]{rossoni2016linearized}
+l.52   Belati]{rossoni2016linearized}
                                      pdfTeX warning (ext4): destination with th
 e same identifier (name{cite.subramanian2014application}) has been already used
 , duplicate ignored
 <to be read again> 
                    \relax 
-l.55 ...amanian(2014)]{subramanian2014application}
+l.59 ...amanian(2014)]{subramanian2014application}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.taylor2015convex}) has been already u
 sed, duplicate ignored
 <to be read again> 
                    \relax 
-l.59 \bibitem[Taylor(2015)]{taylor2015convex}
+l.63 \bibitem[Taylor(2015)]{taylor2015convex}
                                              pdfTeX warning (ext4): destination
  with the same identifier (name{cite.TriasHELM}) has been already used, duplica
 te ignored
 <to be read again> 
                    \relax 
-l.64 \bibitem[Trias(2012)]{TriasHELM}
+l.68 \bibitem[Trias(2012)]{TriasHELM}
                                      
 LaTeX Font Info:    Font shape `T1/phv/m/sc' will be
-(Font)              scaled to size 8.99994pt on input line 69.
+(Font)              scaled to size 8.99994pt on input line 73.
 pdfTeX warning (ext4): destination with the same identifier (name{cite.zhao2008
 pv}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.71 ...2008)Zhao, Chiang, Ju, and Li]{zhao2008pv}
+l.75 ...2008)Zhao, Chiang, Ju, and Li]{zhao2008pv}
                                                   pdfTeX warning (ext4): destin
 ation with the same identifier (name{cite.zimmerman2010ac}) has been already us
 ed, duplicate ignored
 <to be read again> 
                    \relax 
-l.77 \bibitem[Zimmerman(2010)]{zimmerman2010ac}
+l.81 \bibitem[Zimmerman(2010)]{zimmerman2010ac}
                                                )
 No file practical_grid_modeling.ind.
-[77
+[79
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4170.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 4170.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4259.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 4259.
  (./practical_grid_modeling.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4170.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4170.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4259.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4259.
 
 Package rerunfilecheck Info: File `practical_grid_modeling.out' has not changed
 .
-(rerunfilecheck)             Checksum: E8849ABEC0861E135EC50B02916915EA;5766.
+(rerunfilecheck)             Checksum: F843C7CC50421F882C9DEBFFFAC206E8;6570.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4170.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 4259.
  ) 
 Here is how much of TeX's memory you used:
- 34060 strings out of 492982
- 618285 string characters out of 6134897
- 902341 words of memory out of 5000000
- 36569 multiletter control sequences out of 15000+600000
- 626909 words of font info for 161 fonts, out of 8000000 for 9000
+ 34158 strings out of 492982
+ 619448 string characters out of 6134897
+ 900774 words of memory out of 5000000
+ 36647 multiletter control sequences out of 15000+600000
+ 631413 words of font info for 166 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,20n,60p,10449b,701s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,20n,60p,10449b,629s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -3049,10 +3144,10 @@ are/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 urw/palatino/uplri8a.pfb>
-Output written on practical_grid_modeling.pdf (77 pages, 554896 bytes).
+Output written on practical_grid_modeling.pdf (79 pages, 611663 bytes).
 PDF statistics:
- 1223 PDF objects out of 1440 (max. 8388607)
- 1088 compressed objects within 11 object streams
- 438 named destinations out of 1000 (max. 500000)
- 392 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1276 PDF objects out of 1440 (max. 8388607)
+ 1137 compressed objects within 12 object streams
+ 454 named destinations out of 1000 (max. 500000)
+ 421 words of extra memory for PDF output out of 10000 (max. 10000000)
 

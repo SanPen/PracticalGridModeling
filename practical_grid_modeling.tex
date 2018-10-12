@@ -1,8 +1,8 @@
 
 %\documentclass{tufte-book}
 %\documentclass[a4paper,twoside,fleqn]{tufte-book}
-\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
-%\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
+%\documentclass[nols,a4paper,twoside,symmetric,notoc,fleqn]{tufte-book}
+\documentclass[nols,a4paper,twoside,notoc,fleqn]{tufte-book}
 
 % set main font
 \usepackage{helvet}
@@ -1162,6 +1162,169 @@ V_s
 $$
 
 
+\subsection{Definition of an overhead line}
+
+The objective of this process is to compose the series impedance matrix and the shunt admittance matrix. This section is mostly taken from the EMTP theory book \cite{dommel1986electromagnetic}.
+
+The first thing is to define the properties of a wire (the metallic conductors of an overhead line).  
+
+\textbf{Wire properties:}
+\begin{itemize}
+	\item $r$: Internal resistance in $\Omega/km$. It is a value from the catalogue.
+	\item $x$: Internal reactance in $\Omega/km$. This one is usually not provided by catalogue data, so leave it to zero.
+	\item $GMR$: Geometric Mean Radius in $m$. It is a value from the catalogue.
+	\item $xpos$:  horizontal position in $m$.
+	\item $ypos$:  vertical position in $m$.
+	\item $phase$: The phase that the wire belongs to. For simplicity, let's have this property as a number from 0 to 3 matching the following convention:
+	\begin{itemize}
+		\item 0: Neutral
+		\item 1: A
+		\item 2: B
+		\item 3: C
+	\end{itemize}
+\end{itemize}
+
+For the purpose of computing the impedances, a tower is nothing but a collection of wires arranged in a certain disposition. It is fairly common to have more than one conductor per phase in duplex, triplex or cuadruplex arrangement. If carried, the neutral is usually only one wire, but the presented method does not have any limitation on the number of phases or wires per phase.
+
+The first step, is the generation of two primitive matrices of complex type; $Z_{prim}$ and $P_{prim}$ which size is given by the number of wires, if there are $10$ wires the sizes are $10 x 10$. Then those matrices will be reduced by the bundling algorithm that is presented in order to have one dimension per phase instead of one dimension per wire. This leads to the final impedance matrix $Z_{abc}$ and the final Maxwell's potential coefficients matrix $P_{abc}$. 
+ 
+ \vspace{0.5cm}
+  
+\textbf{Primitives composition algorithm:}
+
+\begin{enumerate}
+	
+	
+	\item Initialize variables: \\
+	
+	$n$ = number of wires. \\
+	\vspace{0.1 cm}
+	
+	$\left[Z_{prim} \right]= zeros(n, n)$ \\
+	\vspace{0.1 cm}
+	
+	$\left[P_{prim}\right] = zeros(n, n)$ \\
+	\vspace{0.1 cm}
+	
+	$\left[phases\right] = zeros(n)$ \\
+	\vspace{0.1 cm}
+	
+	$\omega = 2 \cdot \pi \cdot frequency$ in $rad$.
+	\vspace{0.1 cm}
+	
+	$\frac{1}{2 \pi \epsilon_0} = 17.975109x10^{-6}$ in $km/F$. \\
+	\vspace{0.1 cm}
+	
+	$\mu_0 = 4 \cdot \pi \cdot 1x10^{-4}$ in $H/km$. \\
+	\vspace{0.1 cm}
+	
+	$\frac{\mu_0}{2 \cdot \pi} = 2x10^{-4}$  in $H/km$. \\
+	\vspace{0.1 cm}
+	
+	$p = \sqrt{\frac{earth\_resistivity}{j \cdot \omega \cdot \mu_0}}$ \\
+	\vspace{0.1 cm}
+	
+	\item For $i=0$ to $n-1$:
+		
+	\begin{enumerate}
+		
+		\item $\left[Z_{prim}\right]_{(i, i)}= r_i + j \cdot \left(\omega \cdot \frac{ \mu_0}{2 \pi} \cdot Ln \left(\frac{2 \cdot (h_i + p)}{gmr_i} \right) + x_i \right)$
+		
+		\item $\left[P_{prim}\right]_{(i,i)} = \frac{1}{2 \pi \epsilon_0} \cdot Ln \left( \frac{2 \cdot ypos_i}{ gmr_i} \right)$
+		
+		\item For $k=0$ to $n-1$: 
+		
+		\begin{enumerate}
+			\item $d_{ik} = \sqrt{(xpos_i - xpos_k)^2 + (ypos_i - ypos_k)^2}$
+			
+			\item $D_{ik} = \sqrt{(xpos_i - xpos_k)^2 + (ypos_i + ypos_k)^2}$
+			
+			% 1j * w * mu_0_2pi * log(sqrt(pow(h_i + h_j + 2 * p, 2) + pow(x_i - x_j, 2)) / d_ij)
+			
+			\item $\left[Z_{prim}\right]_{(i, k)}= j \cdot \omega \cdot \frac{ \mu_0}{2 \pi} \cdot Ln \left(\frac{ \sqrt{(ypos_i + ypos_k + 2 \cdot p)^2 + (xpos_i - xpos_k)^2} }{d_{ik}} \right)$
+			
+			\item $\left[P_{prim}\right]_{(i,k)} = \frac{1}{2 \pi \epsilon_0} \cdot Ln \left( \frac{D_{ik}}{ d_{ik}} \right)$
+			
+		\end{enumerate}
+	
+		\item Assign the wire phase to the phases vector:\\ $\left[phases\right]_{(i)} = phase_i$
+		
+	\end{enumerate}
+\end{enumerate}
+
+\begin{marginfigure}
+	\includegraphics[width=0.95\linewidth]{img/conductor_images.eps}
+	\caption{Wire images and distances diagram.}
+	\label{wires_images}
+\end{marginfigure}
+
+At this point the primitive matrices $Z_{prim}$ and $P_{prim}$ have been computed. Now we need to bundle the conductors (if more than one per phase) using the phase bundling algorithm.
+ 
+\vspace{0.3cm}
+\textbf{Phase bundling algorithm:}
+
+The phase bundling is used to embed the influence of the extra wires, leaving only one equivalent wire per phase. The algorithm is demonstrated with the matrix $Z_{prim}$ but it is identical for $P_{prim}$.
+
+\begin{enumerate}
+	\item Copy the primitive matrix: \\
+	$\left[Z_{abcn}\right] = copy(\left[Z_{prim}\right])$
+	
+	\item For $phase=0$ to $3$:
+		
+	\begin{enumerate}
+		
+		\item Get the indices where the phases vector is equal to the current phase:\\ 
+		$\left[wires\_indices\right] = where(\left[phases\right] == phase)$
+		
+		\item if $size(\left[wires\_indices\right]) > 1$:
+		
+		\begin{enumerate}
+
+			\item Get the first wire index: \\
+			$i = \left[wires\_indices\right]_{(0)}$
+			
+			\item  Get the indices of the wires to keep (find the indices where the phases vector is different from the current phase): \\
+			$\left[a\right] = join(i, where(\left[phases\right] != phase))$
+			
+			\item Get the indices of the wires to reduce (all except the first): \\
+			$\left[g\right] = \left[wires\_indices\right]_{(1:)}$
+			
+			\item Subtract the column $i$ from the other columns of the indices in $g$:\\
+			$\left[Z_{abcn}\right]_{(:, k)} -= \left[Z_{abcn}\right]_{ (:, i)} \quad \forall k \in g$
+			
+			\item Subtract the row $i$ from the other rows of the indices in $g$:\\
+			$\left[Z_{abcn}\right]_{(k, :)} -= \left[Z_{abcn}\right]_{ (i, :)} \quad \forall k \in g$
+			
+			\item Perform the Kron - reduction to $Z_{abcn}$ to embed the extra wires:\\
+			$\left[Z_{aa}\right] = \left[Z_{abcn}\right]_{(a, a)}$ \\
+			$\left[Z_{ag}\right] = \left[Z_{abcn}\right]_{(a, g)}$ \\
+			$\left[Z_{ga}\right] = \left[Z_{abcn}\right]_{(g, a)}$ \\
+			$\left[Z_{gg}\right] = \left[Z_{abcn}\right]_{(g, g)}$ \\
+			
+			$\left[Z_{abcn}\right] = \left[Z_{aa}\right] - \left[Z_{ag}\right] \times \left[Z_{gg}\right]^{-1} \times \left[Z_{ga}\right]$
+			
+			\item Reduce the phases vector to match the  new size of $Z_{abcn}$:\\
+			$\left[phases\right] = \left[phases\right]_{(a)}$
+			
+		\end{enumerate}
+		
+	\end{enumerate}
+	
+\end{enumerate}
+
+After the phase bundling process the matrix $Z_{abcn}$  will contain the series impedance in $\Omega/km$ for the wire system phases. The matrix $P_{abcn}$ will contain the potential coefficients in $km/F$ for the wire system phases.  Finally to compose the admittance matrix we use the following formula: \\
+
+\marginnote{Note: The capacity is the inverse of the potential matrix $\left[ C_{abcn} \right] = \left[ P_{abcn} \right]^{-1}$ in $F/km$.}
+
+ \vspace{0.3cm}
+$
+\left[Y_{abcn} \right] = j \cdot \omega \cdot \left[ P_{abcn} \right]^{-1}
+$ in $S/km$.\\
+ 
+ \vspace{0.3cm}
+ 
+It is common to perform a Kron reduction to embed the influence of the neutral phase in the same way that it was done for embedding the wire influences in the phase bundling algorithm.
+
 
 \subsection{Transformer}
 
@@ -1943,7 +2106,7 @@ For the computations ahead we will need to have a number of admittance-based mat
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.8\linewidth]{img/ElementBusAgregation.eps}
+	\includegraphics[width=0.99\linewidth]{img/ElementBusAgregation.eps}
 	\caption{Element bus aggregations.}
 	\label{fig:ElementBusAgregation}
 \end{figure}
@@ -2015,6 +2178,7 @@ Y_t = diag([BR_{ytf}]) \times [C_f] + diag([BR_{ytt}]) \times [C_t]
 
 \begin{equation}
 Ybus = [C_f]^\top \times [Y_f] + [C_t]^\top \times Y_t + diag([Ysh])
+\label{eq:y_bus}
 \end{equation}
 
 %-------------------------------------------------------------------------------
@@ -2212,7 +2376,7 @@ Then we convert the buses voltage solution $[V]$ into a square diagonal matrix. 
 [V_{diag}] = diag([V])
 \end{equation}
 
-Compute the buses voltage normalized solution $[V]$ into a square diagonal matrix. This is acomplished by dividing each complex voltage by its absolute value. Use a sparse format for this.
+Compute the buses voltage normalized solution $[V]$ into a square diagonal matrix. This is accomplished by dividing each complex voltage by its absolute value. Use a sparse format for this.
 \begin{equation}
 [E_{diag}] = diag\left(\frac{[V]}{[Vm]}\right)
 \end{equation}
@@ -2241,10 +2405,10 @@ Finally, assemble the Jacobian matrix $J$. The Jacobian matrix is sparse and onl
 J=
 \left[
 \begin{array}{cc}
-Re\left(\left[\frac{\partial S}{\partial \theta}\right]\right)_{(pqpv, pqpv)} &
-Re\left(\left[\frac{\partial S}{\partial Vm}\right]\right)_{(pqpv, pq)} \\
-Im\left(\left[\frac{\partial S}{\partial \theta}\right]\right)_{(pq, pqpv)} &
-Im\left(\left[\frac{\partial S}{\partial Vm}\right]\right)_{(pq,pq)}
+Re\left\{\left[\frac{\partial S}{\partial \theta}\right]\right\}_{(pqpv, pqpv)} &
+Re\left\{\left[\frac{\partial S}{\partial Vm}\right]\right\}_{(pqpv, pq)} \\
+Im\left\{\left[\frac{\partial S}{\partial \theta}\right]\right\}_{(pq, pqpv)} &
+Im\left\{\left[\frac{\partial S}{\partial Vm}\right]\right\}_{(pq,pq)}
 \end{array}
 \right]
 \end{equation}
@@ -2253,7 +2417,7 @@ Observe that the Jacobian matrix is composed of four subsets of the previously c
 
 
 \newpage
-\subsection{Newton-Raphson}
+\subsection{Newton-Raphson in power equations} \label{NR-Method}
 
 Newton-Raphson is a recursive, iterative numerical method that minimizes the value of a function. In our case the value to minimize is the power mismatch:
 
@@ -2263,7 +2427,7 @@ Newton-Raphson is a recursive, iterative numerical method that minimizes the val
 
 Where:
 \begin{equation}
-[S_{calc}] = [V] \cdot ([Y] \times [V] - [I_{bus}])^*
+[S_{calc}] = [V] \cdot ([Y] \times [V] - [I_{specified}])^*
 \label{eq:nr_Scalc}
 \end{equation}
 
@@ -2280,22 +2444,22 @@ Since the mismatch ($[\Delta S]$) is a vector of complex values, we transform it
 \begin{equation}
 F =  \left[
 \begin{array}{c}
-\Delta P \\
-\Delta Q  
+Re \{ [\Delta S]_{(pvpq)}  \} \\
+Im \{ [\Delta S]_{(pq)} \} 
 \end{array}
 \right]
 \label{eq:nr_mismatch}
 \end{equation}
 
-\begin{equation}
-\Delta Q = Im \{ [\Delta S]_{(pq)} \}
-\label{eq:nr_q_inc}
-\end{equation}
-
-\begin{equation}
-\Delta P = Re \{ [\Delta S]_{(pvpq)}  \} 
-\label{eq:nr_p_inc}
-\end{equation}
+%\begin{equation}
+%\Delta Q = Im \{ [\Delta S]_{(pq)} \}
+%\label{eq:nr_q_inc}
+%\end{equation}
+%
+%\begin{equation}
+%\Delta P = Re \{ [\Delta S]_{(pvpq)}  \} 
+%\label{eq:nr_p_inc}
+%\end{equation}
 
 Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the specified tolerance, we stop the iterations otherwise, continue until a certain number of iterations considered as the maximum (for example 20).
 
@@ -2304,12 +2468,23 @@ error = ||F||_{\infty} = max(abs(F))
 \label{eq:nr_error}
 \end{equation}
 
+ 
+\marginnote{The error expression from the equation \ref{eq:nr_error} is commonly adopted for power flow problems since it is computationally less expensive than the equation \ref{eq:nr_error_2}.}
+
+An alternative version of the error is the equation \ref{eq:nr_error_2}, which is common in optimization problems.
+
+\begin{equation}
+error = \frac{1}{2} \cdot (F \times F^\top)
+\label{eq:nr_error_2}
+\end{equation}
+
+
 If the error is higher than the tolerance, we need to solve the voltages increment ($\Delta x$), for which we must compute the Jacobian first. Some simplifications of the method only compute the Jacobian one time, but for better accuracy, the Jacobian needs to be calculated on every iteration.
 
 \marginnote{Do not invert $[J]$, instead use a linear system solver, to solve the linear system $J \times \Delta x  = F$.}
 
 \begin{equation}
-[\Delta x] = [J^{-1}] \times [F]
+[\Delta x] = [J]^{-1} \times [F]
 \label{eq:nr_solve}
 \end{equation}
 
@@ -2330,15 +2505,17 @@ To accomplish this, we declare two polar voltage increment vectors $[\Delta Vm]$
 
 Then we need to add those values to the voltage module and angle vectors $[Vm]$ and $[\theta]$:
 
+\marginnote{$\mu$ is the iteration control parameter. Initially at each iteration $\mu=1$.}
+
 \begin{equation}
-[Vm]^{(k+1} = [Vm]^{(k} + [\Delta Vm]^{(k}
+[Vm]^{(k+1} = [Vm]^{(k} + \mu \cdot [\Delta Vm]^{(k}
+\end{equation}
+
+\begin{equation}
+[\theta]^{(k+1} = [\theta]^{(k} +  \mu \cdot [\Delta \theta]^{(k}
 \end{equation}
 
 \marginnote{Here we introduce the notion of the $k_{th}$ iteration which represents the current iteration and the $k_{th}+1$ represents the next iteration.}
-
-\begin{equation}
-[\theta]^{(k+1} = [\theta]^{(k} + [\Delta \theta]^{(k}
-\end{equation}
 
 At last, we convert the polar vectors  $[Vm]$ and $[\theta]$ into a single complex voltage vector $[V]$.
 
@@ -2366,17 +2543,88 @@ The algorithm is then:
 	
 	\item Solve the linear system. Equation \ref{eq:nr_solve}.
 	
+	\item Set $\mu$: $\mu = 1$.
+	
 	\item Assign $[\Delta x]$ to $[V]$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
 	
 	\item Compute the power mismatch vector $[F]$ using the latest voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
 	
 	\item Compute the error. Equation \ref{eq:nr_error}.
 	
+	\item If the error > error from the previous iteration:
+	\begin{enumerate}
+		\item Decrease $\mu$: $\mu = 0.25 \cdot \mu $
+		
+		\item Assign $[\Delta x]$ to $[V]$. Equations \ref{eq:nr_dd1} to \ref{eq:nr_voltage_conversion}.
+		
+		\item Compute the power mismatch vector $[F]$ using the latest voltage solution $[V]$. Equation \ref{eq:nr_mismatch}.
+		
+		\item Compute the error. Equation \ref{eq:nr_error}.
+	\end{enumerate}
+	
 	\item $iterations = iterations + 1$
 	\end{enumerate}
 
 \item End.
 \end{enumerate}
+
+The Newton-Raphson method tends to diverge if the grid is not perfectly balanced in loading and well conditioned (The impedances are not wildly different in per unit and X>R). The control parameter $\mu$ turns the Newton-Raphson method into a more controlled method that converges in most situations.
+
+Here we have presented a rather simple way of determining the value of $\mu$ by decreasing it by four at every corrective step. Iwamoto and Tamura proposed in 1981 a method \cite{iwamoto1981load} to compute an optimal value of $\mu$. This method involves the computation of the Jacobian matrix using $\Delta V$ instead of $V$. 
+
+
+\subsection{Newton-Raphson in current equations} \label{NRI-Method}
+
+
+Newton-Raphson in current equations is similar to the regular Newton-Raphson algorithm presented before, but the mismatch is computed with the current instead of power.
+
+The Jacobian is then:
+
+\begin{equation}
+J=
+\left[
+\begin{array}{cc}
+Re\left\{\left[\frac{\partial I}{\partial \theta}\right]\right\}_{(pqpv, pqpv)} &
+Re\left\{\left[\frac{\partial I}{\partial Vm}\right]\right\}_{(pqpv, pq)} \\
+Im\left\{\left[\frac{\partial I}{\partial \theta}\right]\right\}_{(pq, pqpv)} &
+Im\left\{\left[\frac{\partial I}{\partial Vm}\right]\right\}_{(pq,pq)}
+\end{array}
+\right]
+\end{equation}
+
+Where:
+
+\begin{equation}
+\left[\frac{\partial I}{\partial Vm}\right] = [Y] \times [E_{diag}]
+\end{equation}
+
+\begin{equation}
+\left[\frac{\partial I}{\partial \theta}\right] = 1j \cdot [Y] \times [V_{diag}]
+\end{equation}
+
+
+The mismatch is computed as increments of current:
+
+\begin{equation}
+F =  \left[
+\begin{array}{c}
+ Re\{\Delta I\} \\
+ Im\{\Delta I\}  
+\end{array}
+\right]
+\label{eq:nri_mismatch}
+\end{equation}
+
+Where:
+
+\begin{equation}
+[\Delta I] = \left( \frac{S_{specified}}{V} \right)^*  - ([Y] \times [V] - [I^{specified}])
+\label{eq:nri_i_inc}
+\end{equation}
+
+The steps of the algorithm are equal to the the algorithm presented in \ref{NR-Method}
+
+
 
 
 
@@ -3086,7 +3334,7 @@ Ironically, what is called the power flow problem does not compute the power flo
 	The variables are:
 	
 	\begin{itemize}
-		\item $[Y_{bus}]$: Bus admittance matrix in p.u. See \ref{Y_calculation}.
+		\item $[Y_{bus}]$: Bus admittance matrix in p.u. See equation \ref{eq:y_bus}.
 		\item $[C_f]$: Connectivity matrix of the branches and the \textit{from} buses.
 		\item $[C_t]$:Connectivity matrix of the branches and the \textit{to} buses.
 		\item $[V]$: Array of bus voltages in p.u.
@@ -3247,7 +3495,13 @@ The optimal power flow problem consists in finding the generators power injectio
 Minimize the generators dispatch cost, including the cost of the slack generators:
 
 \begin{equation}
-min: \sum_i^{Generators+Slack} cost_i \cdot PG_i 
+\begin{aligned}
+\begin{split}
+minimize: \\
+&\sum_i^{Generators} cost_i \cdot PG_i + \sum_i^{Generators} SG_i + \sum_i^{Loads} SD_i \\
+&+ \sum_k^{Branches} Oftp_k + Oftn_k + Otfp_k + Otfn_k
+\end{split} 
+\end{aligned}
 \end{equation}
 
 ST: 
@@ -3256,11 +3510,33 @@ Generator limits must be within boundaries (include the slack generator as well)
 PG_i^{min} \leq PG_i \leq PG_i^{max}
 \end{equation}
 
+The generation shedding variables:
+\begin{equation}
+0 \leq SG_i \leq \infty
+\end{equation}
+
+The load shedding variables:
+\begin{equation}
+0 \leq SD_i \leq \infty
+\end{equation}
+
+The branch overload slack variables:
+\begin{equation}
+\begin{aligned}
+\begin{split}
+&0 \leq Oftp_k  \leq \infty \\
+&0 \leq Oftn_k  \leq \infty \\
+&0 \leq Otfp_k  \leq \infty \\
+&0 \leq Otfn_k  \leq \infty 
+\end{split} 
+\end{aligned}
+\end{equation}
+
 \marginnote{When traversing the matrix B, try to avoid two for loops, dealing with B as if it was dense because it is not. Ideally B should be in CSC format. Then traversing B in sparse mode is several orders of magnitude faster.}
 
-The voltages must satisfy the power balance in every PQ and PV node.
+The voltages must satisfy the power balance in every PQ and PV node. Note that the shedding variables ($GS$ and $LS$) have the opposite sign that the actual variables ($PG$ and $PD$)
 \begin{equation}
-PG_i - PD_i=\sum_j^{PQPV} B_{ij} \cdot \theta_j  \quad  \forall i \in PQPV
+PG_i - SG_i - PD_i + SD_i =\sum_j^{PQPV} B_{ij} \cdot \theta_j  \quad  \forall i \in PQPV
 \end{equation}
 
 
@@ -3278,28 +3554,34 @@ The branch flows must be within limits.
 \end{equation}
 
 
-This is reformulated as:
+This is reformulated as a restriction for the to-from sense, and another restriction for the from-to sense.
 
 \begin{equation}
- B_{ij}⋅(\theta_i - \theta_j) \leq F_{ij}^{max}
+ B_{ij}⋅(\theta_i - \theta_j) \leq F_{ij}^{max} + Oft\_p_{if} - Oft\_n_{if}
 \end{equation}
 
 \begin{equation}
- B_{ij}⋅(\theta_j - \theta_i) \leq F_{ij}^{max}
+ B_{ij}⋅(\theta_j - \theta_i) \leq F_{ij}^{max} + Otf\_p_{if} - Otf\_n_{if}
 \end{equation}
 
 Set the slack generator power:
 
 \begin{equation}
-PG_i - PD_i=\sum_j^{nodes} B_{ij} \cdot \theta_j  \quad  \forall i \in Slack
+PG_i - SG_i - PD_i + SD_i =\sum_j^{nodes} B_{ij} \cdot \theta_j  \quad  \forall i \in Slack
 \end{equation}
 
 \begin{itemize}
-	\item $P_i$: Active power injection at the node i.
+	\item $PD_i$: Active power demand at the node $i$.
+	\item $PG_i$: Active power generation at the node $i$.
+	\item $SD_i$: Demand shedding demand at the node $i$.
+	\item $SG_i$: Generation shedding at the node $i$.
+	\item $Oftp_k$: Positive overload slack variable in the from-to sense of the current.
+	\item $Oftn_k$: Negative overload slack variable in the from-to sense of the current.
+	\item $Otfp_k$: Positive overload slack variable in the to-from sense of the current.
+	\item $Otfn_k$: Negative overload slack variable in the to-from sense of the current.
 	\item $B$: Susceptance matrix. It is the imaginary part of the circuit admittance matrix.
 	\item $\theta$: Voltage angles in radians.
-	\item $PQPV$: Set of the non-slack nodes.
-	
+	\item $PQPV$: Set of the non-slack nodes.	
 	\item $Slack$: Set of the slack nodes.
 \end{itemize}
 
@@ -3314,39 +3596,52 @@ This section introduces the use of a linear power flow derived from the power fl
 The linear program is:
 
 \begin{equation}
-min: \sum_i^{Generators} cost_i \cdot PG_i   \quad \forall i \in generators
+min: \sum_i^{Generators} cost_i \cdot PG_i  
 \end{equation}
 
-ST:
+Subjected To:
 
-\begin{equation}
-PG_i^{min} \leq PG_i \leq PG_i^{max}  \quad \forall i \in generators
-\end{equation}
+\begin{itemize}
+	\item The generators generation power $PG_i$ must be within limits.
+	\begin{equation}
+	PG_i^{min} \leq PG_i \leq PG_i^{max}  \quad \forall i \in generators
+	\end{equation}
+	
+	\item The nodes voltage angle $\theta_i$ must be within limits. Wise limits are  $\theta_i^{min}=0$ and $\theta_i^{max}=0.5 \quad Rad$.
+	\begin{equation}
+	\theta_i^{min} \leq \theta_i \leq \theta_i^{max}  \quad \forall i \in pvpq
+	\end{equation}
+	
+	\item The nodes voltage module $V_i$ must be within limits. Wise limits are  $V_i^{min}=0.9 \quad p.u.$ and $V_i^{max}=1.1 \quad p.u$.
+	\begin{equation}
+	Vm_i^{min} \leq Vm_i \leq Vm_i^{max}  \quad \forall i \in pq
+	\end{equation}
+\end{itemize}
 
-\begin{equation}
-\theta_i^{min} \leq \theta_i \leq \theta_i^{max}  \quad \forall i \in pvpq
-\end{equation}
-
-\begin{equation}
-Vm_i^{min} \leq Vm_i \leq Vm_i^{max}  \quad \forall i \in pq
-\end{equation}
 
 The equation \ref{eq:AC_linear_power_flow} can be transformed to the following equations:
 
-\begin{equation}
--\sum_{k}^{pvpq}Bs_{k,i} \cdot \Delta\theta_i + \sum_{k}^{pq}G_{k,i} \cdot \Delta Vm_i = \sum_{g}^{generators_i} PG_{g} - \sum_{l}^{loads_i} PD_l \quad \forall i \in pvpq
-\end{equation}
+\marginnote{Remember that linear program libraries cannot deal with complex numbers, therefore we have to split the equations into real and imaginary parts. Also remember that there exist $Y=G + j \cdot B$ (complete admittance matrix) and $Y_S = G_S + j \cdot B_S$ (Admittance matrix of the series components). }
 
-\begin{equation}
--\sum_{k}^{pqpv}Gs_{k,i} \cdot \Delta\theta_i - \sum_{k}^{pq}B_{k,i} \cdot \Delta Vm_i = - \sum_{l}^{loads_i} QD_l \quad \forall i \in pq
-\end{equation}
+\begin{itemize}
+	\item Power balance in the modes: The power from the voltage solution must match exactly the specified power (in active and reactive components).
+	\begin{equation}
+	-\sum_{k}^{pvpq}Bs_{k,i} \cdot \Delta\theta_i + \sum_{k}^{pq}G_{k,i} \cdot \Delta Vm_i = \sum_{g}^{generators_i} PG_{g} - \sum_{l}^{loads_i} PD_l \quad \forall i \in pvpq
+	\end{equation}
 
+	\begin{equation}
+	-\sum_{k}^{pqpv}Gs_{k,i} \cdot \Delta\theta_i - \sum_{k}^{pq}B_{k,i} \cdot \Delta Vm_i = - \sum_{l}^{loads_i} QD_l \quad \forall i \in pq
+	\end{equation}
+
+\end{itemize}
+
+After solving the voltage deltas ($\Delta \theta$ and $\Delta V$) with the linear program,  we can get the actual voltage angles and module with the following equations.	
 \begin{equation}
 \theta_i = \Delta \theta_i
 \end{equation}
-
+	
 \begin{equation}
-Vm_i = Vm_i^{SP} + \Delta Vm_i
+Vm_i = Vm_i^{specified} + \Delta Vm_i
 \end{equation}
 
 %-------------------------------------------------------------------------------
