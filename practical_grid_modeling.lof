@@ -15,24 +15,24 @@
 \contentsline {figure}{\numberline {5.5}{\ignorespaces General branch model.}}{24}{subsection.5.2.1}
 \contentsline {figure}{\numberline {5.6}{\ignorespaces General positive sequence branch model.}}{25}{subsection.5.2.2}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}}{31}{section.6.1}
-\contentsline {figure}{\numberline {6.2}{\ignorespaces Graph with two islands.}}{34}{section.6.2}
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Element bus aggregations.}}{36}{section.6.4}
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Substation example with all the connectivity representation in the CIM / EMS sense. On the right side there is the reduction of the topology to a calculation model.}}{33}{section.6.1}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Graph with two islands.}}{36}{section.6.2}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Element bus aggregations.}}{38}{section.6.4}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {7.1}{\ignorespaces Circuit's admittance matrix and vectors reduction. Representation for a six node circuit with two slack nodes.}}{40}{section.7.2}
-\contentsline {figure}{\numberline {7.2}{\ignorespaces Jacobian based linear system to compute the voltage increments.}}{42}{section.7.3}
-\contentsline {figure}{\numberline {7.3}{\ignorespaces Matrix reduction (VD: Slack, PV: Voltage controlled, PQ: Power controlled)}}{48}{section.7.4}
-\contentsline {figure}{\numberline {7.4}{\ignorespaces Structure of the coefficients}}{52}{equation.7.6.59}
-\contentsline {figure}{\numberline {7.5}{\ignorespaces $PQ-PV$ switching algorithm.}}{58}{section.7.8}
-\addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {9.1}{\ignorespaces Example of voltage results for a time series simulation.}}{63}{chapter.9}
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {10.1}{\ignorespaces Example of cumulative distribution function of a load.}}{66}{paragraph*.23}
-\contentsline {figure}{\numberline {10.2}{\ignorespaces Example of cumulative distribution function of the voltage. This is the Result of a probabilistic power flow.}}{66}{paragraph*.23}
-\contentsline {figure}{\numberline {10.3}{\ignorespaces Example of voltage convergence. This is the Result of a probabilistic power flow.}}{66}{section.10.2}
+\contentsline {figure}{\numberline {7.1}{\ignorespaces Circuit's admittance matrix and vectors reduction. Representation for a six node circuit with two slack nodes.}}{42}{section.7.2}
+\contentsline {figure}{\numberline {7.2}{\ignorespaces Jacobian based linear system to compute the voltage increments.}}{44}{section.7.3}
+\contentsline {figure}{\numberline {7.3}{\ignorespaces Matrix reduction (VD: Slack, PV: Voltage controlled, PQ: Power controlled)}}{51}{section.7.4}
+\contentsline {figure}{\numberline {7.4}{\ignorespaces Structure of the coefficients}}{55}{equation.7.6.63}
+\contentsline {figure}{\numberline {7.5}{\ignorespaces $PQ-PV$ switching algorithm.}}{61}{section.7.8}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces 5 bus grid with terminals and switches.}}{75}{appendix.A}
+\contentsline {figure}{\numberline {9.1}{\ignorespaces Example of voltage results for a time series simulation.}}{67}{chapter.9}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {10.1}{\ignorespaces Example of cumulative distribution function of a load.}}{70}{paragraph*.23}
+\contentsline {figure}{\numberline {10.2}{\ignorespaces Example of cumulative distribution function of the voltage. This is the Result of a probabilistic power flow.}}{70}{paragraph*.23}
+\contentsline {figure}{\numberline {10.3}{\ignorespaces Example of voltage convergence. This is the Result of a probabilistic power flow.}}{70}{section.10.2}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {A.1}{\ignorespaces 5 bus grid with terminals and switches.}}{79}{appendix.A}
 \addvspace {10\p@ }
 \contentsfinish 

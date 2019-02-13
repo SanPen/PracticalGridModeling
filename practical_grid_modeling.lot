@@ -8,37 +8,37 @@
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {5.1}{\ignorespaces Main properties of the static device object. More properties my be added if needed.}}{22}{subsection.5.1.1}
 \contentsline {table}{\numberline {5.2}{\ignorespaces Equations of the generalized $\Pi $ model.}}{24}{equation.5.2.3}
-\contentsline {table}{\numberline {5.3}{\ignorespaces Three-phase transformer impedances of the branch model.}}{27}{subsection.5.2.4}
+\contentsline {table}{\numberline {5.3}{\ignorespaces Three-phase transformer impedances of the branch model.}}{29}{subsection.5.2.5}
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {6.1}{\ignorespaces Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[C_{bus,terminal}]$}}{32}{section.6.1}
-\contentsline {table}{\numberline {6.2}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "from" side: $[C_{branch,terminal\_f}]$}}{32}{section.6.1}
-\contentsline {table}{\numberline {6.3}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "to" side: $[C_{branch,terminal\_t}]$}}{32}{section.6.1}
-\contentsline {table}{\numberline {6.4}{\ignorespaces Connectivity matrix of the switch objects with the terminals: $[C_{switch,terminal}]$}}{32}{section.6.1}
-\contentsline {table}{\numberline {6.5}{\ignorespaces Switch states (0: open, 1: closed): $[switch\_states]$}}{33}{section.6.1}
-\contentsline {table}{\numberline {6.6}{\ignorespaces Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[C_f]$}}{33}{equation.6.1.6}
-\contentsline {table}{\numberline {6.7}{\ignorespaces Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[C_t]$}}{34}{equation.6.1.6}
-\contentsline {table}{\numberline {6.8}{\ignorespaces Grid adjacency matrix $[C_{bus, bus}]$, also known as $A$. Serves as a graph to detect the islands formed.}}{34}{equation.6.1.7}
-\contentsline {table}{\numberline {6.9}{\ignorespaces Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}}{35}{equation.6.3.8}
-\contentsline {table}{\numberline {6.10}{\ignorespaces Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}}{36}{equation.6.3.9}
+\contentsline {table}{\numberline {6.1}{\ignorespaces Connectivity matrix of the connectivity nodes (Buses) with the terminals: $[C_{bus,terminal}]$}}{34}{section.6.1}
+\contentsline {table}{\numberline {6.2}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "from" side: $[C_{branch,terminal\_f}]$}}{34}{section.6.1}
+\contentsline {table}{\numberline {6.3}{\ignorespaces Connectivity matrix of the branch objects with the terminals at the "to" side: $[C_{branch,terminal\_t}]$}}{34}{section.6.1}
+\contentsline {table}{\numberline {6.4}{\ignorespaces Connectivity matrix of the switch objects with the terminals: $[C_{switch,terminal}]$}}{34}{section.6.1}
+\contentsline {table}{\numberline {6.5}{\ignorespaces Switch states (0: open, 1: closed): $[switch\_states]$}}{35}{section.6.1}
+\contentsline {table}{\numberline {6.6}{\ignorespaces Calculated connectivity matrix of branches at the "from" side with the Connectivity nodes (Buses): $[C_f]$}}{35}{equation.6.1.6}
+\contentsline {table}{\numberline {6.7}{\ignorespaces Calculated connectivity matrix of branches at the "to" side with the Connectivity nodes (Buses): $[C_t]$}}{36}{equation.6.1.6}
+\contentsline {table}{\numberline {6.8}{\ignorespaces Grid adjacency matrix $[C_{bus, bus}]$, also known as $A$. Serves as a graph to detect the islands formed.}}{36}{equation.6.1.7}
+\contentsline {table}{\numberline {6.9}{\ignorespaces Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}}{37}{equation.6.3.8}
+\contentsline {table}{\numberline {6.10}{\ignorespaces Calculated connectivity matrix of branches with the Connectivity nodes (Buses): $[C]$}}{38}{equation.6.3.9}
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {7.1}{\ignorespaces Bus types.}}{39}{section.7.1}
-\addvspace {10\p@ }
-\addvspace {10\p@ }
+\contentsline {table}{\numberline {7.1}{\ignorespaces Bus types.}}{41}{section.7.1}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {A.1}{\ignorespaces Bus data}}{75}{appendix.A}
-\contentsline {table}{\numberline {A.2}{\ignorespaces Branch data}}{76}{appendix.A}
-\contentsline {table}{\numberline {A.3}{\ignorespaces Load data}}{76}{appendix.A}
-\contentsline {table}{\numberline {A.4}{\ignorespaces Generator data}}{77}{appendix.A}
-\contentsline {table}{\numberline {A.5}{\ignorespaces $C_{bus,terminal}$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.6}{\ignorespaces $C_{branch\_f, terminal}$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.7}{\ignorespaces $C_{branch\_t, terminal}$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.8}{\ignorespaces $[C_{switch,terminal}]$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.9}{\ignorespaces $[switch\_states]$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.10}{\ignorespaces $[C_{load, bus}]$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.11}{\ignorespaces $[C_{generation, bus}]$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.12}{\ignorespaces $[C]$}}{77}{section.A.1}
-\contentsline {table}{\numberline {A.13}{\ignorespaces $[C_{bus, bus}]$}}{77}{section.A.1}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {A.1}{\ignorespaces Bus data}}{79}{appendix.A}
+\contentsline {table}{\numberline {A.2}{\ignorespaces Branch data}}{80}{appendix.A}
+\contentsline {table}{\numberline {A.3}{\ignorespaces Load data}}{80}{appendix.A}
+\contentsline {table}{\numberline {A.4}{\ignorespaces Generator data}}{81}{appendix.A}
+\contentsline {table}{\numberline {A.5}{\ignorespaces $C_{bus,terminal}$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.6}{\ignorespaces $C_{branch\_f, terminal}$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.7}{\ignorespaces $C_{branch\_t, terminal}$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.8}{\ignorespaces $[C_{switch,terminal}]$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.9}{\ignorespaces $[switch\_states]$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.10}{\ignorespaces $[C_{load, bus}]$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.11}{\ignorespaces $[C_{generation, bus}]$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.12}{\ignorespaces $[C]$}}{81}{section.A.1}
+\contentsline {table}{\numberline {A.13}{\ignorespaces $[C_{bus, bus}]$}}{81}{section.A.1}
 \addvspace {10\p@ }
 \contentsfinish 

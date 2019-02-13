@@ -1,4 +1,4 @@
-\begin{thebibliography}{14}
+\begin{thebibliography}{16}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -13,6 +13,12 @@ Compressed column storage (ccs).
 Jos Arrillaga and CP~Arnold.
 \newblock \emph{Computer analysis of power systems}.
 \newblock Wiley Online Library, 1990.
+
+\bibitem[Dommel(1986)]{dommel1986electromagnetic}
+Hermann~W Dommel.
+\newblock \emph{Electromagnetic Transients Program: Reference Manual:(EMTP
+  theory book)}.
+\newblock Bonneville Power Administration, 1986.
 
 \bibitem[Dorfler and Bullo(2013)]{dorfler2013kron}
 Florian Dorfler and Francesco Bullo.
@@ -31,6 +37,12 @@ Charles~L Fortescue.
 Antonio Gomez-Exposito and Ali Abur.
 \newblock \emph{Power system state estimation: theory and implementation}.
 \newblock CRC press, 2004.
+
+\bibitem[Iwamoto and Tamura(1981)]{iwamoto1981load}
+S~Iwamoto and Y~Tamura.
+\newblock A load flow calculation method for ill-conditioned power systems.
+\newblock \emph{IEEE transactions on power apparatus and systems}, \penalty0
+  (4):\penalty0 1736--1743, 1981.
 
 \bibitem[Kersting(2012)]{kersting2012distribution}
 William~H Kersting.

@@ -4,51 +4,52 @@ The top-level auxiliary file: practical_grid_modeling.aux
 The style file: plainnat.bst
 Database file #1: bibliography.bib
 Warning--entry type for "subramanian2014application" isn't style-file defined
---line 43 of file bibliography.bib
+--line 49 of file bibliography.bib
 Warning--entry type for "CSC_matrix" isn't style-file defined
---line 193 of file bibliography.bib
+--line 208 of file bibliography.bib
 Warning--to sort, need author or key in CSC_matrix
 Warning--empty year in CSC_matrix
+Warning--there's a number but no volume in iwamoto1981load
 Warning--empty journal in TriasHELM
-You've used 14 entries,
+You've used 16 entries,
             2773 wiz_defined-function locations,
-            671 strings with 7020 characters,
-and the built_in function-call counts, 5248 in all, are:
-= -- 442
-> -- 250
-< -- 11
-+ -- 89
-- -- 75
-* -- 366
-:= -- 803
-add.period$ -- 41
-call.type$ -- 14
-change.case$ -- 62
-chr.to.int$ -- 14
-cite$ -- 32
-duplicate$ -- 275
-empty$ -- 496
-format.name$ -- 94
-if$ -- 1106
+            682 strings with 7333 characters,
+and the built_in function-call counts, 6016 in all, are:
+= -- 510
+> -- 281
+< -- 13
++ -- 100
+- -- 84
+* -- 421
+:= -- 921
+add.period$ -- 47
+call.type$ -- 16
+change.case$ -- 70
+chr.to.int$ -- 16
+cite$ -- 37
+duplicate$ -- 315
+empty$ -- 570
+format.name$ -- 107
+if$ -- 1267
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 16
-newline$ -- 77
-num.names$ -- 52
-pop$ -- 170
+missing$ -- 19
+newline$ -- 87
+num.names$ -- 60
+pop$ -- 191
 preamble$ -- 1
-purify$ -- 53
+purify$ -- 60
 quote$ -- 0
-skip$ -- 204
+skip$ -- 230
 stack$ -- 0
-substring$ -- 128
-swap$ -- 20
+substring$ -- 163
+swap$ -- 22
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 129
-warning$ -- 3
-while$ -- 47
+type$ -- 146
+warning$ -- 4
+while$ -- 55
 width$ -- 0
-write$ -- 175
-(There were 5 warnings)
+write$ -- 200
+(There were 6 warnings)

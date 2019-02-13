@@ -355,9 +355,9 @@ So I really hope you enjoy this book and that find it useful for your purpose.
 
 \begin{itemize}
 	
-	\item $[A] \times [B] \rightarrow$ Matrix-Matrix dot product.
+	\item $[A] \times [B] \rightarrow$ Matrix-Matrix dot product. The result is a matrix.
 	
-	\item $[A] \times [b] \rightarrow$ Matrix-Vector dot product.
+	\item $[A] \times [b] \rightarrow$ Matrix-Vector dot product. The result is a vector.
 	
 	\item $[a] \times [b]^\top \rightarrow$ Vector-Vector dot product. The result is a number.
 	
@@ -654,7 +654,7 @@ $Y$ (Admittance) & $Y_{Base} = 1 / Z_{Base}$ \\
 
 Charles L. Fortescue presented in 1918 his famous article \cite{fortescue1918method} in which he describes how to represent a three-phase element in the so-called \textit{sequence components}.
 
-The main use of this technique is to reduce the amount of impedances needed to represent a line or transformer from usually nine, to three (or even two) if the element is considered to be balanced. An element is considered balance if the impedance in all it's phases is equal and the phase-to-phase coupling impedances are also equal. This is an assumption that is commonly made for transmission grids (very high voltage) and distribution grids in high voltage. This advance allowed the popularization of the single-line diagrams in which every line represents a  a number of wires transmitting power in a balanced scheme.
+The main use of this technique is to reduce the amount of impedances needed to represent a line or transformer from usually nine, to three (or even two) if the element is considered to be balanced. An element is considered balanced if the impedance in all it's phases are equal and the phase-to-phase coupling impedances are also equal. This is an assumption that is commonly made for transmission grids (very high voltage) and distribution grids in high voltage. This advance allowed the popularization of the single-line diagrams in which every line represents a number of wires,transporting power in three-phases in a balanced scheme.
 
 Fortesue defined a transformation matrix $A_s$ and it's inverse as:
 
@@ -684,7 +684,7 @@ a^2 = 1^{-120_{deg}} = 1 \cdot e^{-j \frac{2}{3}\pi} = 1 \cdot cos\left(\frac{2}
 \end{equation}
 
 
-Then, any 3x3 impedance matrix representing the rectangular ABC three-phase impedance of an element (line, transformer, capacitor, etc.) can be transformed to a sequence equivalent using the formula:
+Then, any 3x3 impedance matrix representing the rectangular ABC three-phase impedance of an element (line, transformer, capacitor, etc.) can be transformed to a sequences equivalent using the formula:
 
 \begin{equation}
 Z_{seq} = A_s^{-1} \times Z_{ABC} \times A_s
@@ -1252,11 +1252,11 @@ The first step, is the generation of two primitive matrices of complex type; $Z_
 	\end{enumerate}
 \end{enumerate}
 
-\begin{marginfigure}
-	\includegraphics[width=0.95\linewidth]{img/conductor_images.eps}
-	\caption{Wire images and distances diagram.}
-	\label{wires_images}
-\end{marginfigure}
+%\begin{marginfigure}
+%	\includegraphics[width=0.95\linewidth]{img/conductor_images.eps}
+%	\caption{Wire images and distances diagram.}
+%	\label{wires_images}
+%\end{marginfigure}
 
 At this point the primitive matrices $Z_{prim}$ and $P_{prim}$ have been computed. Now we need to bundle the conductors (if more than one per phase) using the phase bundling algorithm.
  
@@ -2439,8 +2439,6 @@ The minimization of $[\Delta S]$ occurs via se recursive solution of the followi
 
 Since the mismatch ($[\Delta S]$) is a vector of complex values, we transform it into a vector ($[F]$) with the real part of $[\Delta S]$ for the PQ and PV bus indices and the imaginary part of $[\Delta S]$ for the PQ bus indices of the vector. Observe that the length of the vector is $2npq+npv$, matching the Jacobian dimensions.
 
-
-
 \begin{equation}
 F =  \left[
 \begin{array}{c}
@@ -2450,16 +2448,6 @@ Im \{ [\Delta S]_{(pq)} \}
 \right]
 \label{eq:nr_mismatch}
 \end{equation}
-
-%\begin{equation}
-%\Delta Q = Im \{ [\Delta S]_{(pq)} \}
-%\label{eq:nr_q_inc}
-%\end{equation}
-%
-%\begin{equation}
-%\Delta P = Re \{ [\Delta S]_{(pvpq)}  \} 
-%\label{eq:nr_p_inc}
-%\end{equation}
 
 Then we define the error to minimize as the infinite norm of $F$. The infinite norm is the same as the maximum absolute value. If the error is less than the specified tolerance, we stop the iterations otherwise, continue until a certain number of iterations considered as the maximum (for example 20).
 
@@ -3413,7 +3401,7 @@ The imaginary part of $[S_{bus}]$ at the PV nodes is he calculated reactive powe
 
 The power flow result seen in the previous section \ref{post_voltage_solution} computes values of reactive power for the PV nodes $[Q_{pv}]$. These reactive power values may exceed the reactive power capabilities of the generators connected at those buses. The commonly accepted practice is to turn the PV buses where the reactive power exceeds the limits to PQ and re-run a power flow simulation. If this simulation is successful the Bus type is reverted to PV and retry.
 
-Many academic texts suggest that the PV-PQ switching has to be done within the iteration of the power flow solution. That is fundamentally wrong because it introduces discontinuities in the power flow numerical process that is assumed to be smooth. Hence if the PQ-PV switching is done inside the power flow numerical loop, it will be a miracle if the process converges.
+Many academic texts suggest that the PV-PQ switching has to be done within the iteration of the power flow solution. That is fundamentally wrong because it introduces discontinuities in the power flow numerical process that is assumed to be smooth. Hence if the PQ-PV switching is done inside the power flow numerical loop, it will be a miracle if the process converge.
 
 
 The PQ-PV switching logic formulated at \cite{zhao2008pv} is the following:
@@ -4121,7 +4109,7 @@ The augmented Hatchel matrix method, introduces two advantages:
 	\item The linear system has a better condition number, and therefore has better convergence properties.
 \end{itemize}
 
-The linear system to solve iteratively in te Hatchel method is:
+The linear system to solve iteratively in the Hatchel method is:
 
 \begin{equation}
 \begin{bmatrix}
@@ -4141,6 +4129,7 @@ z-h\\
 0\\
 -c(x)
 \end{bmatrix}
+\label{Hatchel_eq}
 \end{equation}
 
 Where:
@@ -4172,6 +4161,7 @@ Where:
 R_{i, i} = \sigma_{i, i}^2
 \end{equation}
 
+Solving the equation \ref{Hatchel_eq} iteratively yields the voltage and the optimal multipliers.
 
 %-------------------------------------------------------------------------------
 %	CHAPTER Short-circuit
